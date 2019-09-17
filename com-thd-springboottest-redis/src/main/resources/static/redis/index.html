@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Annotation</title>
+    <script>
+
+
+function set(){
+    fetch('/thd/redis/set/' + document.getElementById("k").value + '/' + document.getElementById("v").value,{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+function get(){
+    fetch('/thd/redis/get/' + document.getElementById("k").value,{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+    </script>
+</head>
+<body>
+<!-- http://127.0.0.1:8899/thd/redis/index.html -->
+<h1>Redis</h1>
+k:<input type="text" value="" id="k"/>
+v:<input type="text" value="" id="v"/>
+<input type="button" value="set" onclick="set()"/>
+<input type="button" value="get" onclick="get()"/>
+</body>
+</html>

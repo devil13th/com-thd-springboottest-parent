@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ActiveMQ</title>
+    <script>
+
+
+function test(){
+    fetch('/thd/activemq/index',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+function poolInfo(){
+    fetch('/thd/activemq/poolInfo',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+function queue(){
+    fetch('http://127.0.0.1:8899/thd/activemq/sendQueueMessage/aaaaa',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+
+}
+
+
+function topic(){
+    fetch('http://127.0.0.1:8899/thd/activemq/sendQueueMessage/aaaaa',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+
+}
+    </script>
+</head>
+<body>
+<!-- http://127.0.0.1:8899/thd/activeMQ/index.html -->
+<h1>ActiveMQ</h1>
+<input type="button" value="test1" onclick="test()"/>
+<input type="button" value="poolInfo" onclick="poolInfo()"/>
+
+<input type="button" value="queue" onclick="queue()"/>
+<input type="button" value="topic" onclick="topic()"/>
+</body>
+</html>

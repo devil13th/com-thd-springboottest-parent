@@ -1,0 +1,41 @@
+debug: true
+#trace=true
+# 打开actuator 所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        
+server:
+  port: 8899
+  servlet: 
+    context-path: /thd
+
+
+spring:
+  http: 
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  # 异步消息MQ
+  activemq:
+    # broker地址
+    broker-url: tcp://127.0.0.1:61617
+    # 用户名和密码
+    user: admin
+    password: admin
+    # 是否使用发布订阅模式  默认为false
+    jms:
+      pub-sub-domain: true  # false=queue(默认)  true=topic
+    pool:
+      # 是否开启连接池
+      enabled: true
+      # 最大连接数
+      max-connections: 100
+      #空闲的连接过期时间，默认为30秒
+      idle-timeout: 30000
+      # 强制的连接过期时间，与idleTimeout的区别在于
+      # idleTimeout是在连接空闲一段时间失效，而expiryTimeout不管当前连接的情况，只要达到指定时间就失效。默认为0，never
+      expiry-timeout: 10

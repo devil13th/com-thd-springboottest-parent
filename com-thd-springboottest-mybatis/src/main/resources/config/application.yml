@@ -1,0 +1,63 @@
+debug: true
+
+#trace=true
+# 打开actuator 所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 8899
+  servlet:
+    context-path: /thd
+#spring.mvc.view.prefix= /WEB-INF/pages/
+#spring.mvc.view.suffix= .jsp
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#spring.datasource.type
+#更多细微的配置可以通过下列前缀进行调整
+#spring.datasource.hikari
+#spring.datasource.tomcat
+#spring.datasource.dbcp2
+    type: com.alibaba.druid.pool.DruidDataSource
+      #druid相关配置
+      # DruidDataSource 其他属性配置
+    druid:
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+        wall:
+          enabled: true
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml #这里是mapper的配置文件
+  type-aliases-package: com.thd.springboottest.mybatis.entity #这里是实体类的包
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰属性与数据库字段下划线自动转换
+
+logging:
+  level:
+    com.thd.springboottest.mybatis.dao: debug # 输出mybatis的sql 和 参数

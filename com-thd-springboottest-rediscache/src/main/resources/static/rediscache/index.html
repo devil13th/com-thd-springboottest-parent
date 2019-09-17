@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Annotation</title>
+    <script>
+
+
+function getKV(){
+    var obj = {
+        k:document.getElementById("k").value,
+        v:document.getElementById("v").value
+    }
+    return obj;
+}
+function addBeanAndRefreshCache(){
+    fetch('/thd/redisCache/addBeanAndRefreshCache/' + getKV().k + "/" + getKV().v,{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+
+function modiBeanAndRefreshCache(){
+    fetch('/thd/redisCache/modiBeanAndRefreshCache/' + getKV().k + "/" + getKV().v,{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+function removeBeanAndRefreshCache(){
+    fetch('/thd/redisCache/removeBeanAndRefreshCache/' + getKV().k,{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+
+function queryCache(){
+    fetch('/thd/redisCache/queryBeanForCache',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+function cacheInit(){
+    fetch('/thd/redisCache/cacheInit',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+
+    </script>
+</head>
+<body>
+<!-- http://127.0.0.1:8899/thd/rediscache/index.html -->
+<h1>Redis Cache1</h1>
+k:<input type="text" value="" id="k"/>
+v:<input type="text" value="" id="v"/>
+<hr/>
+<input type="button" value="add" onclick="add()"/>
+<input type="button" value="modi" onclick="modi()"/>
+<input type="button" value="remove" onclick="remove()"/>
+<input type="button" value="queryBeanForCache" onclick="queryBeanForCache()"/>
+<hr/>
+<input type="button" value="init cache" onclick="cacheInit()"/>
+<input type="button" value="addBeanAndRefreshCache" onclick="addBeanAndRefreshCache()"/>
+<input type="button" value="modiBeanAndRefreshCache" onclick="modiBeanAndRefreshCache()"/>
+<input type="button" value="removeBeanAndRefreshCache" onclick="removeBeanAndRefreshCache()"/>
+<input type="button" value="queryCache" onclick="queryCache()"/>
+
+</body>
+</html>

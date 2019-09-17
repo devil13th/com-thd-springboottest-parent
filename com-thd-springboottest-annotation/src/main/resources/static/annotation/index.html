@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Annotation</title>
+    <script>
+
+
+function test(){
+    fetch('/thd/annotation/index',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+
+    </script>
+</head>
+<body>
+<!-- http://127.0.0.1:8899/thd/annotation/index.html -->
+<h1>Annotation</h1>
+<input type="button" value="test1" onclick="test()"/>
+</body>
+</html>

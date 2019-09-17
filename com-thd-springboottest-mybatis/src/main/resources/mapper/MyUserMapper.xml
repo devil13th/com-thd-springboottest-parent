@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.thd.springboottest.mybatis.dao.MyUserDao">
+    <sql id="BASE_TABLE">
+        my_user
+    </sql>
+    <sql id="BASE_COLUMN">
+        id,name,age,birthday,create_time
+    </sql>
+
+
+
+    <insert id="save" parameterType="com.thd.springboottest.mybatis.entity.MyUser">
+        INSERT INTO <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="name!=null">
+              name,
+            </if>
+            <if test="age!=null">
+                age,
+            </if>
+            <if test="birthday!=null">
+                birthday,
+            </if>
+            <if test="createTime!=null">
+                create_time
+            </if>
+        </trim>
+        <trim prefix=" VALUE(" suffix=")" suffixOverrides=",">
+            #{id},
+            <if test="name!=null">
+                #{name},
+            </if>
+            <if test="age!=null">
+                #{age},
+            </if>
+            <if test="birthday!=null">
+                #{birthday,jdbcType=DATE},
+            </if>
+            <if test="createTime!=null">
+                #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="update" parameterType="com.thd.springboottest.mybatis.entity.MyUser">
+        UPDATE <include refid="BASE_TABLE"/> SET
+        <trim suffixOverrides=",">
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="age!=null">
+                age = #{age},
+            </if>
+            <if test="birthday!=null">
+                birthday = #{birthday,jdbcType=DATE},
+            </if>
+            <if test="createTime!=null">
+                create_time =  #{createTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE <include refid="BASE_TABLE"/> WHERE id = #{id}
+    </delete>
+
+    <select id="queryById" resultType="com.thd.springboottest.mybatis.entity.MyUser">
+      SELECT <include refid="BASE_COLUMN"/> FROM <include refid="BASE_TABLE"/> WHERE id = #{id}
+    </select>
+
+    <select id="queryByName" resultType="java.util.Map" parameterType="com.thd.springboottest.mybatis.entity.MyUser">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+        <where>
+            <if test="name != null">
+                name like #{name}
+            </if>
+        </where>
+    </select>
+</mapper>

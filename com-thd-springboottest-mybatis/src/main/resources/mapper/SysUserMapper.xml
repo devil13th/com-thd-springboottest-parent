@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.thd.springboottest.mybatis.dao.SysUserDao">
+    <sql id="BASE_TABLE">
+        sys_user
+    </sql>
+    <sql id="BASE_COLUMN">
+        user_id,user_name,user_mail,user_sex,user_birthday
+    </sql>
+
+
+
+    <insert id="insert" parameterType="com.thd.springboottest.mybatis.entity.SysUser" useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId">
+        INSERT INTO <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            user_id,user_name,user_mail,user_birthday,
+            <if test="userSex!=null">
+                user_sex
+            </if>
+        </trim>
+        <trim prefix=" VALUE(" suffix=")" suffixOverrides=",">
+            #{userId},#{userName,jdbcType=VARCHAR},#{userMail},#{userBirthday,jdbcType=DATE},
+            <if test="userSex!=null">
+                #{userSex}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectById" resultType="com.thd.springboottest.mybatis.entity.SysUser">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+        where user_id=#{id}
+    </select>
+
+    <select id="selectAll" resultType="com.thd.springboottest.mybatis.entity.SysUser">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+    </select>
+
+
+
+</mapper>
