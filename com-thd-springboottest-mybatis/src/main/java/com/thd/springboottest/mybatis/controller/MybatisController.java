@@ -50,7 +50,7 @@ public class MybatisController {
         SysUser user = new SysUser();
         String id = UUID.randomUUID().toString();
         user.setUserId(id);
-        user.setUserName("ttt1");
+        user.setUserName("n_" + id);
         user.setUserMail("tt@163.com");
         user.setUserBirthday(new Date());
         user.setUserSex(1);

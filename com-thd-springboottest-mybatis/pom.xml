@@ -28,12 +28,14 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <!--druid连接池-->
+        <!--druid连接池 使用了druid-spring-boot-starter 就可以去掉该依赖了-->
+        <!--
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.1.12</version>
         </dependency>
+    -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>

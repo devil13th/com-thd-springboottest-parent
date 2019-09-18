@@ -31,17 +31,17 @@ spring:
       #druid相关配置
       # DruidDataSource 其他属性配置
     druid:
-      initialSize: 5
-      minIdle: 5
-      maxActive: 20
-      maxWait: 60000
-      timeBetweenEvictionRunsMillis: 60000
-      minEvictableIdleTimeMillis: 300000
+      initialSize: 5 # 初始化大小
+      minIdle: 5 # 最小链接数
+      maxActive: 20 # 最大链接数
+      maxWait: 60000 # 配置获取连接等待超时的时间
+      timeBetweenEvictionRunsMillis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      minEvictableIdleTimeMillis: 300000 # 配置一个连接在池中最小生存的时间，单位是毫秒
       validationQuery: SELECT 1 FROM DUAL
       testWhileIdle: true
       testOnBorrow: false
       testOnReturn: false
-      poolPreparedStatements: true
+      poolPreparedStatements: true # 打开PSCache，并且指定每个连接上PSCache的大小
       maxPoolPreparedStatementPerConnectionSize: 20
       useGlobalDataSourceStat: true
       filter:
