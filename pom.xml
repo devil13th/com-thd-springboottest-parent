@@ -13,6 +13,7 @@
         <module>com-thd-springboottest-jdbc</module>
         <module>com-thd-springboottest-mybatis</module>
         <module>com-thd-springboottest-optimize</module>
+        <module>com-thd-springboot-test-logback</module>
     </modules>
 
 
