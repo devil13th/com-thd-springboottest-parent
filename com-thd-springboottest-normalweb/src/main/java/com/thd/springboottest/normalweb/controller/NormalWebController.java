@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+
 /**
  * @author devil13th
  **/
@@ -20,7 +23,17 @@ public class NormalWebController {
     @RequestMapping(value="/hello")
     @ResponseBody
     //http://127.0.0.1:8899/thd/normalWeb/hello
-    public String hello(){
+    public String hello(HttpServletRequest req){
+        String headerToken = req.getHeader("token");
+        System.out.println("request header token is :" + headerToken);
+        System.out.println(" --------------------- ");
+        Enumeration<String> enums= req.getHeaders("name");
+        while(enums.hasMoreElements()){
+            String headerStr = enums.nextElement();
+            System.out.println(headerStr);
+        }
+        System.out.println("request headers name is :" + headerToken);
+
         System.out.println("hello");
         myService.hello();
         return "hello ";
