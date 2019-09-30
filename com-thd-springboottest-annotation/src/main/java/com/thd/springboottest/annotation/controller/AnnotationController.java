@@ -3,43 +3,87 @@ package com.thd.springboottest.annotation.controller;
 import com.thd.springboottest.annotation.entity.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
+import java.io.*;
+import java.util.List;
 
 /**
  * @author devil13th
+
+ *
  **/
 @Controller
 @RequestMapping(value="/annotation")
 public class AnnotationController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private Environment env;
+
+
+
     @ResponseBody
-    @RequestMapping(value="/testGet",method=RequestMethod.GET)
-    public String testGet(){
-        this.log.info("testGet");
-        int i = 1;
-//        while(i>0){
-//            i++;
-//            System.out.println(i);
-//        }
-        return "index";
+    @RequestMapping("/test")
+    public String test(){
+        return "SUCCESS";
     }
 
 
     @ResponseBody
-    @RequestMapping(value="/testPostForRequestBody",method=RequestMethod.POST)
-    public Person testPostForRequestBody(@RequestBody Person person){
-        this.log.info("testPostForRequestBody");
-        System.out.println(person);
-        return person;
+    @RequestMapping("/getAllComponent")
+    public String getAllComponent(){
+        String[] beanNames = applicationContext.getBeanDefinitionNames();
+        for(String name : beanNames){
+            System.out.println(name);
+        }
+        return "SUCCESS";
     }
 
+
     @ResponseBody
-    @RequestMapping(value="/testPostForFormData",method=RequestMethod.POST)
-    public Person testPostForFormData(Person person){
-        this.log.info("testPostForFormData");
-        System.out.println(person);
-        return person;
+    @RequestMapping("/getComponentByType")
+    public String getComponentByType(){
+        String[] beanNames = applicationContext.getBeanNamesForType(Person.class);
+        for(String name : beanNames){
+            System.out.println(name);
+        }
+        return "SUCCESS";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getEnv")
+    public String getEnv(){
+        System.out.println("配置文件：" );
+
+        String[] profileNames = env.getActiveProfiles();
+        for(String profileName : profileNames){
+            System.out.println(profileName);
+        }
+
+        System.out.println("默认配置文件：" );
+        profileNames = env.getDefaultProfiles();
+        for(String profileName : profileNames){
+            System.out.println(profileName);
+        }
+
+
+        System.out.println("server.port : " + env.getProperty("server.port") );
+
+
+
+        return "SUCCESS";
     }
 }

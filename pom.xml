@@ -15,6 +15,7 @@
         <module>com-thd-springboottest-optimize</module>
         <module>com-thd-springboottest-logback</module>
         <module>com-thd-springboottest-mybatisplus</module>
+        <module>com-thd-springboottest-requestparameter</module>
     </modules>
 
 

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>requestparameter</title>
+    <script>
+
+
+function testGet01(){
+    fetch('/thd/requestparameter/testGet01?usr=devil13th&pwd=123456',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+
+function testGet02(){
+    fetch('/thd/requestparameter/testGet02/hello',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+function testGet03(){
+    fetch('/thd/requestparameter/testGet03?age=5&name=devil13th',{
+        method: 'GET'
+    }).then(function(response) {
+        return response.text();
+    }).then(function(j) {
+        alert(j);
+    });
+}
+
+
+function testPost01(){
+    var headers = new Headers();
+    headers.set('Content-Type', 'application/json');
+    fetch('/thd/requestparameter/testPost01', {
+        method: 'post',
+        headers:headers,
+        body: JSON.stringify({
+            name: 'devil13th',
+            age: 5
+        })
+    }).then(function(res){
+        return res.json()
+    }).then(function(result){
+        console.log(result);
+
+        let personStr = JSON.stringify(result);
+        alert(personStr)
+    });
+}
+
+
+
+function testPost02(){
+    var formData = new FormData();
+    formData.append('name','devil13th');
+    formData.append('age',5);
+
+     //模拟原生form提交数据不要加headers属性
+    fetch('/thd/requestparameter/testPost02', {
+        method: 'post',
+        /*headers:{
+            'Content-Type':'application/x-www-form-urlencoded'
+        },*/
+        body:formData
+    }).then(function(res){
+        return res.json()
+    }).then(function(result){
+        console.log(result);
+
+        let personStr = JSON.stringify(result);
+        alert(personStr)
+    });
+}
+
+
+
+function testUpload01(){
+　　let picture = document.getElementById("picture").files;
+　　let formData = new FormData();
+　　formData.append('file', picture[0]);
+
+    formData.append('name','devil13th');
+    formData.append('age',5);
+　　fetch('/thd/requestparameter/testUpload01', {
+　　　　method:'post',
+　　　　body:formData,
+　　}).then(response => response.text()).then(data => {
+　　　　alert(data)
+　　}).catch(function(e){
+　　　　alert("error:" + e);
+　　})
+}
+
+
+
+function testUpload02(){
+    let picture = document.getElementById("pictures").files;
+　　let formData = new FormData();
+
+　　for (let i = 0; i < picture.length; ++i){
+　　　　formData.append('file', picture[i]);
+　　}
+
+　　fetch('/thd/requestparameter/testUpload02', {
+　　　　method:'post',
+　　　　body:formData,
+　　}).then(response => response.text()).then(data => {
+　　　　alert(data)
+　　}).catch(function(e){
+　　　　alert("error:" + e);
+　　})
+}
+    </script>
+</head>
+<body>
+<!-- http://127.0.0.1:8899/thd/requestparameter/index.html -->
+<h1>GET方式</h1>
+<input type="button" value="通过?传基本数据类型值" onclick="testGet01()"/> /thd/requestparameter/testGet01?usr=devil13th&pwd=123456<br/>
+<input type="button" value="restful的路径方式传值" onclick="testGet02()"/> /thd/requestparameter/testGet02/hello<br/>
+<input type="button" value="通过?传对象属性值到后台转对象" onclick="testGet03()"/>/thd/requestparameter/testGet03?age=5&name=devil13th<br/>
+<hr/>
+<h1>POST方式</h1>
+<input type="button" value="fetch post提交 数据是在body中的json" onclick="testPost01()"/>
+
+<form method="post" action="/thd/requestparameter/testPost02" target="_blank">
+    name:<input type="text" name="name"/>
+    age:<input type="text" name="age"/>
+    <input type="submit" value="原始表单提交"/>
+</form>
+<input type="button" value="fetch模拟表单提交" onclick="testPost02()"/>
+
+
+<hr/>
+单个文件上传
+<form>
+　　<input type="file" id="picture" />
+　　<br/>
+　　<button type="button" onclick="testUpload01()">单个图片上传</button>
+</form>
+<br/><br/>
+多个文件上传
+<form>
+    　　<input type="file" id="pictures" multiple="multiple"/>
+    　　<br/>
+    　　<button type="button" onclick="testUpload02()">多个图片上传</button>
+</form>
+
+
+</body>
+</html>
