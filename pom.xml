@@ -18,6 +18,7 @@
         <module>com-thd-springboottest-requestparameter</module>
         <module>com-thd-springboottest-aop</module>
         <module>com-thd-springboottest-interceptor</module>
+        <module>com-thd-springboottest-activiti</module>
     </modules>
 
 
