@@ -19,6 +19,7 @@
         <module>com-thd-springboottest-aop</module>
         <module>com-thd-springboottest-interceptor</module>
         <module>com-thd-springboottest-activiti</module>
+        <module>com-thd-springboottest-datetimestamp</module>
     </modules>
 
 
@@ -51,10 +52,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
