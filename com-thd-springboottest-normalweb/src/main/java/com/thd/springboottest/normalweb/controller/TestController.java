@@ -38,16 +38,39 @@ public class TestController {
         System.out.println("---------- setCookie -------------");
 
         Cookie currentCk = new Cookie(cookieName,cookieValue);
-        currentCk.setMaxAge(60*60*24*30) ;
-        response.addCookie(new Cookie(cookieName,cookieValue));
+        currentCk.setMaxAge(60*60*24*30*12) ; //单位是秒
+        //currentCk.setDomain("www.devil13th.com");
+        currentCk.setPath("/");
+
+        response.addCookie(currentCk);
 
 //        Map<String,String> cookieMap = new HashMap<String,String>();
         List<Map<String,String>> cookieList = new ArrayList<Map<String,String>>();
         Cookie[] cks =  request.getCookies();
-        for(Cookie ck : cks){
-            Map<String,String> hm = new HashMap<String,String>();
-            hm.put(ck.getName(),ck.getValue());
-            cookieList.add(hm);
+        if(cks != null && cks.length > 0) {
+            for (Cookie ck : cks) {
+                Map<String, String> hm = new HashMap<String, String>();
+                hm.put(ck.getName(), ck.getValue());
+                cookieList.add(hm);
+            }
+        }
+        return cookieList;
+
+    }
+
+
+    @RequestMapping("/getCookie")
+    @ResponseBody
+    public List<Map<String,String>> getCookie(){
+        System.out.println("---------- getCookie -------------");
+        List<Map<String,String>> cookieList = new ArrayList<Map<String,String>>();
+        Cookie[] cks =  request.getCookies();
+        if(cks != null && cks.length > 0) {
+            for (Cookie ck : cks) {
+                Map<String, String> hm = new HashMap<String, String>();
+                hm.put(ck.getName(), ck.getValue());
+                cookieList.add(hm);
+            }
         }
         return cookieList;
 
@@ -67,8 +90,10 @@ public class TestController {
 
         Cookie[] cks =  req.getCookies();
         System.out.println("------------ cookie info : ------------");
-        for(Cookie ck : cks){
-            System.out.println(ck.getName() + ":" + ck.getValue());
+        if(cks != null && cks.length > 0) {
+            for (Cookie ck : cks) {
+                System.out.println(ck.getName() + ":" + ck.getValue());
+            }
         }
         return param;
     }
@@ -85,10 +110,12 @@ public class TestController {
         res.addCookie(new Cookie("token","devil13th-b"));
         res.addHeader("tokenB","tokenB");
 
-        System.out.println("------------ cookie info : ------------");
         Cookie[] cks =  req.getCookies();
-        for(Cookie ck : cks){
-            System.out.println(ck.getName() + ":" + ck.getValue());
+        System.out.println("------------ cookie info : ------------");
+        if(cks != null && cks.length > 0) {
+            for (Cookie ck : cks) {
+                System.out.println(ck.getName() + ":" + ck.getValue());
+            }
         }
         return param;
     }
