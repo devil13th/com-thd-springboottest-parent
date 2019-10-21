@@ -6,9 +6,7 @@
 
 package com.thd.springboottest.activiti.utils;
 
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.FlowElement;
-import org.activiti.bpmn.model.UserTask;
+import org.activiti.bpmn.model.*;
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
@@ -44,7 +42,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 @Component
-public class MyActivitiUtilFor5x {
+public class MyActivitiUtil {
 
 	public ClassPathXmlApplicationContext context;
 	@Autowired
@@ -68,7 +66,7 @@ public class MyActivitiUtilFor5x {
 	/**
 	 * 构造函数
 	 */
-	public MyActivitiUtilFor5x() {
+	public MyActivitiUtil() {
 
 	}
 
@@ -79,7 +77,7 @@ public class MyActivitiUtilFor5x {
 	 *            activiti-spring配置文件位置
 	 *            使用classpath的路径例如com/thd/activiti/activiti.cfg1.xml
 	 */
-	public MyActivitiUtilFor5x(String SpringCfgXmlPathForActiviti) {
+	public MyActivitiUtil(String SpringCfgXmlPathForActiviti) {
 		log.info("---- MyActivitiUtil Construction ："
 				+ SpringCfgXmlPathForActiviti);
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
@@ -376,9 +374,73 @@ public class MyActivitiUtilFor5x {
 		return taskList;
 	}
 
+	/**
+	 * 获取task的下一步节点
+	 * 5.x failure
+	 * 6.x ok
+	 * @param taskId 当前待办id
+	 * @return
+	 */
+	public List<FlowElement> queryNextTaskByCurrentTaskId(String taskId){
+		List<FlowElement> nextNodes = new ArrayList<FlowElement>();
+		Task task = processEngine.getTaskService().createTaskQuery().taskId(taskId).singleResult();
+		ExecutionEntity ee = (ExecutionEntity) processEngine.getRuntimeService().createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+		//当前节点
+		String crruentActivityId = ee.getActivityId();
+		//获取流程的bpmn
+		BpmnModel bpmnModel = processEngine.getRepositoryService().getBpmnModel(task.getProcessDefinitionId());
+		FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(crruentActivityId);
+		// 输出连线
+		List<SequenceFlow> outFlows = flowNode.getOutgoingFlows();
+		for (SequenceFlow sequenceFlow : outFlows) {
+			// 下一个节点
+			FlowElement targetFlow = sequenceFlow.getTargetFlowElement();
+			nextNodes.add(targetFlow);
+			if (targetFlow instanceof EndEvent) {// 如果下个节点为结束节点
+				System.out.println(sequenceFlow.getId() + "," + sequenceFlow.getName() + "," + sequenceFlow.getTargetFlowElement());
+			}
+		}
+		return nextNodes;
 
+	}
 
-//
+	/**
+	 * 获取task的上一步节点
+	 * 5.x failure
+	 * 6.x ok
+	 * @param taskId 当前待办id
+	 * @return
+	 */
+	public List<FlowElement> queryPrevTaskByCurrentTaskId(String taskId){
+		List<FlowElement> nextNodes = new ArrayList<FlowElement>();
+		Task task = processEngine.getTaskService().createTaskQuery().taskId(taskId).singleResult();
+		ExecutionEntity ee = (ExecutionEntity) processEngine.getRuntimeService().createExecutionQuery().executionId(task.getExecutionId()).singleResult();
+		//当前节点
+		String crruentActivityId = ee.getActivityId();
+		//获取流程的bpmn
+		BpmnModel bpmnModel = processEngine.getRepositoryService().getBpmnModel(task.getProcessDefinitionId());
+		FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(crruentActivityId);
+		// 输入连线
+		List<SequenceFlow> inFlows = flowNode.getIncomingFlows();
+		for (SequenceFlow sequenceFlow : inFlows) {
+			// 上一个节点
+			FlowElement targetFlow = sequenceFlow.getSourceFlowElement();
+			nextNodes.add(targetFlow);
+			if (targetFlow instanceof StartEvent) {// 如果上个节点为开始节点
+				System.out.println(sequenceFlow.getId() + "," + sequenceFlow.getName() + "," + sequenceFlow.getTargetFlowElement());
+			}
+		}
+		return nextNodes;
+
+	}
+
+    /**
+     * 获取task的上一步节点
+     * 5.x ok
+     * 6.x failure
+     * @param taskId 当前待办id
+     * @return
+     */
 //	public List<PvmActivity> queryPrevTaskByCurrentTaskId(String taskId) {
 //		List<PvmActivity> resultList = new ArrayList<PvmActivity>();
 //		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();

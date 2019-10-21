@@ -1,8 +1,7 @@
 package com.thd.springboottest.activiti.controller;
 
-import com.thd.springboottest.activiti.utils.MyActivitiUtilFor5x;
+import com.thd.springboottest.activiti.utils.MyActivitiUtil;
 import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.engine.RuntimeService;
 import org.activiti.engine.impl.util.ProcessDefinitionUtil;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value="/activiti")
 public class ActivitiController {
     @Autowired
-    private MyActivitiUtilFor5x util;
+    private MyActivitiUtil util;
 
     @RequestMapping(value="/test")
     @ResponseBody

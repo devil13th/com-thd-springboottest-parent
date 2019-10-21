@@ -1,7 +1,7 @@
 package com.thd.springboottest.utils;
 
 import com.thd.springboottest.Application;
-import com.thd.springboottest.activiti.utils.MyActivitiUtilFor5x;
+import com.thd.springboottest.activiti.utils.MyActivitiUtil;
 import org.activiti.engine.*;
 
 import org.activiti.engine.repository.Deployment;
@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class MyActivitiUtilFor5xTest{
     @Autowired
-    private MyActivitiUtilFor5x util;
+    private MyActivitiUtil util;
 
     @Autowired
     public ProcessEngine processEngine;

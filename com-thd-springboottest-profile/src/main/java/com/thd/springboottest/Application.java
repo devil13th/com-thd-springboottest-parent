@@ -6,20 +6,16 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
-/**
- * 注意,如果集成activiti 一定要配置exclude={org.activiti.spring.boot.SecurityAutoConfiguration.class
- * Caused by: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy
- */
 
-@SpringBootApplication(
-    scanBasePackages = "com.thd.springboottest",
-    exclude={org.activiti.spring.boot.SecurityAutoConfiguration.class}
-)
+@SpringBootApplication(scanBasePackages = "com.thd.springboottest")
+
 public class Application extends SpringBootServletInitializer {
 
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(this.getClass());
     }
+
+
 
     public static void main(String[] args) {
         //System.setProperty("spring.devtools.restart.enabled", "false");
