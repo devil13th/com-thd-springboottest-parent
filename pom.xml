@@ -21,6 +21,7 @@
         <module>com-thd-springboottest-activiti</module>
         <module>com-thd-springboottest-datetimestamp</module>
         <module>com-thd-springboottest-profile</module>
+        <module>com-thd-springboottest-swagger</module>
     </modules>
 
 

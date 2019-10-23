@@ -41,6 +41,11 @@ public class WebInterceptor implements HandlerInterceptor {
         System.out.println("getRequestURI:" + request.getRequestURI());
         System.out.println("getRequestURL:" + request.getRequestURL());
         System.out.println("getRealPath:" + request.getSession().getServletContext().getRealPath("image"));
-        return true;
+
+        //return true;
+
+
+        response.getWriter().write("there's a error in interceptor");
+        return false;
     }
 }

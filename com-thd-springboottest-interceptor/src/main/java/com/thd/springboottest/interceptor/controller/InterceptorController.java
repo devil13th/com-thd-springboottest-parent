@@ -19,7 +19,7 @@ public class InterceptorController {
     }
 
     @RequestMapping("/test01")
-    // url: http://127.0.0.1:8899/thd/aop/aopTest01?usr=admin&pwd=123
+    // url: http://127.0.0.1:8899/thd/interceptor/test?usr=admin&pwd=123
     public String test01(@RequestParam String usr, @RequestParam int pwd){
         System.out.println(usr + ":" + pwd);
         if(pwd > 100){
