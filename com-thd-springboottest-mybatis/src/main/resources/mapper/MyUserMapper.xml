@@ -1,86 +1,173 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.thd.springboottest.mybatis.dao.MyUserDao">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thd.springboottest.mybatis.dao.MyUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.thd.springboottest.mybatis.entity.MyUser">
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="user_age" property="userAge" />
+        <result column="user_birthday" property="userBirthday" />
+        <result column="user_create_time" property="userCreateTime" />
+    </resultMap>
+
     <sql id="BASE_TABLE">
         my_user
     </sql>
-    <sql id="BASE_COLUMN">
-        id,name,age,birthday,create_time
+
+    <!-- 通用查询结果列   -->
+    <sql id="Column_List">
+        user_id, user_name, user_age, user_birthday, user_create_time
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="Where_Clause">
+        <where>
+            <trim prefixOverrides="and" >
+                <if test="userId != null and userId != ''">
+                    and user_id = #{userId}
+                </if>
+                <if test="userName != null and userName != ''">
+                    and user_name = #{userName}
+                </if>
+                <if test="userAge != null and userAge != ''">
+                    and user_age = #{userAge}
+                </if>
+                <if test="userBirthday != null ">
+                    and user_birthday = #{userBirthday}
+                </if>
+                <if test="userCreateTime != null ">
+                    and user_create_time = #{userCreateTime}
+                </if>
+            </trim>
+        </where>
     </sql>
 
 
+    <!-- like查询条件 -->
+    <sql id="Like_Where_Clause">
+        <where>
+            <trim prefixOverrides="and" >
+                <if test="userId != null and userId != ''">
+                    and user_id like CONCAT('%',#{userId},'%')
+                </if>
+                <if test="userName != null and userName != ''">
+                    and user_name like CONCAT('%',#{userName},'%')
+                </if>
+                <if test="userAge != null and userAge != ''">
+                    and user_age like CONCAT('%',#{userAge},'%')
+                </if>
+                <if test="userBirthday != null ">
+                    and user_birthday = #{userBirthday}
+                </if>
+                <if test="userCreateTime != null ">
+                    and user_create_time = #{userCreateTime}
+                </if>
+            </trim>
+        </where>
+    </sql>
 
-    <insert id="save" parameterType="com.thd.springboottest.mybatis.entity.MyUser">
-        INSERT INTO <include refid="BASE_TABLE"/>
+
+    <!-- 插入记录 -->
+    <insert id="save" parameterType="Object">
+        insert into <include refid="BASE_TABLE" />
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            id,
-            <if test="name!=null">
-              name,
-            </if>
-            <if test="age!=null">
-                age,
-            </if>
-            <if test="birthday!=null">
-                birthday,
-            </if>
-            <if test="createTime!=null">
-                create_time
-            </if>
+            user_id,user_name,user_age,user_birthday,user_create_time,
         </trim>
-        <trim prefix=" VALUE(" suffix=")" suffixOverrides=",">
-            #{id},
-            <if test="name!=null">
-                #{name},
-            </if>
-            <if test="age!=null">
-                #{age},
-            </if>
-            <if test="birthday!=null">
-                #{birthday,jdbcType=DATE},
-            </if>
-            <if test="createTime!=null">
-                #{createTime,jdbcType=TIMESTAMP}
-            </if>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{userId},#{userName},#{userAge},#{userBirthday},#{userCreateTime},
         </trim>
     </insert>
 
-
-    <update id="update" parameterType="com.thd.springboottest.mybatis.entity.MyUser">
-        UPDATE <include refid="BASE_TABLE"/> SET
-        <trim suffixOverrides=",">
-            <if test="name!=null">
-                name = #{name},
+    <!-- 编辑记录 -->
+    <update id="update" parameterType="Object">
+        update  <include refid="BASE_TABLE" /> set
+        <trim  suffixOverrides="," >
+            <if test="userId != null ">
+                user_id = #{userId},
             </if>
-            <if test="age!=null">
-                age = #{age},
+            <if test="userName != null ">
+                user_name = #{userName},
             </if>
-            <if test="birthday!=null">
-                birthday = #{birthday,jdbcType=DATE},
+            <if test="userAge != null ">
+                user_age = #{userAge},
             </if>
-            <if test="createTime!=null">
-                create_time =  #{createTime,jdbcType=TIMESTAMP}
+            <if test="userBirthday != null ">
+                user_birthday = #{userBirthday},
+            </if>
+            <if test="userCreateTime != null ">
+                user_create_time = #{userCreateTime},
             </if>
         </trim>
-        WHERE id = #{id}
+        <where>
+            <trim  prefixOverrides="and" >
+                <!--where主键条件-->
+                <!-- #{userId}对应 MyUserMapper.delete(String id)中的userId -->
+                and user_id=#{userId}
+            </trim>
+        </where>
     </update>
 
-    <delete id="delete">
-        DELETE <include refid="BASE_TABLE"/> WHERE id = #{id}
+    <!-- 删除记录 -->
+    <delete id="deleteById">
+        delete from  <include refid="BASE_TABLE" />
+        <where>
+            <trim prefixOverrides="and" >
+                <!--where主键条件-->
+                <!-- #{userId}对应 MyUserMapper.delete(String id)中的userId -->
+                and user_id=#{userId}
+            </trim>
+        </where>
     </delete>
 
-    <select id="queryById" resultType="com.thd.springboottest.mybatis.entity.MyUser">
-      SELECT <include refid="BASE_COLUMN"/> FROM <include refid="BASE_TABLE"/> WHERE id = #{id}
+    <!-- 根据id查询对象 -->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+        <include refid="Column_List" />
+        from <include refid="BASE_TABLE" />
+        <where>
+            <trim prefixOverrides="and"  >
+                <!--where主键条件-->
+                <!-- #{userId}对应 MyUserMapper.delete(String id)中的userId -->
+                and user_id=#{userId}
+            </trim>
+        </where>
     </select>
 
-    <select id="queryByName" resultType="java.util.Map" parameterType="com.thd.springboottest.mybatis.entity.MyUser">
+
+    <!-- 查询列表 -->
+    <select id="queryList" resultMap="BaseResultMap" parameterType="Object">
         select
-        <include refid="BASE_COLUMN"/>
-        from
-        <include refid="BASE_TABLE"/>
+        <include refid="Column_List" />
+        from <include refid="BASE_TABLE" />
+        <include refid="Where_Clause" />
+
+    </select>
+
+    <!-- 查询列表 -->
+    <select id="queryListByLike" resultMap="BaseResultMap"
+            parameterType="Object">
+        select
+        <include refid="Column_List" />
+        from <include refid="BASE_TABLE" />
+        <include refid="Like_Where_Clause" />
+    </select>
+
+
+
+    <select id="queryJoinExample" resultType="map">
+        select mu.user_id as auid,mu.user_name as auname,mu.user_age as auage,su.user_sex as susex,su.user_name as suname from my_user mu right join sys_user su on mu.user_id = su.user_id
         <where>
-            <if test="name != null">
-                name like #{name}
-            </if>
+            <trim prefixOverrides="and">
+                <if test="name != null and name != ''">
+                    and mu.user_name like CONCAT('%',#{name},'%')
+                </if>
+                <if test="name != null and name != ''">
+                    and su.user_sex = #{sex}
+                </if>
+            </trim>
         </where>
+
     </select>
 </mapper>

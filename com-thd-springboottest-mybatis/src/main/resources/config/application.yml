@@ -28,7 +28,7 @@ spring:
 #spring.datasource.tomcat
 #spring.datasource.dbcp2
     type: com.alibaba.druid.pool.DruidDataSource
-      #druid相关配置
+      # druid相关配置
       # DruidDataSource 其他属性配置
     druid:
       initialSize: 5 # 初始化大小
@@ -51,10 +51,11 @@ spring:
         wall:
           enabled: true
 
-
+## mybatis数据源
 mybatis:
   mapper-locations: classpath:mapper/*.xml #这里是mapper的配置文件
-  type-aliases-package: com.thd.springboottest.mybatis.entity #这里是实体类的包
+  # 这里是实体类的包 添加这个配置后就不用在mapper.xml配置文件中aliases了
+  type-aliases-package: com.thd.springboottest.mybatis.entity
   configuration:
     map-underscore-to-camel-case: true # 驼峰属性与数据库字段下划线自动转换
 

@@ -12,9 +12,10 @@
         <module>com-thd-springboottest-normalweb</module>
         <module>com-thd-springboottest-jdbc</module>
         <module>com-thd-springboottest-mybatis</module>
+        <module>com-thd-springboottest-mybatisgenerator</module>
+        <module>com-thd-springboottest-mybatisplus</module>
         <module>com-thd-springboottest-optimize</module>
         <module>com-thd-springboottest-logback</module>
-        <module>com-thd-springboottest-mybatisplus</module>
         <module>com-thd-springboottest-requestparameter</module>
         <module>com-thd-springboottest-aop</module>
         <module>com-thd-springboottest-interceptor</module>
@@ -22,6 +23,7 @@
         <module>com-thd-springboottest-datetimestamp</module>
         <module>com-thd-springboottest-profile</module>
         <module>com-thd-springboottest-swagger</module>
+
     </modules>
 
 

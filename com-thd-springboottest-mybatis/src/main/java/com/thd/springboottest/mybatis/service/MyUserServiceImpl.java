@@ -1,11 +1,12 @@
 package com.thd.springboottest.mybatis.service;
 
-import com.thd.springboottest.mybatis.dao.MyUserDao;
+import com.thd.springboottest.mybatis.dao.MyUserMapper;
 import com.thd.springboottest.mybatis.entity.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author devil13th
@@ -13,29 +14,21 @@ import java.util.List;
 @Service
 public class MyUserServiceImpl implements  MyUserService {
     @Autowired
-    private MyUserDao myUserDao;
+    private MyUserMapper myUserMapper;
     @Override
-    public int save(MyUser user) {
-        return myUserDao.save(user);
-    }
-
+    public int save(MyUser user) {return myUserMapper.save(user);}
     @Override
     public int update(MyUser user) {
-        return myUserDao.update(user);
+        return myUserMapper.update(user);
     }
-
     @Override
-    public int delete(String id) {
-        return myUserDao.delete(id);
-    }
-
+    public MyUser queryById(String id) {return myUserMapper.queryById(id);}
     @Override
-    public MyUser queryById(String id) {
-        return myUserDao.queryById(id);
-    }
-
+    public List queryList(MyUser user) {return myUserMapper.queryList(user);}
     @Override
-    public List queryByName(MyUser user) {
-        return myUserDao.queryByName(user);
-    }
+    public List queryListByLike(MyUser user){return myUserMapper.queryListByLike(user);};
+    @Override
+    public int deleteById(String id){return myUserMapper.deleteById(id);}
+    //一个联合查询和Map类型的参数
+    public List queryJoin(Map m){return myUserMapper.queryJoinExample(m);};
 }

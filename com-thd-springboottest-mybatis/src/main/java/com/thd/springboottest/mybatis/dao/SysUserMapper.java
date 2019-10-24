@@ -11,7 +11,7 @@ import java.util.List;
  **/
 @Mapper
 @Repository
-public interface SysUserDao {
+public interface SysUserMapper {
     @Select("select * from sys_user where user_id=#{id}")
     public SysUser getNameById(@Param("id") long id);
 
