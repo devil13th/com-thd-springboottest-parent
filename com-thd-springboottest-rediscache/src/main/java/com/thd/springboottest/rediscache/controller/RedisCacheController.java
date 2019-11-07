@@ -41,6 +41,7 @@ public class RedisCacheController {
 
     @ResponseBody
     @RequestMapping(value="/modiBean/{id}/{name}")
+    // http://127.0.0.1:8899/thd/redisCache/modiBean/1/zhangsan1
     public TestBean modiBean(@PathVariable String id,@PathVariable String name){
         TestBean tb = new TestBean();
         tb.setId(id);
@@ -52,6 +53,7 @@ public class RedisCacheController {
 
     @ResponseBody
     @RequestMapping(value="/removeBean/{id}")
+    // http://127.0.0.1:8899/thd/redisCache/removeBean/1
     public TestBean removeBean(@PathVariable String id){
         TestBean tb = this.redisCacheServiceImpl.removeBean(id);
         return tb;
@@ -59,6 +61,7 @@ public class RedisCacheController {
 
     @ResponseBody
     @RequestMapping(value="/queryBean/{id}")
+    // http://127.0.0.1:8899/thd/redisCache/queryBean/1
     public TestBean queryBean(@PathVariable String id){
         TestBean tb = this.redisCacheServiceImpl.queryBean(id);
         return tb;
@@ -71,6 +74,7 @@ public class RedisCacheController {
 
     @ResponseBody
     @RequestMapping(value="/cacheInit")
+    // http://127.0.0.1:8899/thd/redisCache/cacheInit
     public Map<String,TestBean> cacheInit(){
         Map<String,TestBean> r = new HashMap<String,TestBean>();
         r.put("a",new TestBean("a","1"));

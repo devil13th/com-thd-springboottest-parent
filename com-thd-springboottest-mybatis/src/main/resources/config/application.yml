@@ -2,11 +2,11 @@ debug: true
 
 #trace=true
 # 打开actuator 所有端点
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
 
 server:
   port: 8899

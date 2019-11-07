@@ -24,7 +24,7 @@ public class RedisCacheServiceImpl implements RedisCacheService {
     @CachePut(value = "person", key = "#root.targetClass + #result.id", unless = "#redisCacheBean eq null")
     public TestBean addBean(TestBean redisCacheBean) {
         if(RedisCacheServiceImpl.list.containsKey(redisCacheBean.getId())){
-            return null;
+            return this.modiBean(redisCacheBean);
         }
         RedisCacheServiceImpl.list.put(redisCacheBean.getId(),redisCacheBean);
         return redisCacheBean;
