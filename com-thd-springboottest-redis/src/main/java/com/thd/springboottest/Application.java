@@ -25,6 +25,9 @@ public class Application extends SpringBootServletInitializer {
         //System.setProperty("spring.devtools.restart.enabled", "false");
         ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
         String[] names = ctx.getBeanDefinitionNames();
+        for(int i = 0 , j = names.length ;i  < j ; i++){
+            System.out.println(names[i]);
+        }
     }
 
 
