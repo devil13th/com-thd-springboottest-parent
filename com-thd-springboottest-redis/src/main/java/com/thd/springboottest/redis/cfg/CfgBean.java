@@ -113,7 +113,7 @@ public class CfgBean {
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
 
         // 设置redis value的序列化器 (上面几种序列化器任选其一,推荐使用fastJsonRedisSerializer (json格式,序列化效率高且业界常用))
-        redisTemplate.setValueSerializer(jdkSerializationRedisSerializer);
+        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
         redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 
 
