@@ -23,6 +23,7 @@
         <module>com-thd-springboottest-datetimestamp</module>
         <module>com-thd-springboottest-profile</module>
         <module>com-thd-springboottest-swagger</module>
+        <module>com-thd-springboottest-nginx</module>
 
     </modules>
 

@@ -35,7 +35,7 @@ spring:
         # 连接池中的最大空闲连接
         max-idle: 200
         # 连接池中的最小空闲连接
-        min-idle: 0
+        min-idle: 10
 
 
 
