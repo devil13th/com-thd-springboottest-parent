@@ -30,7 +30,13 @@
     <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
 
-    <!--定义了一个名为CONSOLE的logger , 将日志输出到控制台-->
+
+
+
+    <!-- 下面内容 每一个appender是配置了一种日志输出的组件 -->
+
+
+    <!--定义了一个名为CONSOLE的logger , 目标：将日志输出到控制台, 输出的日志级别：INFO及以上-->
     <!-- ch.qos.logback.core.ConsoleAppender 是将日志输出到控制台 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
@@ -44,7 +50,7 @@
         </encoder>
     </appender>
 
-    <!-- 定义一个输出到控制台的日志组件 -->
+    <!-- 定义一个输出到控制台的日志组件，目标：将日志输出到控制台，, 输出的日志级别：INFO及以上 -->
     <appender name="CONSOLE_COLOR" class="ch.qos.logback.core.ConsoleAppender">
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -67,7 +73,7 @@
     </appender>
 
 
-    <!-- 定义一个输出到文件的日志组件 -->
+    <!-- 定义一个输出到文件的日志组件, 目标：将日志输出到文件, 输出的日志级别：仅仅DEBUG -->
     <!-- 时间滚动输出 level为 DEBUG 日志 -->
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 -->
@@ -95,12 +101,12 @@
 
         <!-- 此日志文件只记录debug级别的 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-<!--
-onMismatch（匹配不成功） 有2个值： ACCEPT 和 DENY
-输出的级别等于 level 标签里的 级别时：
-如果值 = ACCEPT ，则输出
-如果值 = DENY , 不输出
--->
+            <!--
+            onMismatch（匹配不成功） 有2个值： ACCEPT 和 DENY
+            输出的级别等于 level 标签里的 级别时：
+            如果值 = ACCEPT ，则输出
+            如果值 = DENY , 不输出
+            -->
             <level>debug</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -110,7 +116,7 @@ onMismatch（匹配不成功） 有2个值： ACCEPT 和 DENY
 
 
 
-    <!-- 时间滚动输出 level为 INFO 日志 -->
+    <!-- 定义一个输出到文件的日志组件, 目标：将日志输出到文件, 输出的日志级别：仅仅INFO级别 -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 -->
         <file>${log.path}/log_info.log</file>
@@ -146,7 +152,7 @@ onMismatch（匹配不成功） 有2个值： ACCEPT 和 DENY
         </filter>
     </appender>
 
-    <!-- 时间滚动输出 level为 WARN 日志 -->
+    <!-- 定义一个输出到文件的日志组件, 目标：将日志输出到文件, 输出的日志级别：仅仅WARN级别 -->
     <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 -->
         <file>${log.path}/log_warn.log</file>
@@ -173,7 +179,7 @@ onMismatch（匹配不成功） 有2个值： ACCEPT 和 DENY
     </appender>
 
 
-    <!-- 时间滚动输出 level为 ERROR 日志 -->
+    <!-- 定义一个输出到文件的日志组件, 目标：将日志输出到文件, 输出的日志级别：仅仅ERROR级别 -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 正在记录的日志文件的路径及文件名 -->
         <file>${log.path}/log_error.log</file>
@@ -230,7 +236,7 @@ onMismatch（匹配不成功） 有2个值： ACCEPT 和 DENY
 
 
 
-
+    <!-- 下面内容需要在applicatoin中设置spring.profile使用哪个配置 dev:开发环境 test:测试环境 prod:生产环境 -->
     <!--开发环境:打印ERROR和INFO级的日志-->
     <springProfile name="dev">
         <logger name="com.thd.springboottest" level="info">
@@ -255,17 +261,17 @@ onMismatch（匹配不成功） 有2个值： ACCEPT 和 DENY
     <root level="INFO">
 
         <appender-ref ref="CONSOLE_COLOR" />
-        <appender-ref ref="CONSOLE" />
-         <!-- <appender-ref ref="DEBUG_FILE" />
-         <appender-ref ref="INFO_FILE" />
-         <appender-ref ref="WARN_FILE" />
-         <appender-ref ref="ERROR_FILE" />-->
+        <!-- <appender-ref ref="CONSOLE" />
+        <appender-ref ref="DEBUG_FILE" />
+        <appender-ref ref="INFO_FILE" />
+        <appender-ref ref="WARN_FILE" />
+        <appender-ref ref="ERROR_FILE" />-->
     </root>
 
-    <logger name="com.thd.springboottest" level="INFO">
-        <appender-ref ref="INFO_FILE" />
-        <appender-ref ref="ERROR_FILE" />
-    </logger>
+<!--    <logger name="com.thd.springboottest" level="INFO">-->
+<!--        <appender-ref ref="INFO_FILE" />-->
+<!--        <appender-ref ref="ERROR_FILE" />-->
+<!--    </logger>-->
 
 
 

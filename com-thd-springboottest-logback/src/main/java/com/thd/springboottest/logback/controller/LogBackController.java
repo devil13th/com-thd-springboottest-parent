@@ -1,7 +1,9 @@
 package com.thd.springboottest.logback.controller;
 
+import com.thd.springboottest.logback.service.LogBackTestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,12 +19,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/logBack")
 public class LogBackController {
     private Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private LogBackTestService logBackTestService;
+
+    //url : http://127.0.0.1:8899/thd/logBack/index
     @RequestMapping("/index")
     @ResponseBody
     public String index(){
-        log.info(" index() ");
-        log.debug(" index() ");
-        log.error(" index() ");
+        log.info(" info() ");
+        log.debug(" debug() ..");
+        log.warn(" warn() ");
+        log.error(" error() ");
+        logBackTestService.test();
         return "SUCCESS";
     }
 }

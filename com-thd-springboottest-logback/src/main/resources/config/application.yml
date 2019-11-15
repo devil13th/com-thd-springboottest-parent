@@ -2,6 +2,10 @@ server:
   port: 8899
   servlet:
     context-path: /thd
+spring:
+  profiles:
+    active: prod
+
 
 logging:
   config: classpath:config/logback-spring.xml
