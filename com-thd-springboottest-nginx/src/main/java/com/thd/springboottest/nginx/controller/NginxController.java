@@ -6,18 +6,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * com.thd.springboottest.nginx.controller.NginxController
+ * 使用nginx 解决js跨域问题
  *
  * @author: wanglei62
  * @DATE: 2019/11/7 23:14
@@ -30,6 +27,13 @@ public class NginxController {
     @Autowired
     private HttpServletResponse response;
 
+
+    /**
+     * 设置cookie
+     * @param cookieName cookie name
+     * @param cookieValue cookie value
+     * @return
+     */
     @RequestMapping("/setCookie/{cookieName}/{cookieValue}")
     @ResponseBody
     // url : http://127.0.0.1:8899/thd/nginx/setCookie/name/devil13th
@@ -43,6 +47,11 @@ public class NginxController {
         return ResponseEntity.ok("SUCCESS");
     }
 
+
+    /**
+     * 展示所有cookie
+     * @return
+     */
     @RequestMapping("/getCookie")
     @ResponseBody
     // url : http://127.0.0.1:8899/thd/nginx/getCookie
@@ -58,6 +67,11 @@ public class NginxController {
         return ResponseEntity.ok(m);
     }
 
+    /**
+     * 删除cookie
+     * @param cookieName
+     * @return
+     */
     @RequestMapping("/delCookie/{cookieName}")
     @ResponseBody
     public ResponseEntity delCookie(@PathVariable String cookieName){
