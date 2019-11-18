@@ -24,6 +24,7 @@
         <module>com-thd-springboottest-profile</module>
         <module>com-thd-springboottest-swagger</module>
         <module>com-thd-springboottest-nginx</module>
+        <module>com-thd-springboottest-uploadfiles</module>
 
     </modules>
 

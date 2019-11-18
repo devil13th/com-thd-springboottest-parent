@@ -1,0 +1,23 @@
+debug: true
+spring:
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled: true
+
+server:
+  port: 8899
+  servlet:
+    context-path: /thd
+    # 附件上传相关
+    multipart:
+      # 限制上传的多个文件的总大小
+      max-request-size: 3M
+      # 限制单个文件的最大值
+      max-file-size: 1M
+
+
+
+#spring.mvc.view.prefix= /WEB-INF/pages/
+#spring.mvc.view.suffix= .jsp

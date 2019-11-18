@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Boot 文件上传</title>
+
+
+    <script>
+function ajaxUpload(){
+    var input = document.querySelector('input[id="ajaxFiles"]')
+
+    var data = new FormData()
+    console.log(input.files)
+    if(!input.files || input.files.length < 1){
+        alert("请选择附件");
+        return ;
+    }
+
+    for(var i = 0 , j = input.files.length ; i < j ; i++){
+        data.append('file',input.files[i]);
+    }
+
+    data.append('keyword', 'ajax多文件上传')
+
+    console.log(data);
+
+    fetch('/thd/uploadfiles/multiUpload', {
+      method: 'POST',
+      body: data
+    })
+}
+
+    </script>
+</head>
+<body>
+
+访问地址：http://127.0.0.1:8899/thd/index.html
+<hr/>
+<h1>form单文件上传</h1>
+<form method="post" action="/thd/uploadfiles/singleUpload" enctype="multipart/form-data">
+    <input type="file" name="file" /><br>
+    <input type ="text" name="keyword" placeholder="关键字"/><br>
+    <input type="submit" value="单文件上传提交" />
+</form>
+
+<h1>form多文件上传</h1>
+<form method="post" action="/thd/uploadfiles/multiUpload" enctype="multipart/form-data">
+    <input type="file" name="file" multiple="multiple"/><br>
+    <input type ="text" name="keyword" placeholder="关键字"/><br>
+    <input type="submit" value="多文件上传提交" />
+</form>
+
+
+<h1>ajax多文件上传</h1>
+<form method="post" action="/thd/uploadfiles/multiUpload" enctype="multipart/form-data">
+    <input type="file" id="ajaxFiles" name="file" multiple="multiple"/><br>
+    <input type ="text" name="keyword" id="ajaxFileKeyworld" placeholder="关键字"/><br>
+    <input type="button" value="ajax多文件上传提交" onclick="ajaxUpload()"/>
+</form>
+
+</body>
+</html>
