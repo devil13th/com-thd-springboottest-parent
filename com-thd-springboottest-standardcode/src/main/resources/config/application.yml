@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: dev
+
+
+
+  thymeleaf:
+    cache: false
+    prefix: classpath:/static/
+    suffix: .html
+
+
+---
+spring:
+  profiles: dev
+  application:
+    name: thd - springboot standard code - dev
+---
+spring:
+  profiles: test
+  application:
+    name: thd - springboot standard code - test
+
+---
+spring:
+  profiles: prod
+  application:
+    name: thd - springboot standard code - prod

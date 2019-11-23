@@ -25,10 +25,11 @@
         <module>com-thd-springboottest-swagger</module>
         <module>com-thd-springboottest-nginx</module>
         <module>com-thd-springboottest-uploadfiles</module>
+        <module>com-thd-springboottest-standardcode</module>
 
     </modules>
 
-
+    <!-- 如果不想使用 spring-boot-starter-parent 则注释掉parent后将dependencyManagement中的注释打开 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -45,6 +46,22 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.encoding>utf-8</maven.compiler.encoding>
     </properties>
+
+
+    <!-- 如果不想使用 spring-boot-starter-parent 则注释掉parent后将该注释打开 -->
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                &lt;!&ndash; Import dependency management from Spring Boot &ndash;&gt;-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-dependencies</artifactId>-->
+<!--                <version>2.1.5.RELEASE</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
+
 
 
     <dependencies>
