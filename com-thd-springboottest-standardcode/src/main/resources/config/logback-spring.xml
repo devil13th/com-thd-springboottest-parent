@@ -54,7 +54,7 @@
     <appender name="CONSOLE_COLOR" class="ch.qos.logback.core.ConsoleAppender">
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>info</level>
+            <level>debug</level>
         </filter>
         <encoder>
             <!-- %37():如果字符没有37个字符长度,则左侧用空格补齐 -->
@@ -246,6 +246,18 @@
             <appender-ref ref="WARN_FILE" />
             <appender-ref ref="DEBUG_FILE" />
         </logger>
+        <logger name="com.thd" level="debug">
+            <appender-ref ref="INFO_FILE" />
+            <appender-ref ref="ERROR_FILE" />
+            <appender-ref ref="WARN_FILE" />
+            <appender-ref ref="DEBUG_FILE" />
+        </logger>
+        <logger name="com" level="debug">
+            <appender-ref ref="INFO_FILE" />
+            <appender-ref ref="ERROR_FILE" />
+            <appender-ref ref="WARN_FILE" />
+            <appender-ref ref="DEBUG_FILE" />
+        </logger>
     </springProfile>
     <!--测试环境:打印ERROR和INFO级的日志-->
     <springProfile name="test">
@@ -264,7 +276,7 @@
     </springProfile>
 
     <!-- 根logger 等级为Info -->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE_COLOR" />
         <!-- <appender-ref ref="CONSOLE" />
         <appender-ref ref="DEBUG_FILE" />

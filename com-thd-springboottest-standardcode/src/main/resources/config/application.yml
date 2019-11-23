@@ -10,6 +10,24 @@ spring:
     suffix: .html
 
 
+## mybatis数据源
+mybatis:
+  mapper-locations: classpath:mapper/*.xml #这里是mapper的配置文件
+  # 这里是实体类的包 添加这个配置后就不用在mapper.xml配置文件中aliases了
+  type-aliases-package: com.thd.springboottest.standardcode.entity
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰属性与数据库字段下划线自动转换
+
+
+logging:
+  config: classpath:config/logback-spring.xml
+  path: D:/deleteme/logback
+  # mybatis log output
+#  level:
+#    com.thd.springboottest.standardcode.dao: debug # 输出mybatis的sql 和 参数
+
+
+
 ---
 spring:
   profiles: dev

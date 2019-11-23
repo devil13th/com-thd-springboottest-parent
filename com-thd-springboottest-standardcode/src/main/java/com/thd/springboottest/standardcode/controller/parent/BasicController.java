@@ -1,4 +1,4 @@
-package com.thd.springboottest.standardcode.controller;
+package com.thd.springboottest.standardcode.controller.parent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +19,28 @@ public class BasicController {
     protected HttpServletRequest request;
     @Autowired
     protected HttpServletResponse response;
+
     public Logger getLog() {
         return log;
     }
 
     public void setLog(Logger log) {
         this.log = log;
+    }
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public HttpServletResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(HttpServletResponse response) {
+        this.response = response;
     }
 }

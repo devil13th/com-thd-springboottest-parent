@@ -1,5 +1,6 @@
 package com.thd.springboottest.standardcode.controller;
 
+import com.thd.springboottest.standardcode.controller.parent.BasicController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @RequestMapping("/test")
 @Controller
-public class TestController extends BasicController{
+public class TestController extends BasicController {
     @RequestMapping("/test")
     @ResponseBody
     public ResponseEntity test(){

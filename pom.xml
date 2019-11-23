@@ -26,6 +26,7 @@
         <module>com-thd-springboottest-nginx</module>
         <module>com-thd-springboottest-uploadfiles</module>
         <module>com-thd-springboottest-standardcode</module>
+        <module>com-thd-springboottest-exceptionhandler</module>
 
     </modules>
 
