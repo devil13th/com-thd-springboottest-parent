@@ -1,4 +1,4 @@
-package com.thd.springboottest.standardcode.entity;
+package com.thd.springboottest.redis.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,6 +18,8 @@ public class MyUser {
     @JSONField(format="yyyy-MM-dd")
     // MVC Date反序列化格式(客户端->服务端)
     @DateTimeFormat(pattern="yyyy-MM-dd")
+    // MVC Date 的序列化格式(服务端->客户端)
+    @JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+8")
     private Date userBirthday;
 
     // redis使用fastjson格式化

@@ -5,7 +5,7 @@
 spring:
   jackson:
     # 对日期类型的序列化(服务端->客户端)
-    # date-format: yyyy/MM/dd HH:mm:ss
+    #date-format: yyyy/MM/dd HH:mm:ss
     date-format: yyyy-MM-dd HH:mm:ss
     # 解决相差8小时问题
     time-zone: GMT+8

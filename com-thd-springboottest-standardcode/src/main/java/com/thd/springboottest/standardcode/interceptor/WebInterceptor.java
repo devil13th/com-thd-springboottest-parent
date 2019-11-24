@@ -23,7 +23,7 @@ public class WebInterceptor implements HandlerInterceptor {
      */
     public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
             throws Exception {
-        this.logger.info(" completion ");
+        this.logger.debug(" completion ");
     }
 
     /*
@@ -31,7 +31,7 @@ public class WebInterceptor implements HandlerInterceptor {
      */
     public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3)
             throws Exception {
-        this.logger.info(" postHandle ");
+        this.logger.debug(" postHandle ");
 
     }
 
@@ -39,11 +39,11 @@ public class WebInterceptor implements HandlerInterceptor {
      * 进入controller层之前拦截请求
      */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
-        this.logger.info("getContextPath:" + request.getContextPath());
-        this.logger.info("getServletPath:" + request.getServletPath());
-        this.logger.info("getRequestURI:" + request.getRequestURI());
-        this.logger.info("getRequestURL:" + request.getRequestURL());
-        this.logger.info("getRealPath:" + request.getSession().getServletContext().getRealPath("image"));
+        this.logger.debug("getContextPath:" + request.getContextPath());
+        this.logger.debug("getServletPath:" + request.getServletPath());
+        this.logger.debug("getRequestURI:" + request.getRequestURI());
+        this.logger.debug("getRequestURL:" + request.getRequestURL());
+        this.logger.debug("getRealPath:" + request.getSession().getServletContext().getRealPath("image"));
 
         return true;
 

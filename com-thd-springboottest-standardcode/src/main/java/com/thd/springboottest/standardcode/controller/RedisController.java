@@ -1,10 +1,8 @@
-package com.thd.springboottest.redis.controller;
+package com.thd.springboottest.standardcode.controller;
 
-import com.thd.springboottest.redis.vo.MyUser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.thd.springboottest.standardcode.controller.parent.BasicController;
+import com.thd.springboottest.standardcode.entity.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,22 +17,16 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 /**
- * @author devil13th
- **/
+ * com.thd.springboottest.standardcode.controller.RedisController
+ * User: devil13th
+ * Date: 2019/11/24
+ * Time: 21:46
+ * Description: No Description
+ */
+
+@RequestMapping("/redis")
 @Controller
-@RequestMapping(value="/redis")
-public class RedisController {
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-
-    public Logger getLog() {
-        return log;
-    }
-
-    public void setLog(Logger log) {
-        this.log = log;
-    }
-
-
+public class RedisController extends BasicController {
     @Resource
     private RedisTemplate myRedisTemplate;
 

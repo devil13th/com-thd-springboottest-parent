@@ -246,18 +246,6 @@
             <appender-ref ref="WARN_FILE" />
             <appender-ref ref="DEBUG_FILE" />
         </logger>
-        <logger name="com.thd" level="debug">
-            <appender-ref ref="INFO_FILE" />
-            <appender-ref ref="ERROR_FILE" />
-            <appender-ref ref="WARN_FILE" />
-            <appender-ref ref="DEBUG_FILE" />
-        </logger>
-        <logger name="com" level="debug">
-            <appender-ref ref="INFO_FILE" />
-            <appender-ref ref="ERROR_FILE" />
-            <appender-ref ref="WARN_FILE" />
-            <appender-ref ref="DEBUG_FILE" />
-        </logger>
     </springProfile>
     <!--测试环境:打印ERROR和INFO级的日志-->
     <springProfile name="test">
@@ -278,6 +266,7 @@
     <!-- 根logger 等级为Info -->
     <root level="DEBUG">
         <appender-ref ref="CONSOLE_COLOR" />
+        <appender-ref ref="ERROR_FILE" />
         <!-- <appender-ref ref="CONSOLE" />
         <appender-ref ref="DEBUG_FILE" />
         <appender-ref ref="INFO_FILE" />
