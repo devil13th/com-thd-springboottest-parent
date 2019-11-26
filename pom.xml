@@ -27,6 +27,7 @@
         <module>com-thd-springboottest-uploadfiles</module>
         <module>com-thd-springboottest-standardcode</module>
         <module>com-thd-springboottest-exceptionhandler</module>
+        <module>com-thd-springboottest-druid</module>
 
     </modules>
 
