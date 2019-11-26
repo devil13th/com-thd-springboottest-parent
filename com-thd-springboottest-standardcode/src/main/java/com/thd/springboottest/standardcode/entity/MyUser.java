@@ -2,6 +2,7 @@ package com.thd.springboottest.standardcode.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
@@ -10,6 +11,7 @@ import java.util.Date;
 /**
  * @author devil13th
  **/
+@Data
 public class MyUser {
     private String userId;
     private String userName;
@@ -26,45 +28,45 @@ public class MyUser {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp userCreateTime;
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Integer getUserAge() {
-        return userAge;
-    }
-
-    public void setUserAge(Integer userAge) {
-        this.userAge = userAge;
-    }
-
-    public Date getUserBirthday() {
-        return userBirthday;
-    }
-
-    public void setUserBirthday(Date userBirthday) {
-        this.userBirthday = userBirthday;
-    }
-
-    public Timestamp getUserCreateTime() {
-        return userCreateTime;
-    }
-
-    public void setUserCreateTime(Timestamp userCreateTime) {
-        this.userCreateTime = userCreateTime;
-    }
+//    public String getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(String userId) {
+//        this.userId = userId;
+//    }
+//
+//    public String getUserName() {
+//        return userName;
+//    }
+//
+//    public void setUserName(String userName) {
+//        this.userName = userName;
+//    }
+//
+//    public Integer getUserAge() {
+//        return userAge;
+//    }
+//
+//    public void setUserAge(Integer userAge) {
+//        this.userAge = userAge;
+//    }
+//
+//    public Date getUserBirthday() {
+//        return userBirthday;
+//    }
+//
+//    public void setUserBirthday(Date userBirthday) {
+//        this.userBirthday = userBirthday;
+//    }
+//
+//    public Timestamp getUserCreateTime() {
+//        return userCreateTime;
+//    }
+//
+//    public void setUserCreateTime(Timestamp userCreateTime) {
+//        this.userCreateTime = userCreateTime;
+//    }
 
     @Override
     public String toString() {

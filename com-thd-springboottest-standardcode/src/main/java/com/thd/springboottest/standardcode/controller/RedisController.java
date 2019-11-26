@@ -37,6 +37,7 @@ public class RedisController extends BasicController {
 
     @ResponseBody
     @RequestMapping(value="/jedisPoolInfo",method= RequestMethod.GET)
+    //url : http://127.0.0.1:8899/thd/redis/jedisPoolInfo
     public String jedisPoolInfo(){
         this.getLog().debug("" + jedisPool.getNumWaiters());
         this.getLog().debug("" + jedisPool.getNumIdle());
@@ -87,7 +88,6 @@ public class RedisController extends BasicController {
         user.setUserName("devil13th");
         user.setUserAge(5);
         user.setUserCreateTime(new Timestamp(new Date().getTime()));
-
         this.myRedisTemplate.opsForValue().set(user.getUserId(),user);
         return user;
     }

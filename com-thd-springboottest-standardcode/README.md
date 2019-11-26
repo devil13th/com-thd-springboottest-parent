@@ -6,7 +6,19 @@
 # Feature
 - Spring MVC
 - MyBatis
-- druid 数据源连接池
+## druid 数据源连接池
+1. application.yml 中 spring.datasource.druid 配置数据源属性
+2. configuration/DruidConfiguration 将druid数据源纳入到ioc容器中
+3. 监控地址
+http://127.0.0.1:8899/thd/druid/index.html
+
+## jdbc
+1. application.yml中配置数据源spring.datasource(也用于mybatis)
+2. dao/JdbcDao jdbc接口
+3. dao/JdbcDaoImpl jdbc接口实现
+4. bean/Page 分页bean
+5. controller/JdbcController jdbc测试controller
+
 ## redis
 1. pom.xml
 redis依赖
@@ -25,7 +37,6 @@ redis依赖
 向IOC注册Redis相关Bean以及设置序列化时使用的序列化工具
 
 3. application.yml
-
 spring.redis 配置了连接信息和连接池信息
 
 4. utils/FastJsonRedisSerializer
@@ -44,8 +55,16 @@ private Timestamp userCreateTime;
 ```
 
 
-- Lombok 
-- swagger 
+## Lombok 
+1. pom.xml
+```
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+</dependency>
+```
+2. entity/MyUser 中添加了@Data 就可以省略setter getter
+## swagger 
 ## logback
 1. logback-spring.xml中配置了日志规则和格式以及输出目的地
 2. application.yml 中logging配置
@@ -74,10 +93,21 @@ spring.jackson 中配置了Date类型的序列化格式(服务端 -> 客户端)
 异常返回结果测试地址：http://127.0.0.1:8899/thd/exceptionhandler/test/error
 正常返回结果测试地址：http://127.0.0.1:8899/thd/exceptionhandler/test/error
 
-- RestFul
-- thymeleaf
-- profiles功能
+## thymeleaf
+1. pom.xml
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+2. application.yml 中spring.thymeleaf配置
+3. resources/static 目录用于放置thymeleaf模板文件
+4. controller/ThymeleafController 用于测试thymeleaf
 
-### mybatis 日志输出
+
+## profiles功能
+
+## mybatis 日志输出
 1. logback-spring.xml中的root的级别改为debug
 2. logback-spring.xml中的CONSOLE_COLOR的级别改为debug

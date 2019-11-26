@@ -33,7 +33,7 @@ public class MVCExceptionHandler {
             return Result.error(myException.getCode(), myException.getMessage());
         } else {
             logger.error("系统异常 {}", e);
-            return Result.error(1000, "系统异常!");
+            return Result.error(1000, "系统异常:" + e.getMessage());
         }
     }
 }
