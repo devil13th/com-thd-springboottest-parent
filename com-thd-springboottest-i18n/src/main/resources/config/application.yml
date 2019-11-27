@@ -1,0 +1,24 @@
+#debug: true
+
+#trace=true
+# 打开actuator 所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+# 国际化
+spring:
+  messages:
+    encoding: UTF-8
+    basename: i18n/messages,i18n/login/login
+    # 如果是多个源的话，用","相隔即可。
+    # basename: xxx,xxxx,xxxx
+
+
+server:
+  port: 8899
+  servlet:
+    context-path: /thd
+#spring.mvc.view.prefix= /WEB-INF/pages/
+#spring.mvc.view.suffix= .jsp

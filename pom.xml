@@ -28,6 +28,7 @@
         <module>com-thd-springboottest-standardcode</module>
         <module>com-thd-springboottest-exceptionhandler</module>
         <module>com-thd-springboottest-druid</module>
+        <module>com-thd-springboottest-i18n</module>
 
     </modules>
 
