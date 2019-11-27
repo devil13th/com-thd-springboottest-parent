@@ -11,7 +11,11 @@ management:
 spring:
   messages:
     encoding: UTF-8
-    basename: i18n/messages,i18n/login/login
+    # 语言资源位置为
+    # classpath:i18n/messages/messages[_en_US|_zh_CN].properties
+    # 或
+    # classpath:i18n/login/login[_en_US|_zh_CN].properties
+    basename: i18n/messages/messages,i18n/login/login
     # 如果是多个源的话，用","相隔即可。
     # basename: xxx,xxxx,xxxx
 
