@@ -30,7 +30,7 @@
         <module>com-thd-springboottest-i18n</module>
         <module>com-thd-springboottest-transactional</module>
         <module>com-thd-springboottest-jsonmessageconverters</module>
-        <module>com-thd-springboottest-exceptionhandler</module>
+        <module>com-thd-springboottest-exceptionhandle</module>
 
     </modules>
 

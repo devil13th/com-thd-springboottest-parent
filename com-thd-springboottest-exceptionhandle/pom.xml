@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>com-thd-springboottest-exceptionhandler</artifactId>
+    <artifactId>com-thd-springboottest-exceptionhandle</artifactId>
 
     <dependencies>
         <dependency>
