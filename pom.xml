@@ -26,9 +26,11 @@
         <module>com-thd-springboottest-nginx</module>
         <module>com-thd-springboottest-uploadfiles</module>
         <module>com-thd-springboottest-standardcode</module>
-        <module>com-thd-springboottest-exceptionhandler</module>
         <module>com-thd-springboottest-druid</module>
         <module>com-thd-springboottest-i18n</module>
+        <module>com-thd-springboottest-transactional</module>
+        <module>com-thd-springboottest-jsonmessageconverters</module>
+        <module>com-thd-springboottest-exceptionhandler</module>
 
     </modules>
 
