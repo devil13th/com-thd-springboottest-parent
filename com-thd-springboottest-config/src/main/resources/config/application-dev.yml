@@ -1,0 +1,8 @@
+cfg:
+  appName: dev
+  process: DEV
+  filePath: D://dev
+  cfgBean:
+    name: dev
+    age: 1
+

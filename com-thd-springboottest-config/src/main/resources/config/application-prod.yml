@@ -1,0 +1,7 @@
+cfg:
+  appName: prod
+  process: PROD
+  filePath: D://prod
+  cfgBean:
+    name: prod
+    age: 2

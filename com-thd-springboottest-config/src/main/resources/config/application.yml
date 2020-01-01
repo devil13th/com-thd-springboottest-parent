@@ -1,0 +1,38 @@
+spring:
+  profiles:
+    # 开启生效的配置文件 (spring.profiles对应的配置以及 application-{xxx}.yml 都会同时生效)
+    # //打包后 java -jar 名称.jar --spring.profiles.active=xxx 来控制使用哪套配置
+    # 可以用下面三个命令启动
+    # java -jar com-thd-springboottest-profile-1.0-SNAPSHOT.jar --spring.profiles.active=dev
+    # java -jar com-thd-springboottest-profile-1.0-SNAPSHOT.jar --spring.profiles.active=test
+    # java -jar com-thd-springboottest-profile-1.0-SNAPSHOT.jar --spring.profiles.active=prod
+    #active: prod  # 开启生产环境配置
+    active: test    # 开启测试环境配置
+    #active: dev     # 开启开发环境配置
+
+
+# 不同环境的配置，使用 --- 进行分割，以spring.profiles属性作为标识
+---
+#dev环境 配置
+spring:
+  profiles: dev
+server:
+  port: 8880
+  servlet:
+    context-path: /dev
+---
+#test 环境 配置
+spring:
+  profiles: test
+server:
+  port: 8881
+  servlet:
+    context-path: /test
+---
+#prod 环境 配置
+spring:
+  profiles: prod
+server:
+  port: 8882
+  servlet:
+    context-path: /prod
