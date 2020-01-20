@@ -31,4 +31,6 @@ public class MyUserServiceImpl implements  MyUserService {
     public int deleteById(String id){return myUserMapper.deleteById(id);}
     //一个联合查询和Map类型的参数
     public List queryJoin(Map m){return myUserMapper.queryJoinExample(m);};
+
+
 }

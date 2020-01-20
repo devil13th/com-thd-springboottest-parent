@@ -41,6 +41,86 @@
         <include refid="BASE_TABLE"/>
     </select>
 
+    <select id="queryByName" resultType="com.thd.springboottest.mybatis.entity.SysUser" parameterType="string">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+        <if test="name != null and name != ''">
+            <where>
+                user_name like concat('%',#{name},'%')
+            </where>
+        </if>
+    </select>
+
+
+    <select id="selectAllForMap" resultType="map">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+    </select>
+
+    <insert id="insertBatch" >
+        insert into sys_user
+        (
+            user_id,
+            user_name,
+            user_sex,
+            user_mail,
+            user_tel,
+            user_birthday,
+            user_status,
+            org_id
+        )
+        values
+        <foreach collection="list" item="r" index="index" separator=",">
+            (
+                #{r.userId},
+                #{r.userName},
+                #{r.userSex},
+                #{r.userMail},
+                #{r.userTel},
+                #{r.userBirthday},
+                #{r.userStatus},
+                #{r.orgId}
+            )
+        </foreach>
+    </insert>
+
+
+    <select id="selectin" resultType="com.thd.springboottest.mybatis.entity.SysUser">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+        <if test="list != null and list.size() > 0">
+            <where>
+                user_name in (
+                    <foreach collection="list" item="r" index="index" separator=",">
+                        #{r}
+                    </foreach>
+                )
+            </where>
+        </if>
+    </select>
+
+
+    <select id="selectAllForMapKey" resultType="com.thd.springboottest.mybatis.entity.SysUser">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+    </select>
+
+    <select id="queryCount" resultType="int">
+        select count(1) from sys_user
+        <if test="userName != null and userName != '' ">
+            <where>
+                user_name like concat('%',#{userName},'%')
+            </where>
+        </if>
+    </select>
 
 
 </mapper>

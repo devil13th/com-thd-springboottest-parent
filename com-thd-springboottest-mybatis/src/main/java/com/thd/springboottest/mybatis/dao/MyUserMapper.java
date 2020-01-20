@@ -25,7 +25,6 @@ public interface MyUserMapper {
     public List queryListByLike(MyUser user);
     //根据id删除
     public int deleteById(String id);
-
     //一个联合查询
     public List queryJoinExample(Map m);
 }

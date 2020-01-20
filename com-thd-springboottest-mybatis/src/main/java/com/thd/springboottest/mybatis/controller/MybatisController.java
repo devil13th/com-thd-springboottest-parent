@@ -1,5 +1,8 @@
 package com.thd.springboottest.mybatis.controller;
 
+//import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageInfo;
+import com.thd.springboottest.mybatis.dao.SysUserMapper;
 import com.thd.springboottest.mybatis.entity.MyUser;
 import com.thd.springboottest.mybatis.entity.SysUser;
 import com.thd.springboottest.mybatis.service.MyUserService;
@@ -30,6 +33,12 @@ public class MybatisController {
     private SysUserService sysUserService;
     @Autowired
     private MyUserService myUserService;
+
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
+
+
     @ResponseBody
     @RequestMapping(value="/index",method= RequestMethod.GET)
     //http://127.0.0.1:8899/thd/mybatis/index
@@ -144,6 +153,110 @@ public class MybatisController {
         List l = myUserService.queryJoin(m);
         return ResponseEntity.ok(l);
     }
+
+
+    // ------------------------------------- 以下是一些复杂Mapper例子 -------------------------- //
+
+    /**
+     * 返回 List<Map> 类型结果
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/selectAllForMap")
+    //http://127.0.0.1:8899/thd/mybatis/selectAllForMap
+    public ResponseEntity selectAllForMap(){
+        List<Map<String,String>> l = this.sysUserMapper.selectAllForMap();
+        System.out.println(l);
+        return ResponseEntity.ok(l);
+    }
+
+
+    /**
+     * 批量插入
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/insertBatch")
+    //http://127.0.0.1:8899/thd/mybatis/insertBatch
+    public ResponseEntity insertBatch(){
+        int ct = 1000;
+        List<SysUser>  l = new ArrayList<SysUser>(ct);
+        int i = 0;
+        while(i<ct){
+            SysUser su = new SysUser();
+            su.setUserId(UUID.randomUUID().toString().replace("-",""));
+            su.setUserBirthday(new Date());
+            su.setUserMail("user" + i + "@163.com");
+            su.setUserName("user_" + i);
+            su.setUserSex(1);
+            su.setUserStatus("1");
+            su.setUserTel("12345678");
+            l.add(su);
+            i++;
+        }
+        this.sysUserMapper.insertBatch(l);
+        return ResponseEntity.ok("SUCCESS");
+    }
+
+    /**
+     * in 查询
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/selectin")
+    //http://127.0.0.1:8899/thd/mybatis/selectin
+    public ResponseEntity selectin(){
+        List<String> param = new ArrayList<String>();
+        param.add("user_1");
+        param.add("user_2");
+        param.add("user_3");
+        param.add("user_4");
+        param.add("user_5");
+        List<SysUser> l = this.sysUserMapper.selectin(param);
+        return ResponseEntity.ok(l);
+    }
+
+
+    /**
+     * 返回map, key为指定属性，value为实体类结果集
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/selectAllForMapKey")
+    //http://127.0.0.1:8899/thd/mybatis/selectAllForMapKey
+    public ResponseEntity selectAllForMapKey(){
+        Map<String,SysUser> m = this.sysUserMapper.selectAllForMapKey();
+        System.out.println(m);
+        return ResponseEntity.ok(m);
+    }
+
+
+    /**
+     * 统计查询
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/queryCount")
+    //http://127.0.0.1:8899/thd/mybatis/queryCount
+    public ResponseEntity queryCount(){
+        Integer count = this.sysUserMapper.queryCount("1");
+        System.out.println(count);
+        return ResponseEntity.ok(count);
+    }
+
+
+    /**
+     * 测试分页插件
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/queryByName/{name}/{page}/{pageSize}")
+    //http://127.0.0.1:8899/thd/mybatis/queryByName/{name}/{page}/{pageSize}
+    public ResponseEntity queryByName(@PathVariable String name,@PathVariable int page,@PathVariable int pageSize){
+        PageInfo<SysUser> pi = this.sysUserService.queryByNamePage(name,pageSize,page);
+        return ResponseEntity.ok(pi);
+    }
+
 
 
 
