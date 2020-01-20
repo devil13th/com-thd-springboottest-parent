@@ -130,5 +130,15 @@ public class RequestparameterController {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value="/testHeader01",method=RequestMethod.GET)
+    //获取请求头内容
+    public String testHeader01(@RequestHeader(name="myHeader") String myHeader) throws IOException {
+        String str = " Request Header - myHeadeer:" + myHeader;
+        System.out.println(str);
+        return str;
+    }
+
+
 
 }
