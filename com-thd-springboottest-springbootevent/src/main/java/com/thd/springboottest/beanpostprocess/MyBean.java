@@ -1,6 +1,5 @@
-package com.thd.springboottest.bean;
+package com.thd.springboottest.beanpostprocess;
 
-import com.thd.springboottest.annotation.MyAnnotation;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;

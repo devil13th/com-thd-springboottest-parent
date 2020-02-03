@@ -1,70 +1,23 @@
-package com.thd.springboottest.redis.cfg;
+package com.thd.springboottest.shiro.configuration;
 
+import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thd.springboottest.redis.utils.FastJsonRedisSerializer;
+import com.thd.springboottest.shiro.dao.MySessionDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-
-/**
- * @author devil13th
- **/
 @Configuration
-public class CfgBean {
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-    @Value("${spring.redis.host}")
-    private String host;
-
-    @Value("${spring.redis.port}")
-    private int port;
-
-    @Value("${spring.redis.timeout}")
-    private int timeout;
-
-    @Value("${spring.redis.jedis.pool.max-idle}")
-    private int maxIdle;
-
-    @Value("${spring.redis.jedis.pool.max-wait}")
-    private long maxWaitMillis;
-
-//    @Value("${spring.redis.password}")
-//    private String password;
-
-    @Value("${spring.redis.block-when-exhausted}")
-    private boolean  blockWhenExhausted;
-
-    @Bean
-    public JedisPool redisPoolFactory()  throws Exception{
-        log.info("JedisPool注入成功！！");
-        log.info("redis地址：" + host + ":" + port);
-        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(maxIdle);
-        jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
-        // 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true
-        jedisPoolConfig.setBlockWhenExhausted(blockWhenExhausted);
-        // 是否启用pool的jmx管理功能, 默认true
-        jedisPoolConfig.setJmxEnabled(true);
-//        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout);
-        return jedisPool;
-    }
-
-
-
-    @Bean("myRedisTemplate")
+public class RedisConfig {
+    private static Logger logger = LoggerFactory.getLogger(MySessionDao.class);
+    @Bean("redisTemplate")
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -104,7 +57,7 @@ public class CfgBean {
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
         // =================== 创建 FastJsonRedisSerializer 序列化器 使用fastjson进行序列化和反序列化=================== //
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
+        MyFastJsonRedisSerializer  fastJsonRedisSerializer = new MyFastJsonRedisSerializer(Object.class);
 
         /**
          * keySerializer 字符串 哈希 列表 集合 有序集合的键的序列化策略。
@@ -116,30 +69,18 @@ public class CfgBean {
         // 设置redis key的序列化器 ( 一般情况下key使用字符串 ,所以用 stringRedisSerializer)
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
-
         // 设置redis value的序列化器 (上面几种序列化器任选其一,推荐使用fastJsonRedisSerializer (json格式,序列化效率高且业界常用))
         redisTemplate.setValueSerializer(fastJsonRedisSerializer);
         redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
 
 
-        System.out.println(redisTemplate.getKeySerializer().toString());
-        System.out.println(redisTemplate.getValueSerializer().toString());
+        logger.info(redisTemplate.getKeySerializer().toString());
+        logger.info(redisTemplate.getValueSerializer().toString());
 
+        //redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
 
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

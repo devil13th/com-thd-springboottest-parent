@@ -1,4 +1,4 @@
-package com.thd.springboottest.annotation;
+package com.thd.springboottest.beanpostprocess;
 
 import java.lang.annotation.*;
 

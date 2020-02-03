@@ -1,0 +1,4 @@
+visit url :
+http://127.0.0.1:8899/thd/st/staticresource.txt
+http://127.0.0.1:8899/thd/st/a.jpg
+i'm a static

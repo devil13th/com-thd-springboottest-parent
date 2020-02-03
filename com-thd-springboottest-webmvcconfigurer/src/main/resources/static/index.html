@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>requestparameter</title>
+    <script>
+
+function testPost01(){
+    var headers = new Headers();
+    headers.set('Content-Type', 'application/json');
+    const u = {
+        "userId":"1",
+        "userName":"devil13th",
+        "phone":"13800138000",
+        "birthday":"2020-02-02",
+        "age":5,
+        "roles":[]
+    }
+    fetch('/thd/test/testFastJsonUnSerializer', {
+        method: 'post',
+        headers:headers,
+        body: JSON.stringify(u)
+    }).then(function(res){
+        return res.json()
+    }).then(function(result){
+        console.log(result);
+        let personStr = JSON.stringify(result);
+        alert(personStr)
+    });
+}
+
+
+/*
+function testPost02(){
+    var formData = new FormData();
+    formData.append('exists','YES');
+    formData.append('name','devil13th');
+
+     //模拟原生form提交数据不要加headers属性
+    fetch('/thd/test/boolFormatter', {
+        method: 'post',
+        headers:{
+            'Content-Type':'application/x-www-form-urlencoded'
+        },
+        body:formData
+    }).then(function(res){
+        return res.json()
+    }).then(function(result){
+        console.log(result);
+
+        let personStr = JSON.stringify(result);
+        alert(personStr)
+    });
+}
+*/
+function testPost02(){
+    var headers = new Headers();
+    headers.set('Content-Type', 'application/x-www-form-urlencoded');
+    /*const u = {
+        "exists":"YES",
+        "name":"devil13th"
+    }*/
+    fetch('/thd/test/boolFormatter', {
+        method: 'post',
+        headers:headers,
+        //body: JSON.stringify(u)
+        body:"exists=YES&name=devil13th"
+    }).then(function(res){
+        return res.json()
+    }).then(function(result){
+        console.log(result);
+        let personStr = JSON.stringify(result);
+        alert(personStr)
+    });
+}
+
+
+
+    </script>
+</head>
+<body>
+地址：http://127.0.0.1:8899/thd/index.html
+
+<h1>tFastJsonUnSerializer 测试SPRING MVC反序列化</h1>
+<input type="button" value="test" onclick="testPost01()"/>
+
+<h1>addFormatter 测试 springboot WebMvcConfigurlar addFormatters方法</h1>
+<input type="button" value="test" onclick="testPost02()"/>
+
+
+
+</body>
+</html>

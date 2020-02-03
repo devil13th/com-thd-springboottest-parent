@@ -32,8 +32,10 @@
         <module>com-thd-springboottest-jsonmessageconverters</module>
         <module>com-thd-springboottest-exceptionhandle</module>
         <module>com-thd-springboottest-config</module>
-        <module>com-thd-springboot-test-springbootevent</module>
         <module>com-thd-springboottest-springbootevent</module>
+        <module>com-thd-springboottest-shiro</module>
+        <module>com-thd-springboottest-fastjson</module>
+        <module>com-thd-springboottest-webmvcconfigurer</module>
 
     </modules>
 

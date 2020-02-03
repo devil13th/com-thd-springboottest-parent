@@ -71,7 +71,12 @@ public class CfgBean {
         // =================== 创建 FastJsonRedisSerializer 序列化器 使用fastjson进行序列化和反序列化=================== //
         FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
 
-
+        /**
+         * keySerializer 字符串 哈希 列表 集合 有序集合的键的序列化策略。
+         * valueSerializer 字符串 列表 集合 有序集合的值的序列化策略。
+         * hashKeySerializer 哈希的小键的序列化策略
+         * hashValueSerializer 哈希的值的序列化策略
+         */
 
         // 设置redis key的序列化器 ( 一般情况下key使用字符串 ,所以用 stringRedisSerializer)
         redisTemplate.setKeySerializer(stringRedisSerializer);
