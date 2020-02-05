@@ -1,20 +1,13 @@
-debug: true
+debug: false
 spring:
   thymeleaf:
     cache: false
   devtools:
     restart:
       enabled: true
-#trace=true
-# 打开actuator 所有端点
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
 
 server:
-  port: 8898
+  port: 8899
   servlet:
     context-path: /thd
 #spring.mvc.view.prefix= /WEB-INF/pages/

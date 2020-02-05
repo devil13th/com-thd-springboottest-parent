@@ -82,7 +82,21 @@ function testPost02(){
     });
 }
 
-
+function testPost03(){
+    var headers = new Headers();
+    headers.set('Content-Type', 'application/x-www-form-urlencoded');
+    fetch('/thd/requestparameter/testPost03', {
+        method: 'post',
+        headers:headers,
+        body:"age=5&name=devil13th"
+    }).then(function(res){
+        return res.json()
+    }).then(function(result){
+        console.log(result);
+        let personStr = JSON.stringify(result);
+        alert(personStr)
+    });
+}
 
 function testUpload01(){
 　　let picture = document.getElementById("picture").files;
@@ -141,6 +155,7 @@ function testUpload02(){
 </form>
 <input type="button" value="fetch模拟表单提交" onclick="testPost02()"/>
 
+<input type="button" value="fetch模拟表单提交2" onclick="testPost03()"/>
 
 <hr/>
 单个文件上传

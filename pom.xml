@@ -36,6 +36,7 @@
         <module>com-thd-springboottest-shiro</module>
         <module>com-thd-springboottest-fastjson</module>
         <module>com-thd-springboottest-webmvcconfigurer</module>
+        <module>com-thd-springboottest-resttemplate</module>
 
     </modules>
 

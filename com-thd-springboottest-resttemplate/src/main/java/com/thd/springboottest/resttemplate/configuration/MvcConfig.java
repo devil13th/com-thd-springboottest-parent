@@ -1,43 +1,19 @@
-package com.thd.springboottest.webmvcconfigurer.config;
+package com.thd.springboottest.resttemplate.configuration;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.thd.springboottest.webmvcconfigurer.formatter.BooleanFormatAnnotationFormatterFactory;
-import com.thd.springboottest.webmvcconfigurer.formatter.BooleanFormatter;
-import com.thd.springboottest.webmvcconfigurer.interceptor.WebInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.AnnotationFormatterFactory;
-import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-    /**
-     * 添加静态文件目录
-     * @param registry
-     */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
-
-        registry.addResourceHandler("/st/**")
-                .addResourceLocations("classpath:/st/");
-
-        registry.addResourceHandler("/v2/api-docs/**")
-                .addResourceLocations("classpath:/META-INF/resources/v2/api-docs/");
-
-    }
 
 
     // WebMvcConfigurerAdapter 这个类在SpringBoot2.0已过时，官方推荐直接实现WebMvcConfigurer 这个接口
@@ -84,28 +60,4 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
 
-    @Autowired
-    private WebInterceptor webInterceptor;
-
-    @Override
-    /**
-     * 定义拦截器
-     */
-    public void addInterceptors(InterceptorRegistry registry) {
-        // 自定义拦截器，添加拦截路径和排除拦截路径
-        registry.addInterceptor(webInterceptor).addPathPatterns("/**").excludePathPatterns("/static/**");
-    }
-
-    /**
-     * 自定义类型转换规则(带有自定义注解的字段)
-     * 本功能只适用于POST请求且body中的数据是name=devil13th&age=5&exists=YES的形式 !!!
-     * @param registry
-     */
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        //registry.addFormatterForFieldAnnotation((AnnotationFormatterFactory<? extends Annotation>) new TimestampFormatAnnotationFormatterFactory());
-        registry.addFormatterForFieldAnnotation(new BooleanFormatAnnotationFormatterFactory());
-        //registry.addFormatterForFieldType(Boolean.class, new BooleanFormatter());
-
-    }
 }
