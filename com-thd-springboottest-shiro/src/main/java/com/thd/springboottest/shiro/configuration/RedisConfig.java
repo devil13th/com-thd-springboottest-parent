@@ -70,8 +70,8 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
         // 设置redis value的序列化器 (上面几种序列化器任选其一,推荐使用fastJsonRedisSerializer (json格式,序列化效率高且业界常用))
-        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
+        redisTemplate.setValueSerializer(jdkSerializationRedisSerializer);
+        redisTemplate.setHashValueSerializer(jdkSerializationRedisSerializer);
 
 
         logger.info(redisTemplate.getKeySerializer().toString());

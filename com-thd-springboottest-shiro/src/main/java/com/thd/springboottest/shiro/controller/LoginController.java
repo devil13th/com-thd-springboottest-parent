@@ -12,6 +12,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,21 @@ public class LoginController {
         try {
             //进行验证，这里可以捕获异常，然后返回对应信息
             subject.login(usernamePasswordToken);
+
+
+            System.out.println(" ------------------ 认证 ---------------------");
+            String sessionId =  SecurityUtils.getSubject().getSession().getId().toString();
+            System.out.println("session id:" + sessionId);
+            System.out.println("isAuthenticated:" + SecurityUtils.getSubject().isAuthenticated());
+            System.out.println("Principal:" + SecurityUtils.getSubject().getPrincipal());
+            System.out.println("Principal Json:" + JSON.toJSONString(SecurityUtils.getSubject().getPrincipal()));
+            SecurityUtils.getSubject().getSession().setAttribute("user",user);
+            System.out.println("User Json:" + JSON.toJSONString(user));
+            System.out.println(SecurityUtils.getSubject().getSession().getAttribute("user"));
+
+           // System.out.println(SecurityUtils.getSecurityManager().getSession("myShiroshiro_redis_session:" + sessionId));
+
+
             System.out.println("------------------- 权限 ---------------------");
             System.out.println(subject.hasRole("admin"));
             System.out.println(subject.hasRole("user"));
@@ -62,6 +78,9 @@ public class LoginController {
 
             System.out.println(subject.isPermitted("query"));
             System.out.println(subject.isPermitted("add"));
+
+
+
 
 
 //            subject.checkRole("admin");
@@ -84,8 +103,16 @@ public class LoginController {
     @RequestMapping("/logout")
     // url : http://127.0.0.1:8899/thd/logout
     public String logout() {
-
+        System.out.println("isAuthenticated:" + SecurityUtils.getSubject().isAuthenticated());
         SecurityUtils.getSubject().logout();
+
+
+        System.out.println(" ------------------ 认证 ---------------------");
+        String sessionId =  SecurityUtils.getSubject().getSession().getId().toString();
+        System.out.println("isAuthenticated:" + SecurityUtils.getSubject().isAuthenticated());
+        System.out.println("session id:" + sessionId);
+        System.out.println("Principal:" + SecurityUtils.getSubject().getPrincipal());
+
 
         return "logout success";
     }
@@ -136,6 +163,9 @@ public class LoginController {
                 System.out.println(subject.isAuthenticated());
                 System.out.println(subject.getPrincipal());
 
+                // 多realm 认证时当多个realm都通过时 会返回成功认证的身份 - 多个身份
+                PrincipalCollection principalCollection = subject.getPrincipals();
+
                 System.out.println("------------------- 权限 ---------------------");
                 subject.checkRole("admin");
                 subject.checkRole("user");
@@ -166,6 +196,7 @@ public class LoginController {
     @RequestMapping("/list")
     // url : http://127.0.0.1:8899/thd/list
     public String list() {
+        SecurityUtils.getSubject().getSession().touch();
         return "list!";
     }
 
