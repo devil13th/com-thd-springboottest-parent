@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.thd.springboottest.resttemplate.entity.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
@@ -238,6 +244,79 @@ public class RestTemplateController {
 
 
         System.out.println("========================");
+
+        return ResponseEntity.ok("SUCCESS");
+    }
+
+
+
+
+    /**
+     * @see ReceiveController#testDownload(HttpServletResponse) 
+     */
+    @RequestMapping("/testDownload")
+    @ResponseBody
+    // url : http://127.0.0.1:8899/thd/restTemplate/testDownload
+    public ResponseEntity testDownload(){
+        RestTemplate rt = new RestTemplate();
+        String url = "http://127.0.0.1:8899/thd/receive/testDownload";
+        HttpMethod method = HttpMethod.POST;
+
+        ResponseEntity<byte[]> response =  rt.getForEntity(url,byte[].class);
+        System.out.println(response.getHeaders());
+        System.out.println(response.getBody());
+        System.out.println(response.getStatusCode());
+
+        System.out.println(response.getHeaders().getContentType());
+        //System.out.println(response.getHeaders().getContentType().getSubtype());
+        try {
+            File file = File.createTempFile("ess-", "." + "pdf");
+            System.out.println(file.getAbsolutePath());
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(response.getBody());
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok("SUCCESS");
+    }
+
+
+    /**
+     * @see ReceiveController#testUpload(MultipartFile, Person)
+     */
+    @RequestMapping("/testUpload")
+    @ResponseBody
+    // url : http://127.0.0.1:8899/thd/restTemplate/testUpload
+    public ResponseEntity testUpload(){
+        RestTemplate rt = new RestTemplate();
+        String url = "http://127.0.0.1:8899/thd/receive/testUpload";
+        HttpMethod method = HttpMethod.POST;
+
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        //设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("multipart/form-data");
+        headers.setContentType(type);
+
+        //设置请求体，注意是LinkedMultiValueMap
+        FileSystemResource fileSystemResource = new FileSystemResource("D:\\deleteme\\target\\2020-02-10_01-56-15_auditDOC_72780405daba4c248fa512ad926ec49c.pdf");
+        MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
+        form.add("file", fileSystemResource);
+        form.add("filename","aa.pdf");
+        form.add("name","zhangsan");
+        form.add("age","4");
+
+
+        //用HttpEntity封装整个请求报文
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(form, headers);
+
+        String s = restTemplate.postForObject(url, entity, String.class);
+        System.out.println("响应结果:" + s);
+
 
         return ResponseEntity.ok("SUCCESS");
     }

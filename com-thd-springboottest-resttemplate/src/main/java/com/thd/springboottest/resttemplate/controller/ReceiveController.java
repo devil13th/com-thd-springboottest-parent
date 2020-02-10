@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.Response;
 import java.io.*;
 import java.util.Date;
@@ -125,9 +126,9 @@ public class ReceiveController {
     }
 
     @ResponseBody
-    @RequestMapping(value="/testUpload01",method=RequestMethod.POST)
+    @RequestMapping(value="/testUpload",method=RequestMethod.POST)
     //单个文件上传 并获取数据
-    public String testUpload01(@RequestParam("file") MultipartFile file,@ModelAttribute("person") Person person) throws IOException {
+    public String testUpload(@RequestParam("file") MultipartFile file,@ModelAttribute("person") Person person) throws IOException {
         System.out.println(person);
         System.out.println("文件大小:" + file.getSize());
         InputStream is = file.getInputStream();
@@ -184,5 +185,41 @@ public class ReceiveController {
     }
 
 
+    // 文件下载
+    @ResponseBody
+    @RequestMapping(value="/testDownload",method=RequestMethod.GET)
+    //url : http://127.0.0.1:8899/thd/receive/testDownload
+    public void testDownload(HttpServletResponse response) throws IOException {
+        //response.setHeader("Content-Disposition", "attachment; filename=xxx.pdf" );
+        //response.setContentType("APPLICATION/OCTET-STREAM");
+
+        File f = new File("D:\\deleteme\\target\\2020-02-10_01-55-52_auditDOC_14b88b0f8289452ab519970753bf2ae2.pdf");
+        System.out.println(f.exists());
+        FileInputStream in = null;
+        OutputStream outp =  response.getOutputStream();
+        try {
+            outp = response.getOutputStream();
+            in = new FileInputStream("D:\\deleteme\\target\\2020-02-10_01-55-52_auditDOC_14b88b0f8289452ab519970753bf2ae2.pdf");
+            byte[] b = new byte[1024];
+            int i = 0;
+            while ((i = in.read(b)) > 0) {
+                outp.write(b, 0, i);
+            }
+            outp.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                in.close();
+                in = null;
+            }
+            if (outp != null) {
+                outp.close();
+                outp = null;
+                response.flushBuffer();
+            }
+        }
+
+    }
 
 }
