@@ -44,6 +44,7 @@ public class NginxController {
         ck.setPath("/");
 
         response.addCookie(ck);
+        System.out.println("session id:" + request.getSession().getId());
         return ResponseEntity.ok("SUCCESS");
     }
 
@@ -64,6 +65,7 @@ public class NginxController {
                 m.put(ck.getName(),ck.getValue());
             }
         }
+        System.out.println("session id:" + request.getSession().getId());
         return ResponseEntity.ok(m);
     }
 
@@ -80,6 +82,7 @@ public class NginxController {
         ck.setMaxAge(-1);
         ck.setPath("/");
         response.addCookie(ck);
+        System.out.println("session id:" + request.getSession().getId());
         return ResponseEntity.ok("SUCCESS");
     }
 }
