@@ -12,6 +12,9 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.DefaultSessionKey;
+import org.apache.shiro.session.mgt.SessionKey;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -19,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.Serializable;
 
 /**
  * com.thd.springboottest.shiro.controller.LoginController
@@ -59,6 +64,7 @@ public class LoginController {
 
             System.out.println(" ------------------ 认证 ---------------------");
             String sessionId =  SecurityUtils.getSubject().getSession().getId().toString();
+            SecurityUtils.getSubject().getSession().setAttribute("userName",user.getUserName());
             System.out.println("session id:" + sessionId);
             System.out.println("isAuthenticated:" + SecurityUtils.getSubject().isAuthenticated());
             System.out.println("Principal:" + SecurityUtils.getSubject().getPrincipal());
@@ -167,10 +173,10 @@ public class LoginController {
                 PrincipalCollection principalCollection = subject.getPrincipals();
 
                 System.out.println("------------------- 权限 ---------------------");
-                subject.checkRole("admin");
-                subject.checkRole("user");
-                subject.isPermitted("query");
-                subject.isPermitted("add");
+                System.out.println(subject.hasRole("admin"));
+                System.out.println(subject.hasRole("user"));
+                System.out.println(subject.isPermitted("query"));
+                System.out.println(subject.isPermitted("add"));
             }catch (AuthenticationException e) {
                 e.printStackTrace();
                 return "账号或密码错误！";
@@ -197,7 +203,25 @@ public class LoginController {
     // url : http://127.0.0.1:8899/thd/list
     public String list() {
         SecurityUtils.getSubject().getSession().touch();
+        SessionKey sk = new DefaultSessionKey(SecurityUtils.getSubject().getSession().getId());
+        Session session = SecurityUtils.getSecurityManager().getSession(sk);
+        System.out.println("attribute username:" + session.getAttribute("userName"));
         return "list!";
+    }
+
+
+
+    @RequestMapping("/showInfo")
+    // url : http://127.0.0.1:8899/thd/showInfo
+    public String showInfo() {
+        SessionKey sk = new DefaultSessionKey(SecurityUtils.getSubject().getSession().getId());
+        Session session = SecurityUtils.getSecurityManager().getSession(sk);
+        System.out.println("Subject:" + SecurityUtils.getSubject());
+        System.out.println("session Id:" + session.getId());
+        System.out.println("principal:" + SecurityUtils.getSubject().getPrincipal());
+        System.out.println("isAuthenticated:" + SecurityUtils.getSubject().isAuthenticated());
+        System.out.println("attribute username:" + session.getAttribute("userName"));
+        return "showInfo!";
     }
 
 

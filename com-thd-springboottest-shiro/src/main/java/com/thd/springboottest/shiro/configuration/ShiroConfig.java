@@ -345,6 +345,7 @@ public class ShiroConfig {
         map.put("/doLogin", "anon");
         map.put("/simpleHash","anon");
         map.put("/pLogin","anon");
+        map.put("/showInfo","anon");
         map.put("/testRedis/*","anon");
 
         map.put("/**", "authc");
