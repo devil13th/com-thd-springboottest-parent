@@ -27,7 +27,7 @@ public class NginxController {
     @Autowired
     private HttpServletResponse response;
 
-
+    // ===================  以下方法是测试nginx下不同应用 cookie 获取和设置 ==================== //
     /**
      * 设置cookie
      * @param cookieName cookie name
@@ -85,4 +85,31 @@ public class NginxController {
         System.out.println("session id:" + request.getSession().getId());
         return ResponseEntity.ok("SUCCESS");
     }
+
+    // ===================  以下方法是测试cookie path 路径问题 ==================== //
+
+    @RequestMapping("/setCookiePath")
+    @ResponseBody
+    public ResponseEntity setCookiePath(){
+        System.out.println("setCookiePath");
+        Cookie ck = new Cookie("rt","rt");
+        ck.setMaxAge(6 * 24 * 60 * 60);
+        ck.setPath("/");
+
+        Cookie ck1 = new Cookie("rt/a","rt/a");
+        ck1.setMaxAge(6 * 24 * 60 * 60);
+        ck1.setPath("/a");
+
+        Cookie ck2 = new Cookie("rt/a/b","rt/a/b");
+        ck2.setMaxAge(6 * 24 * 60 * 60);
+        ck2.setPath("/a/b");
+
+        response.addCookie(ck);
+        response.addCookie(ck1);
+        response.addCookie(ck2);
+        System.out.println("session id:" + request.getSession().getId());
+        return ResponseEntity.ok("SUCCESS");
+    }
+
+
 }
