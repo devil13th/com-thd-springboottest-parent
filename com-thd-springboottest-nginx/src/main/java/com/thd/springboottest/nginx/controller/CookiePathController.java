@@ -34,11 +34,11 @@ public class CookiePathController {
         ck.setMaxAge(6 * 24 * 60 * 60);
         ck.setPath("/");
 
-        Cookie ck1 = new Cookie("rt/a","rt/a");
+        Cookie ck1 = new Cookie("a","rt/a");
         ck1.setMaxAge(6 * 24 * 60 * 60);
         ck1.setPath("/a");
 
-        Cookie ck2 = new Cookie("rt/a/b","rt/a/b");
+        Cookie ck2 = new Cookie("b","rt/a/b");
         ck2.setMaxAge(6 * 24 * 60 * 60);
         ck2.setPath("/a/b");
 
