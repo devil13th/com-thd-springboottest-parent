@@ -37,6 +37,8 @@
         <module>com-thd-springboottest-fastjson</module>
         <module>com-thd-springboottest-webmvcconfigurer</module>
         <module>com-thd-springboottest-resttemplate</module>
+        <module>com-thd-springboottest-task</module>
+        <module>com-thd-springboottest-rabbitmq</module>
 
     </modules>
 
