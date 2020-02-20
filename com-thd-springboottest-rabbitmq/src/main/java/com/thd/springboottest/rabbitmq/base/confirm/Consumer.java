@@ -1,4 +1,4 @@
-package com.thd.springboottest.rabbitmq.base.transaction;
+package com.thd.springboottest.rabbitmq.base.confirm;
 
 
 import com.rabbitmq.client.*;
@@ -55,7 +55,7 @@ public class Consumer {
                  * Reject a message.
                  * @param deliveryTag 发布的每一条消息都会获得一个唯一的deliveryTag，deliveryTag在channel范围内是唯一的
                  * @param requeue 是否重回队列 如果值为true，则重新放入RabbitMQ的发送队列，如果值为false，则通知RabbitMQ销毁这条消息
-                 * @throws java.io.IOException if an error is encountered
+                 * @throws IOException if an error is encountered
                  */
                 // void basicReject(long deliveryTag, boolean requeue) throws IOException;
 
@@ -64,7 +64,7 @@ public class Consumer {
                  * @param deliveryTag 发布的每一条消息都会获得一个唯一的deliveryTag，deliveryTag在channel范围内是唯一的
                  * @param multiple 批量确认标志。如果值为true，则执行批量确认，此deliveryTag之前收到的消息全部进行拒绝; 如果值为false，则只对当前收到的消息进行拒绝
                  * @param requeue 是否重回队列 如果值为true，则重新放入RabbitMQ的发送队列，如果值为false，则通知RabbitMQ销毁这条消息
-                 * @throws java.io.IOException if an error is encountered
+                 * @throws IOException if an error is encountered
                  */
                  // void basicNack(long deliveryTag, boolean multiple, boolean requeue) throws IOException;
                  // 注意!!!!! 如果我们的队列目前只有一个消费者，请注意不要拒绝消息并放回队列导致消息在同一个消费者身上无限循环无法消费的情况发生。

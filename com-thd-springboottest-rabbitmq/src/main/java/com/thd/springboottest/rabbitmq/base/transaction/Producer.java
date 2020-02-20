@@ -3,6 +3,7 @@ package com.thd.springboottest.rabbitmq.base.transaction;
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
+import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
 
 /**
  * com.thd.springboottest.rabbitmq.base.direct.Producer

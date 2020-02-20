@@ -1,4 +1,4 @@
-package com.thd.springboottest.rabbitmq.base.transaction;
+package com.thd.springboottest.rabbitmq.base;
 
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
