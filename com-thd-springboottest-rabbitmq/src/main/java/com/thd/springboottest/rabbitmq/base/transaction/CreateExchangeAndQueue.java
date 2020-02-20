@@ -1,4 +1,4 @@
-package com.thd.springboottest.rabbitmq.base.direct;
+package com.thd.springboottest.rabbitmq.base.transaction;
 
 import com.rabbitmq.client.*;
 
