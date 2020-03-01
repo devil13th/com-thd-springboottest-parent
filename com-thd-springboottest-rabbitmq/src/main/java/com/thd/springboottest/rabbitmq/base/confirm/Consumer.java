@@ -49,7 +49,6 @@ public class Consumer {
                  */
                 channel.basicAck(deliveryTag, true);
 
-
                 // 下面是拒绝应答
                 /**
                  * Reject a message.

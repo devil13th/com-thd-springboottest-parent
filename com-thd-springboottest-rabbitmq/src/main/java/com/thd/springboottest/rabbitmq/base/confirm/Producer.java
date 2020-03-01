@@ -16,7 +16,7 @@ import java.io.IOException;
 public class Producer {
     // 注：一定要先启动Consumer2，创建好交换器、队列 !!!
     private static final String ROUTE_KEY ="routekey-devil13th"; // 路由键名称
-    private static final String EXCHANGE_NAME = "exchange-devil13th";// 交换器名称
+    private static final String EXCHANGE_NAME = "exchange-devil13th3";// 交换器名称
 
     public static void main(String[] args) throws Exception{
         // 获取连接
@@ -25,12 +25,7 @@ public class Producer {
         // 创建信道
         Channel channel = connection.createChannel();
 
-
-
-
         System.out.println(channel);
-
-
 
         // 开启发送方确认模式
         channel.confirmSelect();
