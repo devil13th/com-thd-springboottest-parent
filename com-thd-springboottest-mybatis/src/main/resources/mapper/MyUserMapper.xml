@@ -163,7 +163,7 @@
                 <if test="name != null and name != ''">
                     and mu.user_name like CONCAT('%',#{name},'%')
                 </if>
-                <if test="name != null and name != ''">
+                <if test="sex != null and sex != ''">
                     and su.user_sex = #{sex}
                 </if>
             </trim>

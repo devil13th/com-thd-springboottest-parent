@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.thd.springboottest.mybatisplus.entity.SysUser;
 import com.thd.springboottest.mybatisplus.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,4 +55,22 @@ public class SysUserController {
         qw.eq("user_sex",1);
         return this.sysUserService.queryByPage(qw,currentPage,pageSize);
     }
+
+
+    //url : http://127.0.0.1:8899/thd/sysUser/loadByName/7
+    @RequestMapping("/loadByName/{name}")
+    @ResponseBody
+    public ResponseEntity loadByName(@PathVariable String name){
+        SysUser u = this.sysUserService.loadByName(name);
+        return ResponseEntity.ok("S");
+    }
+
+    //url : http://127.0.0.1:8899/thd/sysUser/queryByName/37
+    @RequestMapping("/queryByName/{name}")
+    @ResponseBody
+    public List<SysUser> queryByName(@PathVariable String name){
+        return this.sysUserService.queryByName(name);
+    }
+
+
 }

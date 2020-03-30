@@ -259,6 +259,54 @@ public class MybatisController {
 
 
 
+    /**
+     * xmlmapper的最小参数
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/configByMinParams")
+    //http://127.0.0.1:8899/thd/mybatis/configByMinParams
+    public ResponseEntity configByMinParams(){
+        Integer count = this.sysUserMapper.configByMinParams("1");
+        System.out.println(count);
+        return ResponseEntity.ok(count);
+    }
+
+
+    /**
+     * xmlmapper的最小参数
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/configByMinParams01")
+    //http://127.0.0.1:8899/thd/mybatis/configByMinParams01
+    public ResponseEntity configByMinParams01(){
+        SysUser u = new SysUser();
+        u.setUserName("1");
+        u.setUserSex(1);
+        List<Map<String,String>> list = this.sysUserMapper.configByMinParams01(u);
+        System.out.println(list);
+        return ResponseEntity.ok(list);
+    }
+
+
+    /**
+     * xmlmapper的最小参数
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/configByMinParams02")
+    //http://127.0.0.1:8899/thd/mybatis/configByMinParams02
+    public ResponseEntity configByMinParams02(){
+        SysUser u = new SysUser();
+        u.setUserName("1");
+        u.setUserSex(1);
+        List<SysUser> list = this.sysUserMapper.configByMinParams02(u);
+        System.out.println(list);
+        return ResponseEntity.ok(list);
+    }
+
+
 
 
 }

@@ -48,4 +48,15 @@ public interface SysUserMapper {
 
     // 根据姓名查询用户
     public List<SysUser> queryByName(@Param(value="name") String name);
+
+
+    // mapper的最小配置参数 - 统计返回某唯一一个值
+    Integer configByMinParams(@Param("userName") String userName);
+
+    //  mapper的最小配置参数 - 返回列表  泛型为Map
+    List<Map<String,String>> configByMinParams01(SysUser user);
+
+
+    //  mapper的最小配置参数 - 返回列表 泛型为实体对象
+    List<SysUser> configByMinParams02(SysUser user);
 }

@@ -127,7 +127,18 @@ public class User implements Serializable {
         this.roles = roles;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", birthday=" + birthday +
+                ", age=" + age +
+                ", roles=" + roles +
+                '}';
+    }
 
     public Date getBirthday() {
         return birthday;

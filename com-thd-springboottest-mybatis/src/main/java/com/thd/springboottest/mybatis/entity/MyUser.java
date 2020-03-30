@@ -48,6 +48,17 @@ public class MyUser {
         return userCreateTime;
     }
 
+    @Override
+    public String toString() {
+        return "MyUser{" +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userAge=" + userAge +
+                ", userBirthday=" + userBirthday +
+                ", userCreateTime=" + userCreateTime +
+                '}';
+    }
+
     public void setUserCreateTime(Date userCreateTime) {
         this.userCreateTime = userCreateTime;
     }

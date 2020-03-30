@@ -122,5 +122,46 @@
         </if>
     </select>
 
+    <!-- ================================ 以下是mapper的最小参数配置 ========================== -->
+    <select id="configByMinParams" resultType="int">
+        select count(1) from sys_user
+        <if test="userName != null and userName != '' ">
+            <where>
+                user_name like concat('%',#{userName},'%')
+            </where>
+        </if>
+    </select>
+
+    <select id="configByMinParams01" resultType="map">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+        <where>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="userSex != null and userSex != ''">
+                and user_sex = #{userSex}
+            </if>
+        </where>
+    </select>
+
+    <select id="configByMinParams02" resultType="com.thd.springboottest.mybatis.entity.SysUser">
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+        <where>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="userSex != null and userSex != ''">
+                and user_sex = #{userSex}
+            </if>
+        </where>
+    </select>
+
+
 
 </mapper>

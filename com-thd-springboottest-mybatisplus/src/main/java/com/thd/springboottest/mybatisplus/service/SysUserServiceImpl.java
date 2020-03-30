@@ -26,6 +26,18 @@ public class SysUserServiceImpl implements SysUserService {
         return sysUserMapper.selectList(null);
     };
 
+    public SysUser loadByName(String userName){
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>();
+        queryWrapper.eq("user_name",userName);
+        SysUser sysUser = sysUserMapper.selectOne(queryWrapper);
+        return sysUser;
+    };
+    public List<SysUser> queryByName(String userName){
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>();
+        queryWrapper.like("user_name",userName);
+        List<SysUser> list = sysUserMapper.selectList(queryWrapper);
+        return list;
+    };
     public List queryByCondition(QueryWrapper<SysUser> wrapper){
         return sysUserMapper.selectList(wrapper);
     }

@@ -74,5 +74,8 @@ pagehelper:
 
 
 logging:
+  config: classpath:config/logback-spring.xml
+  path: D:/deleteme/logbacks
   level:
     com.thd.springboottest.mybatis.dao: debug # 输出mybatis的sql 和 参数
+

@@ -18,7 +18,8 @@ public interface SysUserService {
      * @return
      */
     public List queryAll();
-
+    public SysUser loadByName(String userName);
+    public List<SysUser> queryByName(String userName);
     /**
      * 根据条件查询
      * @param wrapper
