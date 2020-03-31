@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class JacksonBean {
@@ -17,15 +18,13 @@ public class JacksonBean {
     private Date date2;
 
 
+    private LocalDateTime localDateTime;
+
     // 反序列化测试用
     @JsonDeserialize(using = JsonDateDeserializer.class)
     private Date date3;
 
     private Timestamp createTime;
-
-
-
-
 
 
     @Override
@@ -35,6 +34,8 @@ public class JacksonBean {
                 ", birthday=" + birthday +
                 ", date1=" + date1 +
                 ", date2=" + date2 +
+                ", localDateTime=" + localDateTime +
+                ", date3=" + date3 +
                 ", createTime=" + createTime +
                 '}';
     }
@@ -93,5 +94,13 @@ public class JacksonBean {
 
     public void setDate3(Date date3) {
         this.date3 = date3;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 }

@@ -1,7 +1,10 @@
 package com.thd.springboottest.jackson.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.thd.springboottest.jackson.bean.JacksonBean;
+import com.thd.springboottest.jackson.bean.LocalDateTimeDeserializer;
+import com.thd.springboottest.jackson.bean.LocalDateTimeSerializer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Controller
@@ -86,6 +90,49 @@ public class JacksonController {
     // url : http://127.0.0.1:8899/thd/jackson/testInput
     public ResponseEntity testInput(@RequestBody JacksonBean jb) throws Exception{
         System.out.println(jb);
+        return ResponseEntity.ok( jb);
+    }
+
+    /**
+     * 设置自定义的序列化和反序列化规则
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/testCustomSerializa")
+    @ResponseBody
+    // url : http://127.0.0.1:8899/thd/jackson/testCustomSerializa
+    public ResponseEntity testCustomSerializa() throws Exception{
+
+        // 设置自定义的序列化器
+        ObjectMapper mapper = new ObjectMapper();
+        JavaTimeModule timeModule = new JavaTimeModule();
+        timeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
+        mapper.registerModule(timeModule);
+
+
+
+        JacksonBean jb = new JacksonBean();
+        jb.setName("devil13th");
+        jb.setBirthday(new Date());
+        jb.setDate1(new Date());
+        jb.setDate2(new Date());
+        jb.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        jb.setLocalDateTime(LocalDateTime.now());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 设置日期序列化的格式, 优先级低于Bean属性的@Annotation注释
+        mapper.setDateFormat(formatter);
+
+
+        String str = mapper.writeValueAsString(jb);
+        System.out.println(str);
+
+        //设置自定义的反序列化器
+        JavaTimeModule timeModule2 = new JavaTimeModule();
+        timeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
+        mapper.registerModule(timeModule2);
+        String json = "{\"name\":\"devil13th\",\"birthday\":\"2020-04-01 00:37:13\",\"date1\":\"2020-04-01 00:37:13\",\"date2\":\"2020-04-01\",\"localDateTime\":1585672633042,\"date3\":null,\"createTime\":\"2020-04-01 00:37:13\"}";
+        JacksonBean jjb = mapper.readValue(json,JacksonBean.class);
+        System.out.println(jjb);
         return ResponseEntity.ok( jb);
     }
 
