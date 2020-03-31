@@ -1,6 +1,7 @@
 package com.thd.springboottest.jackson.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,6 +15,12 @@ public class JacksonBean {
     private Date date1;
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date date2;
+
+
+    // 反序列化测试用
+    @JsonDeserialize(using = JsonDateDeserializer.class)
+    private Date date3;
+
     private Timestamp createTime;
 
 
@@ -78,5 +85,13 @@ public class JacksonBean {
 
     public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getDate3() {
+        return date3;
+    }
+
+    public void setDate3(Date date3) {
+        this.date3 = date3;
     }
 }
