@@ -14,6 +14,23 @@ public class JacksonBean {
     private Date date1;
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date date2;
+    private Timestamp createTime;
+
+
+
+
+
+
+    @Override
+    public String toString() {
+        return "JacksonBean{" +
+                "name='" + name + '\'' +
+                ", birthday=" + birthday +
+                ", date1=" + date1 +
+                ", date2=" + date2 +
+                ", createTime=" + createTime +
+                '}';
+    }
 
     public Date getDate1() {
         return date1;
@@ -31,7 +48,7 @@ public class JacksonBean {
         this.date2 = date2;
     }
 
-    private Timestamp createTime;
+
 
     public JacksonBean() {}
 
