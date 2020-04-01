@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 //时间戳反序列化时间
-public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+public class JsonLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
     @Override
     public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         Long timestamp = jsonParser.getLongValue();
