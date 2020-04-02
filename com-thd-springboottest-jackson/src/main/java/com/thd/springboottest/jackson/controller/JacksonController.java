@@ -187,7 +187,7 @@ public class JacksonController {
 
         ObjectMapper mapper=new ObjectMapper();//先创建objmapper的对象
 
-
+        // 设置ObjectMapper的序列化器
         JavaTimeModule timeModule = new JavaTimeModule();
         timeModule.addSerializer(Date.class, new JsonDateSerializer());
         timeModule.addSerializer(Timestamp.class, new JsonTimestampSerializer());
@@ -321,7 +321,7 @@ public class JacksonController {
         JavaTimeModule timeModule = new JavaTimeModule();
         timeModule.addDeserializer(Date.class, new JsonDateDeserializer());
         timeModule.addDeserializer(Timestamp.class, new JsonTimestampDeserializer());
-        mapper.registerModule(timeModule);
+//        mapper.registerModule(timeModule);
 
         String json = "{\"name\":\"thd\",\"age\":5,\"birthday\":\"2020-04-01\",\"createTime\":\"2020&&04&&01 11$$33$$00\"}";
         TestBean03 tb = mapper.readValue(json,TestBean03.class);
@@ -334,6 +334,58 @@ public class JacksonController {
          * 可以使用ObjectMapper.registerModule设置反序列化器
          */
 
+        return ResponseEntity.ok( tb);
+    }
+
+
+
+
+
+    /**
+     * LocalDateTime的序列化
+     * 使用ObjectMapper.registerModule设置序列化器
+     */
+    @RequestMapping("serializeLocalDateTime")
+    // url : http://127.0.0.1:8899/thd/jackson/serializeLocalDateTime
+    public ResponseEntity serializeLocalDateTime() throws Exception{
+
+
+        ObjectMapper mapper=new ObjectMapper();//先创建objmapper的对象
+        TestBean04 tb = new TestBean04();
+        tb.setAge(5);
+        tb.setName("thd");
+        tb.setBirthday(LocalDateTime.now());
+        JavaTimeModule timeModule2 = new JavaTimeModule();
+        timeModule2.addSerializer(LocalDateTime.class, new JsonLocalDateTimeSerializer());
+        mapper.registerModule(timeModule2);
+
+        String json = mapper.writeValueAsString(tb);
+        System.out.println(String.format("TestBean04:%s",tb));
+        System.out.println(String.format("序列化TestBean04:%s",json));
+        return ResponseEntity.ok( tb);
+    }
+
+
+
+    /**
+     * LocalDateTime的反序列化
+     * 使用ObjectMapper.registerModule设置反序列化器
+     */
+    @RequestMapping("deserializeLocalDateTime")
+    // url : http://127.0.0.1:8899/thd/jackson/deserializeLocalDateTime
+    public ResponseEntity deserializeLocalDateTime() throws Exception{
+
+
+        ObjectMapper mapper=new ObjectMapper();//先创建objmapper的对象
+
+        JavaTimeModule timeModule2 = new JavaTimeModule();
+        timeModule2.addDeserializer(LocalDateTime.class, new JsonLocalDateTimeDeserializer());
+        mapper.registerModule(timeModule2);
+
+        String json = "{\"name\":\"thd\",\"age\":5,\"birthday\":1585792819042}";
+
+        TestBean04 tb = mapper.readValue(json,TestBean04.class);
+        System.out.println(String.format("TestBean04:%s",tb));
         return ResponseEntity.ok( tb);
     }
 
@@ -383,7 +435,7 @@ public class JacksonController {
 
         //设置自定义的反序列化器
         JavaTimeModule timeModule2 = new JavaTimeModule();
-        timeModule.addDeserializer(LocalDateTime.class, new JsonLocalDateTimeDeserializer());
+        timeModule2.addDeserializer(LocalDateTime.class, new JsonLocalDateTimeDeserializer());
         mapper.registerModule(timeModule2);
         String json = "{\"name\":\"devil13th\",\"birthday\":\"2020-04-01 00:37:13\",\"date1\":\"2020-04-01 00:37:13\",\"date2\":\"2020-04-01\",\"localDateTime\":414899151000,\"date3\":null,\"createTime\":\"2020-04-01 00:37:13\"}";
 

@@ -1,10 +1,13 @@
 package com.thd.springboottest.jackson.bean;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -18,22 +21,19 @@ import java.util.Date;
 public class TestBean04 {
     private String name;
     private Integer age;
-    @JsonSerialize(using = JsonDateSerializer.class)
-    private Date birthday;
-    @JsonSerialize(using = JsonTimestampSerializer.class)
-    private Timestamp createTime;
+    @JsonSerialize(using = JsonLocalDateTimeSerializer.class)
+    @JsonDeserialize(using = JsonLocalDateTimeDeserializer.class)
+    private LocalDateTime birthday;
+
 
     @Override
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String birthdayStr = sdf.format(birthday);
-        String createTimeStr = sdf.format(new Date(createTime.getTime()));
-
+        DateTimeFormatter dateTimeFormatter =   DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String  birthdayStr = birthday.format(dateTimeFormatter);
         return "TestBean03{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 ", birthday=" + birthdayStr +
-                ", createTime=" + createTimeStr +
                 '}';
     }
 }

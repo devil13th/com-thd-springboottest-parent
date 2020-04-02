@@ -15,15 +15,12 @@ public class JsonDateDeserializer extends JsonDeserializer<Date> {
     @Override
     public Date deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         String dateStr = jsonParser.getText();
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
         try {
             Date d = sdf.parse(dateStr);
             return d;
         } catch (ParseException e) {
             return null;
         }
-
     }
 }

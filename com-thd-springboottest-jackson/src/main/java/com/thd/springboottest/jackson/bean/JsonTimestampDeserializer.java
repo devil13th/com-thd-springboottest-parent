@@ -32,6 +32,5 @@ public class JsonTimestampDeserializer extends JsonDeserializer<Timestamp> {
         }catch(Exception e){
             throw new RuntimeException("Timestamp格式错误");
         }
-
     }
 }
