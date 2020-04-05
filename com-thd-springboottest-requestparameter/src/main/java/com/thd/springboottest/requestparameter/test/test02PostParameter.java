@@ -44,7 +44,8 @@ public class test02PostParameter {
         JSONObject obj = new JSONObject();
         obj.put("age","5");
         obj.put("name","devil13th");
-
+        obj.put("birthday","2013_01_02 23:11:24");
+        obj.put("createTime","2013&&03&&23 23$$11$$24");
         // 设置请求头内容
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8); // 设置content-type

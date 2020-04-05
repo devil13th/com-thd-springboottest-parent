@@ -25,11 +25,10 @@ public class test01GetParameter {
      */
 
     public static void main(String args[]){
-//        String url = CommonURL.URL +"/testGet01?usr=devil13th&pwd=123456";
-//        String url = CommonURL.URL +"/testGet02/hello";
-        String url = CommonURL.URL +"/testGet03?age=5&name=devil13th";
 
-
+        //String url = CommonURL.URL +"/testGet01?usr=devil13th&pwd=123456&birthday=2015_10_10 10:11:12&createTime=1586085091";
+//        String url = CommonURL.URL +"/testGet01a?name=devil13th&age=15&birthday=2015_10_10 10:11:12&createTime=1586085091";
+        String url =  CommonURL.URL +"/testGet02/2015_01_01/1586085091";
         SSL factory = new SSL();
         factory.setReadTimeout(100000);
         factory.setConnectTimeout(15000);

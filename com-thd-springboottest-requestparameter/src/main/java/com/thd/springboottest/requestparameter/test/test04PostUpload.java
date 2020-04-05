@@ -40,12 +40,13 @@ public class test04PostUpload {
 
         //设置请求体,注意是LinkedMultiValueMap
         MultiValueMap<String,Object> map = new LinkedMultiValueMap<String,Object>();
-        FileSystemResource fileSystemResource = new FileSystemResource("D:\\deleteme\\application.yml");
+        FileSystemResource fileSystemResource = new FileSystemResource("D:\\deleteme\\testfile");
         map.add("file", fileSystemResource);
         map.add("filename","kkk");
         map.add("age","6");
         map.add("name","devil13th");
-
+        map.add("createTime","1586085091");
+        map.add("birthday","2015_10_10 10:11:12");
         // 设置请求头内容
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA); // 设置content-type 为 multipart/form-data"

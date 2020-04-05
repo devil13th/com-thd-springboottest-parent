@@ -45,7 +45,8 @@ public class test03PostParameter {
         MultiValueMap<String,String> map = new LinkedMultiValueMap<String,String>();
         map.add("age","6");
         map.add("name","devil13th");
-
+        map.add("birthday","2015_10_10 10:11:12");
+        map.add("createTime","1586085091");
         // 设置请求头内容
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED); // 设置content-type 为 application/x-www-form-urlencoded

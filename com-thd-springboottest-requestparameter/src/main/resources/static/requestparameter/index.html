@@ -46,7 +46,9 @@ function testPost01(){
         headers:headers,
         body: JSON.stringify({
             name: 'devil13th',
-            age: 5
+            age: 5,
+            birthday:'2013_01_02 23:11:24',
+            createTime:'2013&&03&&23 23$$11$$24'
         })
     }).then(function(res){
         return res.json()
@@ -64,6 +66,8 @@ function testPost02(){
     var formData = new FormData();
     formData.append('name','devil13th');
     formData.append('age',5);
+    formData.append('createTime',1586085091);
+    formData.append('birthday','2015_10_10 10:11:12');
 
      //模拟原生form提交数据不要加headers属性
     fetch('/thd/requestparameter/testPost02', {
@@ -88,7 +92,7 @@ function testPost03(){
     fetch('/thd/requestparameter/testPost03', {
         method: 'post',
         headers:headers,
-        body:"age=5&name=devil13th"
+        body:"age=5&name=devil13th&createTime=1586085091&birthday=2015_10_10 10:11:12"
     }).then(function(res){
         return res.json()
     }).then(function(result){
@@ -105,6 +109,9 @@ function testUpload01(){
 
     formData.append('name','devil13th');
     formData.append('age',5);
+    formData.append('createTime',1586085091);
+    formData.append('birthday','2015_10_10 10:11:12');
+
 　　fetch('/thd/requestparameter/testUpload01', {
 　　　　method:'post',
 　　　　body:formData,
@@ -146,16 +153,28 @@ function testUpload02(){
 <input type="button" value="通过?传对象属性值到后台转对象" onclick="testGet03()"/>/thd/requestparameter/testGet03?age=5&name=devil13th<br/>
 <hr/>
 <h1>POST方式</h1>
-<input type="button" value="fetch post提交 数据是在body中的json" onclick="testPost01()"/>
+<input type="button" value="fetch post提交 数据是在body中的json" onclick="testPost01()"/><br/>
 
 <form method="post" action="/thd/requestparameter/testPost02" target="_blank">
-    name:<input type="text" name="name"/>
-    age:<input type="text" name="age"/>
-    <input type="submit" value="原始表单提交"/>
+    name:<input type="text" name="name" value="thd"/>
+    age:<input type="text" name="age" value="5"/>
+    birthday:<input type="text" name="birthday" value="2015_10_10 10:11:12"/>
+    createTime:<input type="text" name="createTime" value="1586085091"/>
+    <input type="submit" value="原始表单提交testPost02"/>
 </form>
-<input type="button" value="fetch模拟表单提交" onclick="testPost02()"/>
 
-<input type="button" value="fetch模拟表单提交2" onclick="testPost03()"/>
+
+<form method="post" action="/thd/requestparameter/testPost03" target="_blank">
+    name:<input type="text" name="name" value="thd"/>
+    age:<input type="text" name="age" value="5"/>
+    birthday:<input type="text" name="birthday" value="2015_10_10 10:11:12"/>
+    createTime:<input type="text" name="createTime" value="1586085091"/>
+    <input type="submit" value="原始表单提交testPost03"/>
+</form>
+
+<input type="button" value="fetch模拟表单提交 testPost03()" onclick="testPost02()"/>
+
+<input type="button" value="fetch模拟表单提交2 testPost03()" onclick="testPost03()"/>
 
 <hr/>
 单个文件上传
