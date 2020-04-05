@@ -62,7 +62,7 @@ public class RequestparameterController {
 
     @ResponseBody
     @RequestMapping(value="/testPost01",method=RequestMethod.POST)
-    //通过Post方式提交来body内容(一般是json),可以通过@RequestBody直接将body中的json转成对象
+    //通过Post方式来提交body内容(一般是json),可以通过@RequestBody直接将body中的json转成对象
     //注意这种方式要设置头部信息的contentType属性 headers.set('Content-Type', 'application/json');
     public Person testPost01(@RequestBody Person person){
         this.log.info("testPost01");

@@ -5,10 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -134,6 +134,132 @@ public class DateTimestampController {
         logger.info("dateTimestampFormatByJsonFormatAnnotation()");
         ResponseEntity r = ResponseEntity.ok(dateTimestamp);
         return r;
+    }
+
+
+
+    // ============================================ 参数中的转换 ============================================== //
+
+
+
+    @RequestMapping("/dateFormatByParameter")
+    @ResponseBody
+    // http://127.0.0.1:8899/thd/datetimestamp/dateFormatByParameter?d=2019_11_21 2003:03:03
+    // http://127.0.0.1:8899/thd/datetimestamp/dateFormatByParameter?d=2019_11_21
+    // http://127.0.0.1:8899/thd/datetimestamp/dateFormatByParameter?d=1585875000
+    public ResponseEntity dateFormatByParameter(@RequestParam  Date d){
+        logger.info("dateFormatByParameter()");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(d));
+        return ResponseEntity.ok(d);
+        /**
+         * 请求：http://127.0.0.1:8899/thd/datetimestamp/dateFormatByConfiguration?d=2019_11_21 2003:03:03
+         *      2019_11_21 2003:03:03请求已经通过DateConverter转换成日期类型
+         *
+         * 响应：格式化是使用了jackson，调用了自定义的JsonDateSerializer进行的序列化
+         * "2019||11||21 03:03:03"
+         */
+
+    }
+
+
+    @RequestMapping("/dateFormatByPath/{d}")
+    @ResponseBody
+    // http://127.0.0.1:8899/thd/datetimestamp/dateFormatByPath/2019_11_21 2003:03:03
+    // http://127.0.0.1:8899/thd/datetimestamp/dateFormatByPath/2019_11_21
+    // http://127.0.0.1:8899/thd/datetimestamp/dateFormatByPath/1585875000
+    public ResponseEntity dateFormatByPath(@PathVariable Date d){
+        logger.info("dateFormatByPath()");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(sdf.format(d));
+        return ResponseEntity.ok(d);
+        /**
+         * 请求：http://127.0.0.1:8899/thd/datetimestamp/dateFormatByConfiguration?d=2019_11_21 2003:03:03
+         *      2019_11_21 2003:03:03请求已经通过DateConverter转换成日期类型
+         *
+         * 响应：格式化是使用了jackson，调用了自定义的JsonDateSerializer进行的序列化
+         * "2019||11||21 03:03:03"
+         */
+
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value="/dateFormatByObjectParameter",method=RequestMethod.GET)
+    // url中?后的参数直接转对象接收
+    //url : http://127.0.0.1:8899/thd/datetimestamp/dateFormatByObjectParameter?birthday=2019_11_21 2003:03:03&name=devil13th
+    public MyBean dateFormatByObjectParameter(MyBean person ){
+        System.out.println(person);
+        return person;
+
+        /**
+         * 请求：http://127.0.0.1:8899/thd/datetimestamp/dateFormatByObjectParameter?birthday=2019_11_21 2003:03:03&name=devil13th
+         *      2019_11_21 2003:03:03请求已经通过DateConverter转换成日期类型
+         *
+         * 响应：格式化是使用了jackson，调用了自定义的JsonDateSerializer进行的序列化
+         * {"name":"devil13th","createTime":null,"birthday":"2020||02||12 11:03:03"}
+         */
+    }
+
+
+
+
+
+
+    @RequestMapping("/timestampFormatByParameter")
+    @ResponseBody
+    // 默认的时间戳格式 http://127.0.0.1:8899/thd/datetimestamp/timestampFormatByParameter?d=2015-12-12 2023:23:23
+    // 通过自定义时间戳的格式 http://127.0.0.1:8899/thd/datetimestamp/timestampFormatByParameter?d=1585877000
+    public ResponseEntity timestampFormatByParameter(Timestamp d){
+        logger.info("timestampFormatByParameter()");
+        /**
+         * 请求：http://127.0.0.1:8899/thd/datetimestamp/timestampFormatByConfiguration?d=1585877000
+         *      1585877000请求已经通过TimestampConverter转换成日期类型
+         *
+         * 响应：格式化是使用了jackson，调用了自定义的JsonTimestampSerializer进行的序列化
+         * "1970||01||19 16:31:17"
+         */
+        return ResponseEntity.ok(d);
+
+
+    }
+
+
+
+
+
+
+
+
+
+    @RequestMapping("/timestampFormatForRequestBody")
+    @ResponseBody
+
+    /*
+url : post请求 http://127.0.0.1:8899/thd/datetimestamp/timestampFormatForRequestBody
+
+请求的body内容：
+{
+	"name":"devil13th",
+	"birthday":"2015_11_21 10:22:12",
+	"createTime":"2012&&10&&10 10$$11$$22"
+}
+     */
+    public ResponseEntity timestampFormatForRequestBody(@RequestBody MyBean myBean){
+        logger.info("timestampFormatForRequestBody()");
+        System.out.println(myBean);
+        return ResponseEntity.ok(myBean);
+
+        //响应内容：
+        /*
+        {
+            "name":"devil13th",
+            "birthday":"2015_11_21 10:22:12",
+            "createTime":"2012&&10&&10 10$$11$$22"
+        }
+        json的序列化是用的jackson中设置的自定义序列化器
+
+        */
     }
 
 

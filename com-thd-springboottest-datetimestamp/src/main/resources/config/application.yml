@@ -18,3 +18,8 @@ server:
     context-path: /thd
 #spring.mvc.view.prefix= /WEB-INF/pages/
 #spring.mvc.view.suffix= .jsp
+
+
+logging:
+  config: classpath:config/logback-spring.xml
+  path: D:/deleteme/logbacks
