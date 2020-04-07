@@ -20,7 +20,6 @@
         <module>com-thd-springboottest-aop</module>
         <module>com-thd-springboottest-interceptor</module>
         <module>com-thd-springboottest-activiti</module>
-        <module>com-thd-springboottest-datetimestamp</module>
         <module>com-thd-springboottest-profile</module>
         <module>com-thd-springboottest-swagger</module>
         <module>com-thd-springboottest-nginx</module>
