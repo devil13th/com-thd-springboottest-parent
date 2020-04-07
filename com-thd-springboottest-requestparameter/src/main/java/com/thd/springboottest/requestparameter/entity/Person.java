@@ -1,5 +1,9 @@
 package com.thd.springboottest.requestparameter.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.thd.springboottest.requestparameter.serializer.fastjson.FastjsonDateDeserializer;
+import com.thd.springboottest.requestparameter.serializer.fastjson.FastjsonDateSerializer;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +18,11 @@ import java.util.Date;
 public class Person {
     private String name;
     private int age;
+
+    /**
+     * fastjson用到的序列化器和反序列化器
+     */
+    @JSONField(serializeUsing = FastjsonDateSerializer.class,deserializeUsing = FastjsonDateDeserializer.class)
     private Date birthday;
     private Timestamp createTime;
     public Person() {

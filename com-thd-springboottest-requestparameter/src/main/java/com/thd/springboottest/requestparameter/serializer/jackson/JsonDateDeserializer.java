@@ -1,4 +1,4 @@
-package com.thd.springboottest.requestparameter.serializer;
+package com.thd.springboottest.requestparameter.serializer.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
