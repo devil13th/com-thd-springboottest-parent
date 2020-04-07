@@ -34,10 +34,6 @@ public class test04PostUpload {
         RestTemplate rt = new RestTemplate(factory);
 
 
-
-
-
-
         //设置请求体,注意是LinkedMultiValueMap
         MultiValueMap<String,Object> map = new LinkedMultiValueMap<String,Object>();
         FileSystemResource fileSystemResource = new FileSystemResource("D:\\deleteme\\testfile");
