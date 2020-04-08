@@ -8,17 +8,18 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 
-public class FastjsonDateSerializer implements ObjectSerializer {
+public class FastjsonTimestampSerializer implements ObjectSerializer {
     @Override
     public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType,
                       int features) throws IOException {
 
         Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        logger.info(" fastjson 日期序列化:" + object);
+        logger.info(" fastjson 时间戳序列化:" + object);
         SerializeWriter out = serializer.out;
         if (object == null) {
             out.writeNull();
@@ -26,9 +27,8 @@ public class FastjsonDateSerializer implements ObjectSerializer {
         }
 
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy||MM||dd HH:mm:ss");
-        String formattedDate = formatter.format(object);
-        out.writeString(formattedDate);
+        Timestamp ts = (Timestamp)object;
+        out.writeLong(ts.getTime());
 
     }
 }

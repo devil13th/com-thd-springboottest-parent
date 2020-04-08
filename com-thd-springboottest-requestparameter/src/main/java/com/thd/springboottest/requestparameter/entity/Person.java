@@ -3,6 +3,8 @@ package com.thd.springboottest.requestparameter.entity;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.thd.springboottest.requestparameter.serializer.fastjson.FastjsonDateDeserializer;
 import com.thd.springboottest.requestparameter.serializer.fastjson.FastjsonDateSerializer;
+import com.thd.springboottest.requestparameter.serializer.fastjson.FastjsonTimestampDeserializer;
+import com.thd.springboottest.requestparameter.serializer.fastjson.FastjsonTimestampSerializer;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -24,6 +26,7 @@ public class Person {
      */
     @JSONField(serializeUsing = FastjsonDateSerializer.class,deserializeUsing = FastjsonDateDeserializer.class)
     private Date birthday;
+    @JSONField(serializeUsing = FastjsonTimestampSerializer.class,deserializeUsing = FastjsonTimestampDeserializer.class)
     private Timestamp createTime;
     public Person() {
 

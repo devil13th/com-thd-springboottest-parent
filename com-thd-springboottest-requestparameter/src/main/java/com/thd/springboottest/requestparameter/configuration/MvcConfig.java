@@ -12,6 +12,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 添加如下配置后将把springboot的HttpMessageConvert中的jackson替换为fastjson
+ */
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 

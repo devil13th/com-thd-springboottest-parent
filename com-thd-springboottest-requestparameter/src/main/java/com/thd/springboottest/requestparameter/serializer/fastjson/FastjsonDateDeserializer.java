@@ -22,7 +22,7 @@ public class FastjsonDateDeserializer implements ObjectDeserializer {
 
         Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        logger.info(" fastjson 日期转换:" + defaultJSONParser.getLexer().stringVal());
+        logger.info(" fastjson 日期反序列化:" + defaultJSONParser.getLexer().stringVal());
 
         String dateStr = defaultJSONParser.getLexer().stringVal();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
