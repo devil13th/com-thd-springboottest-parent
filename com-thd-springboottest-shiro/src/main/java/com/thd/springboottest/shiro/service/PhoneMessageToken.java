@@ -10,18 +10,17 @@ public class PhoneMessageToken implements HostAuthenticationToken, RememberMeAut
      * The phone
      */
     private String phone;
-
     private User user;
-
     private boolean rememberMe;
     private String host;
+    private String validateCode;
 
 
-    public PhoneMessageToken(User u,String phone) {
-        this.phone = phone;
+    public PhoneMessageToken(User u,String validateCode) {
         this.rememberMe = false;
         this.host = null;
         this.user=u;
+        this.validateCode = validateCode;
     }
 
 
@@ -52,6 +51,9 @@ public class PhoneMessageToken implements HostAuthenticationToken, RememberMeAut
 
     @Override
     public Object getCredentials() {
-        return this.phone;
+        return this.validateCode;
     }
+
+
+
 }

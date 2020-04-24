@@ -63,19 +63,24 @@ public class PhoneMessageRealm extends AuthorizingRealm {
             return null;
         }
 
-        String phone = (String) token.getCredentials();
+        String validateCode = (String) token.getCredentials();
 
-        User user = loginService.getUserByPhone(phone);
+        User user = (User)token.getPrincipal();
 
         if (user == null) {
             throw new UnknownAccountException("手机号不存在!");
         }
 
+        // 验证手机获取的验证码
+
+        // 这个code应该是根据token的principal查询发送的验证码
+        String code = "123456";
+
 
 
 
        // return new SimpleAuthenticationInfo(phone, "123456", this.getName());
-        return new SimpleAuthenticationInfo(user, phone, this.getName());
+        return new SimpleAuthenticationInfo(user, code, this.getName());
 
     }
 

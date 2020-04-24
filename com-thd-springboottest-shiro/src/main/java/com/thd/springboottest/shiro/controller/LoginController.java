@@ -150,7 +150,7 @@ public class LoginController {
 
 
 
-        if(code != null && !code.trim().equals("") && messageCode.equals(code)){  // 模拟验证 手机验证码
+        if(code != null && !code.trim().equals("")){  // 模拟验证 手机验证码
             Subject subject = SecurityUtils.getSubject();
             System.out.println(subject.isAuthenticated());
             System.out.println(subject.getPrincipal());
@@ -160,7 +160,7 @@ public class LoginController {
             }
 
 
-            PhoneMessageToken token = new PhoneMessageToken(realUser,phone);
+            PhoneMessageToken token = new PhoneMessageToken(realUser,code);
 
 
             try {
