@@ -20,6 +20,50 @@ import javax.servlet.http.HttpServletResponse;
  **/
 //public class MyFilter extends AccessControlFilter {
 public class MyAuthcFilter extends FormAuthenticationFilter {
+
+
+
+    public MyAuthcFilter()
+    {
+        super();
+    }
+
+    @Override
+    public boolean isAccessAllowed(ServletRequest request, ServletResponse response,Object mappedValue){
+        if (((HttpServletRequest)request).getMethod().toUpperCase().equals("OPTIONS"))
+        {
+            return true;
+        }
+        return super.isAccessAllowed(request, response, mappedValue);
+    }
+
+    @Override
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response)throws Exception{
+        if (isLoginRequest(request, response)) {
+            if (isLoginSubmission(request, response)) {
+                return executeLogin(request, response);
+            } else {
+                return true;
+            }
+        } else {
+            //解决 WebUtils.toHttp 往返回response写数据跨域问题
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            String origin = httpRequest.getHeader("Origin");
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+            httpServletResponse.setHeader("Access-Control-Allow-Origin", origin);
+            //通过对 Credentials 参数的设置，就可以保持跨域 Ajax 时的 Cookie
+            //设置了Allow-Credentials，Allow-Origin就不能为*,需要指明具体的url域
+            httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+
+            // 返回固定的JSON串
+            WebUtils.toHttp(response).setContentType("application/json; charset=utf-8");
+            WebUtils.toHttp(response).getWriter().print("{code:401,msg:'尚未登录'}");
+            return false;
+        }
+    }
+
+
+
     /**
      *
      * 表示是否允许访问；mappedValue就是[urls]配置中拦截器参数部分，如果允许访问返回true，否则false；
@@ -33,35 +77,35 @@ public class MyAuthcFilter extends FormAuthenticationFilter {
      * @return
      * @throws Exception
      * */
-    @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        System.out.println("------------" + this.getClass().getName() + "---------------");
-
-        if (isLoginRequest(request, response)) {
-            return true;
-        } else {
-            Subject subject = getSubject(request, response);
-            // If principal is not null, then the user is known and should be allowed access.
-            return subject.getPrincipal() != null;
-        }
-    }
+//    @Override
+//    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+//        System.out.println("------------" + this.getClass().getName() + "---------------");
+//
+//        if (isLoginRequest(request, response)) {
+//            return true;
+//        } else {
+//            Subject subject = getSubject(request, response);
+//            // If principal is not null, then the user is known and should be allowed access.
+//            return subject.getPrincipal() != null;
+//        }
+//    }
 
     /**
      * 表示当访问拒绝时是否已经处理了；如果返回true表示需要继续处理；如果返回false表示该拦截器实例已经处理了，将直接返回即可。
      * onAccessDenied是否执行取决于isAccessAllowed的值，如果返回true则onAccessDenied不会执行；如果返回false，执行onAccessDenied
      * 如果onAccessDenied也返回false，则直接返回，不会进入请求的方法（只有isAccessAllowed和onAccessDenied的情况下）
      * */
-    @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        System.out.println("------------" + this.getClass().getName() + "---------------");
-        HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-        //这里是个坑，如果不设置的接受的访问源，那么前端都会报跨域错误，因为这里还没到corsConfig里面
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", ((HttpServletRequest) request).getHeader("Origin"));
-        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
-        httpServletResponse.setCharacterEncoding("UTF-8");
-        httpServletResponse.setContentType("application/json");
-        httpServletResponse.getWriter().write("{code:403,msg:'请登录'}");
-        return false;
-
-    }
+//    @Override
+//    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+//        System.out.println("------------" + this.getClass().getName() + "---------------");
+//        HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
+//        //这里是个坑，如果不设置的接受的访问源，那么前端都会报跨域错误，因为这里还没到corsConfig里面
+//        httpServletResponse.setHeader("Access-Control-Allow-Origin", ((HttpServletRequest) request).getHeader("Origin"));
+//        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+//        httpServletResponse.setCharacterEncoding("UTF-8");
+//        httpServletResponse.setContentType("application/json");
+//        httpServletResponse.getWriter().write("{code:403,msg:'请登录'}");
+//        return false;
+//
+//    }
 }
