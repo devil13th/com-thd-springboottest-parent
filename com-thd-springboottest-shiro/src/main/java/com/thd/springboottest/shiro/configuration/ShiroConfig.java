@@ -1,7 +1,11 @@
 package com.thd.springboottest.shiro.configuration;
 
 import com.thd.springboottest.shiro.dao.MySessionDao;
+import com.thd.springboottest.shiro.filter.MyAnonFilter;
+import com.thd.springboottest.shiro.filter.MyAuthcFilter;
+import com.thd.springboottest.shiro.filter.MyPermsFilter;
 import com.thd.springboottest.shiro.listener.MyListener;
+import com.thd.springboottest.shiro.service.MySessionManager;
 import com.thd.springboottest.shiro.service.UserPasswordRealm;
 import com.thd.springboottest.shiro.service.PhoneMessageRealm;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -18,12 +22,12 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.*;
 
 /**
@@ -269,7 +273,8 @@ public class ShiroConfig {
      */
     @Bean("sessionManager")
     public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+//        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        DefaultWebSessionManager sessionManager = new MySessionManager();
         Collection<SessionListener> listeners = new ArrayList<SessionListener>();
         //配置监听
         listeners.add(sessionListener());
@@ -332,24 +337,65 @@ public class ShiroConfig {
 
         return manager;
     }
+
     @Bean
     ShiroFilterFactoryBean shiroFilterFactoryBean() {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
+
+        // 可以添加自己定义的过滤器
+        /*
+        简写(加粗为常用)		名称			优先级(1为最高)	说明	对应Java类
+        anon				匿名拦截器		1				不需要登录就能访问,一般用于静态资源,或者移动端接口	org.apache.shiro.web.filter.authc.AnonymousFilter
+        authc				登录拦截器		2				需要登录认证才能访问的资源	org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+        authcBasic			Http拦截器		3				Http身份验证拦截器,非常用类型,不太了解	org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+        logout				登出拦截器		4				用户登出拦截器,主要属性:redirectURL退出登录后重定向的地址	org.apache.shiro.web.filter.authc.LogoutFilter
+        noSessionCreation	不创建会话拦截器	5				调用 subject.getSession(false) 不会有什么问题，但是如果 subject.getSession(true) 将抛出 DisabledSessionException 异常	org.apache.shiro.web.filter.authc.NoSessionCreationFilter
+        prems				权限拦截器		6				验证用户是否拥有资源权限	org.apache.shiro.web.filter.authc.PermissionsAuthorizationFilter
+        port				端口拦截器		7				其主要属性: port(80) 如果用户访问该页面是非 80，将自动将请求端口改为 80 并重定向到该 80 端口	org.apache.shiro.web.filter.authc.PortFilter
+        rest				rest风格拦截器	8				rest 风格拦截器，自动根据请求方法构建权限字符串构建权限字符串；非常用类型拦截器	org.apache.shiro.web.filter.authc.HttpMethodPermissionFilter
+        roles				角色拦截器		9				验证用户是否拥有资源角色	org.apache.shiro.web.filter.authc.RolesAuthorizationFilter
+        ssl					SSL拦截器		10				只有请求协议是https才能通过,否则你会自动跳转到https端口(443)	org.apache.shiro.web.filter.authc.SslFilter
+        user				用户拦截器		11				用户拦截器，用户已经身份验证 / 记住我登录的都可；	org.apache.shiro.web.filter.authc.UserFilter
+        */
+
+        Map<String, Filter> filters = bean.getFilters();
+        filters.put("anon", new MyAnonFilter());
+        filters.put("authc", new MyAuthcFilter());
+        filters.put("prems", new MyPermsFilter());
+        bean.setFilters(filters);
+
+
         bean.setSecurityManager(securityManager());
-        bean.setLoginUrl("/login");
+        //注意过滤器配置顺序 不能颠倒
+
+        // 未登录时跳转到的地址
+        bean.setLoginUrl("/unlogin");
+
+        //登录成功后的跳转地址
         bean.setSuccessUrl("/index");
+        // 未授权时跳转到的地址
         bean.setUnauthorizedUrl("/unauthorizedurl");
+
+
         Map<String, String> map = new LinkedHashMap<>();
-        map.put("/list", "anon");
+
+        //配置不会被拦截的地址 顺序判断，在 ShiroConfiguration 中的 shiroFilter 处配置了 /ajaxLogin=anon，意味着可以不需要认证也可以访问
+
+        // 配置url对应的拦截器(与上面定义的拦截器名称对应)
+
+        //map.put("/list", "anon");
         map.put("/logout", "anon");
+        map.put("/login", "anon");
         map.put("/doLogin", "anon");
         map.put("/simpleHash","anon");
         map.put("/pLogin","anon");
         map.put("/showInfo","anon");
+        map.put("/unauthorizedurl","anon");
+
         map.put("/testRedis/*","anon");
-
+        map.put("/perm/*","prems");
+        map.put("/dynamicPerm","prems");
         map.put("/**", "authc");
-
 
 
         bean.setFilterChainDefinitionMap(map);

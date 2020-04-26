@@ -24,6 +24,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * com.thd.springboottest.shiro.controller.LoginController
@@ -41,6 +43,7 @@ public class LoginController {
     private RedisTemplate redisTemplate;
     @RequestMapping("/login")
     // url : http://127.0.0.1:8899/thd/login?userName=wsl&password=123456
+    // url : http://127.0.0.1:8899/thd/login?userName=zhangsan&password=123456
     public String login(User user) {
 
         logger.info("login");
@@ -70,6 +73,7 @@ public class LoginController {
             System.out.println("Principal:" + SecurityUtils.getSubject().getPrincipal());
             System.out.println("Principal Json:" + JSON.toJSONString(SecurityUtils.getSubject().getPrincipal()));
             SecurityUtils.getSubject().getSession().setAttribute("user",user);
+            SecurityUtils.getSubject().getSession().setAttribute("username",user.getUserName());
             System.out.println("User Json:" + JSON.toJSONString(user));
             System.out.println(SecurityUtils.getSubject().getSession().getAttribute("user"));
 
@@ -172,6 +176,9 @@ public class LoginController {
                 // 多realm 认证时当多个realm都通过时 会返回成功认证的身份 - 多个身份
                 PrincipalCollection principalCollection = subject.getPrincipals();
 
+                Session session = subject.getSession();
+                System.out.println(session.getId());
+
                 System.out.println("------------------- 权限 ---------------------");
                 System.out.println(subject.hasRole("admin"));
                 System.out.println(subject.hasRole("user"));
@@ -197,7 +204,36 @@ public class LoginController {
         }
     }
 
-
+    @RequestMapping("/perm/add")
+    @RequiresPermissions(value={"add"})
+    // url : http://127.0.0.1:8899/thd/perm/add
+    public String perm() {
+        SecurityUtils.getSubject().getSession().touch();
+        SessionKey sk = new DefaultSessionKey(SecurityUtils.getSubject().getSession().getId());
+        Session session = SecurityUtils.getSecurityManager().getSession(sk);
+        System.out.println("attribute username:" + session.getAttribute("userName"));
+        return "perm/add";
+    }
+    @RequestMapping("/perm/query")
+    @RequiresPermissions(value={"query"})
+    // url : http://127.0.0.1:8899/thd/perm/query
+    public String query() {
+        SecurityUtils.getSubject().getSession().touch();
+        SessionKey sk = new DefaultSessionKey(SecurityUtils.getSubject().getSession().getId());
+        Session session = SecurityUtils.getSecurityManager().getSession(sk);
+        System.out.println("attribute username:" + session.getAttribute("userName"));
+        return "perm/query";
+    }
+    @RequestMapping("/dynamicPerm")
+    @RequiresPermissions(value={"dynamicPerm"})
+    // url : http://127.0.0.1:8899/thd/dynamicPerm
+    public String dynamicPerm() {
+        SecurityUtils.getSubject().getSession().touch();
+        SessionKey sk = new DefaultSessionKey(SecurityUtils.getSubject().getSession().getId());
+        Session session = SecurityUtils.getSecurityManager().getSession(sk);
+        System.out.println("attribute username:" + session.getAttribute("userName"));
+        return "perm/query";
+    }
 
     @RequestMapping("/list")
     // url : http://127.0.0.1:8899/thd/list
@@ -207,6 +243,26 @@ public class LoginController {
         Session session = SecurityUtils.getSecurityManager().getSession(sk);
         System.out.println("attribute username:" + session.getAttribute("userName"));
         return "list!";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/unauthorizedurl")
+    // url : http://127.0.0.1:8899/thd/unauthorizedurl
+    public Map unauthorizedurl() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("code", "1000000");
+        map.put("msg", "未授权,请授权!!");
+        return map;
+    }
+    @ResponseBody
+    @RequestMapping("/unlogin")
+    // url : http://127.0.0.1:8899/thd/unlogin
+    public Map unlogin() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("code", "1000000");
+        map.put("msg", "未登录,请登录 please login!!");
+        return map;
     }
 
 
