@@ -49,6 +49,9 @@ public class MyPermsFilter extends PermissionsAuthorizationFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
         Subject subject = getSubject(request, response);
         if (subject.getPrincipal() != null) {
+            /**
+             * 判断是否有权限，调用shiro  hasRole  /  hasPermission
+             */
             return true;
         } else {
 
