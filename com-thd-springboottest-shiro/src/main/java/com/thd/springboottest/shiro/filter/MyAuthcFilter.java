@@ -54,6 +54,7 @@ public class MyAuthcFilter extends FormAuthenticationFilter {
      * 表示当访问拒绝时是否已经处理了；如果返回true表示需要继续处理；如果返回false表示该拦截器实例已经处理了，将直接返回即可。
      * onAccessDenied是否执行取决于isAccessAllowed的值，如果返回true则onAccessDenied不会执行；如果返回false，执行onAccessDenied
      * 如果onAccessDenied也返回false，则直接返回，不会进入请求的方法（只有isAccessAllowed和onAccessDenied的情况下）
+     * onAccessDenied如果返回true表示需要继续处理；如果返回false表示该拦截器实例已经处理了，将直接返回即可。
      * */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response)throws Exception{
