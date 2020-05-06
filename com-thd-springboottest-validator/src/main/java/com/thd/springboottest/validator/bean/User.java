@@ -1,10 +1,9 @@
 package com.thd.springboottest.validator.bean;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 /**
  * com.thd.springboottest.standardcode.bean.User
@@ -28,4 +27,15 @@ public class User {
     @NotNull(message = "用户邮箱不能为空")
     @Email(message = "邮箱格式不正确")
     private String email;
+
+    @Range(min=18,max=50,message = "年龄必须在18到50之间")
+    @Max(value = 50,message = "年龄不能超过50岁")
+    @Min(value = 18,message = "年龄不能小于18岁")
+    private Integer age;
+
+    @Pattern(regexp = "^(\\d{18,18}|\\d{15,15}|(\\d{17,17}[x|X]))$", message = "身份证格式错误")
+    private String idCard;
+
+    @Pattern(regexp = "^1([38]\\d|5[0-35-9]|7[3678])\\d{8}$", message = "电话格式错误")
+    private String tel;
 }
