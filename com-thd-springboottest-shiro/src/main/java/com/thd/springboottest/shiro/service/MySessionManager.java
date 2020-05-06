@@ -16,6 +16,7 @@ import java.io.Serializable;
  * @DATE: 2020/4/26 8:38
  **/
 public class MySessionManager extends DefaultWebSessionManager {
+    // 保存sessionId的请求头名称
     private static final String TOKEN = "token";
 
     private static final String REFERENCED_SESSION_ID_SOURCE = "Stateless request";

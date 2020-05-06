@@ -89,7 +89,6 @@ public class LoginServiceImpl implements LoginService{
         permissionsSet.add(permissions2);
         permissionsSet1.add(permissions1);
 
-
         // 角色 admin
         Role role = new Role("1","admin",permissionsSet);
         Set<Role> roleSet = new HashSet<>();

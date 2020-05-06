@@ -1,5 +1,6 @@
 package com.thd.springboottest.shiro.dao;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
@@ -14,6 +15,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 使用redis存储session信息以达到分布式服务session共享的效果
+ */
 public class MySessionDao extends AbstractSessionDAO {
     private static Logger logger = LoggerFactory.getLogger(MySessionDao.class);
 
@@ -38,6 +42,8 @@ public class MySessionDao extends AbstractSessionDAO {
         assignSessionId(session, sessionId);
         logger.debug("创建seesion,id=[{}]", session.getId().toString());
         try {
+            String sessionJsonStr = JSONObject.toJSONString(session);
+            System.out.println(sessionJsonStr);
             redisTemplate.opsForValue().set(getKey(session.getId().toString()), session,30, TimeUnit.MINUTES);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
@@ -62,6 +68,11 @@ public class MySessionDao extends AbstractSessionDAO {
     public void update(Session session) throws UnknownSessionException {
         logger.debug("更新seesion,id=[{}]", session.getId().toString());
         try {
+
+            String sessionJsonStr = JSONObject.toJSONString(session);
+            System.out.println(sessionJsonStr);
+
+
             redisTemplate.opsForValue().set(getKey(session.getId().toString()), session,30,TimeUnit.MINUTES);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);

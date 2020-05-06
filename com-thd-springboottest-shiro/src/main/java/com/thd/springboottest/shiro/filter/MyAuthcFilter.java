@@ -76,7 +76,7 @@ public class MyAuthcFilter extends FormAuthenticationFilter {
 
             // 返回固定的JSON串
             WebUtils.toHttp(response).setContentType("application/json; charset=utf-8");
-            WebUtils.toHttp(response).getWriter().print("{code:401,msg:'尚未登录'}");
+            WebUtils.toHttp(response).getWriter().print("{\"code\":401,\"msg\":\"尚未登录\"}");
             return false;
         }
     }

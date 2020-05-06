@@ -254,7 +254,7 @@ public class ShiroConfig {
     @Bean("sessionIdCookie")
     public SimpleCookie sessionIdCookie(){
         //这个参数是cookie的名称
-        SimpleCookie simpleCookie = new SimpleCookie("shiro.session");
+        SimpleCookie simpleCookie = new SimpleCookie("myshiro.thdsession");
         //setcookie的httponly属性如果设为true的话，会增加对xss防护的安全系数。它有以下特点：
 
         //setcookie()的第七个参数
@@ -357,7 +357,6 @@ public class ShiroConfig {
         ssl					SSL拦截器		10				只有请求协议是https才能通过,否则你会自动跳转到https端口(443)	org.apache.shiro.web.filter.authc.SslFilter
         user				用户拦截器		11				用户拦截器，用户已经身份验证 / 记住我登录的都可；	org.apache.shiro.web.filter.authc.UserFilter
         */
-
         Map<String, Filter> filters = bean.getFilters();
         filters.put("anon", new MyAnonFilter());
         filters.put("authc", new MyAuthcFilter());
@@ -393,7 +392,7 @@ public class ShiroConfig {
         map.put("/unauthorizedurl","anon");
 
         map.put("/testRedis/*","anon");
-        map.put("/perm/*","authc,prems");
+        map.put("/perm/*","anon,authc,prems");
         map.put("/dynamicPerm","prems");
         map.put("/**", "authc");
 

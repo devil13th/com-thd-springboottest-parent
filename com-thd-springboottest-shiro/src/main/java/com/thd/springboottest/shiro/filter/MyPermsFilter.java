@@ -30,13 +30,13 @@ public class MyPermsFilter extends PermissionsAuthorizationFilter {
      * @return
      * @throws IOException
      */
-    @Override
-    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
-        // 获取接口请求路径
-        String servletPath = WebUtils.toHttp(request).getServletPath();
-        mappedValue = new String[]{servletPath};
-        return super.isAccessAllowed(request, response, mappedValue);
-    }
+//    @Override
+//    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
+//        // 获取接口请求路径
+//        String servletPath = WebUtils.toHttp(request).getServletPath();
+//        mappedValue = new String[]{servletPath};
+//        return super.isAccessAllowed(request, response, mappedValue);
+//    }
 
     /**
      * 解决权限不足302问题
