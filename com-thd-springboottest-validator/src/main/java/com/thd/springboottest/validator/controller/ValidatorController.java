@@ -47,12 +47,15 @@ public class ValidatorController {
     // url :http://127.0.0.1:8899/thd/validator/test02
     // requestbody:
     /**
-     * {
-     * 	"id":1,
-     * 	"account":"1237",
-     * 	"password":"abcdefghti",
-     * 	"email":"aaaab"
-     * }
+     {
+     "id":1,
+     "account":"1237",
+     "password":"abcdefghti",
+     "email":"aaaab",
+     "age":17,
+     "idCard":"110102182738492827",
+     "tel":"12345678907"
+     }
      */
     public ResponseEntity test02(@RequestBody @Valid User user){
         System.out.println("test02");
