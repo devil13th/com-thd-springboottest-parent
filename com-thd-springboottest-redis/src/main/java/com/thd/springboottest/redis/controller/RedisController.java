@@ -47,6 +47,7 @@ public class RedisController {
 
     @ResponseBody
     @RequestMapping(value="/jedisPoolInfo",method= RequestMethod.GET)
+    // url : http://127.0.0.1:8899/thd/redis/jedisPoolInfo
     public String jedisPoolInfo(){
         this.getLog().debug("" + jedisPool.getNumWaiters());
         this.getLog().debug("" + jedisPool.getNumIdle());
@@ -56,6 +57,7 @@ public class RedisController {
 
     @ResponseBody
     @RequestMapping(value="/index",method= RequestMethod.GET)
+    // url : http://127.0.0.1:8899/thd/redis/index
     public String index(){
         this.getLog().debug("index");
         return "index";
@@ -106,6 +108,7 @@ public class RedisController {
     @RequestMapping(value="/testRedisTemplateGet",method= RequestMethod.GET)
     // http://127.0.0.1:8899/thd/redis/testRedisTemplateGet
     public MyUser testRedisTemplateGet(){
+
         MyUser user = (MyUser)this.myRedisTemplate.opsForValue().get("1");
         return user;
     }

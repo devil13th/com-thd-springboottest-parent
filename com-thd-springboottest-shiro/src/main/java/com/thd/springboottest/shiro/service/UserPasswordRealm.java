@@ -119,7 +119,7 @@ public class UserPasswordRealm extends AuthorizingRealm {
         if(u == null){
             throw new UnknownAccountException("用户不存在!");
         }
-        // 原始密码 - 并非数据库中的密码
+        // 原始密码 - 数据库中的密码
         String pwd = loginService.getUserByName(username).getPassword();
         // 盐值是用户名
         ByteSource salt = ByteSource.Util.bytes(username);

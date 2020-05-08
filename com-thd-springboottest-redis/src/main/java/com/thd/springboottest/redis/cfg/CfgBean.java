@@ -1,23 +1,30 @@
 package com.thd.springboottest.redis.cfg;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thd.springboottest.redis.utils.FastJsonRedisSerializer;
+import com.thd.springboottest.redis.utils.MyFastJsonRedisSerializer;
+import com.thd.springboottest.redis.utils.MyFastJsonRedisSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.http.MediaType;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author devil13th
@@ -104,7 +111,26 @@ public class CfgBean {
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
         // =================== 创建 FastJsonRedisSerializer 序列化器 使用fastjson进行序列化和反序列化=================== //
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
+        MyFastJsonRedisSerializer fastJsonRedisSerializer = new MyFastJsonRedisSerializer(Object.class);
+
+        // MyFastJsonRedisSerializer也可以直接使用FastJsonRedisSerializer
+        // FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
+
+
+        //2.定义一个配置，设置编码方式，和格式化的形式
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+
+        //3.设置成了JSON序列化配置
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
+        //fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteClassName);
+
+
+        //4.处理中文乱码问题
+        List<MediaType> fastMediaTypes =  new ArrayList<>();
+        fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+
+        fastJsonRedisSerializer.setFastJsonConfig(fastJsonConfig);
+
 
         /**
          * keySerializer 字符串 哈希 列表 集合 有序集合的键的序列化策略。
@@ -118,8 +144,8 @@ public class CfgBean {
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
 
         // 设置redis value的序列化器 (上面几种序列化器任选其一,推荐使用fastJsonRedisSerializer (json格式,序列化效率高且业界常用))
-        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
 
 
         System.out.println(redisTemplate.getKeySerializer().toString());
