@@ -24,20 +24,27 @@ import java.io.IOException;
 public class MyPermsFilter extends PermissionsAuthorizationFilter {
     /**
      * 根据请求接口路径进行验证
-     * @param request
-     * @param response
-     * @param mappedValue
+     * @param mappedValue shiroconfig配置的路径对应的Filter链的参数 ,例如map.put("/perm/*","anon,authc,prems[admin,sss]")中的admin和sss
      * @return
      * @throws IOException
      */
-//    @Override
-//    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
-//        // 获取接口请求路径
-//        String servletPath = WebUtils.toHttp(request).getServletPath();
-//        mappedValue = new String[]{servletPath};
-//        return super.isAccessAllowed(request, response, mappedValue);
-//    }
+    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
+        Subject subject = this.getSubject(request, response);
 
+        String[] perms = (String[])((String[])mappedValue);
+        boolean isPermitted = true;
+        if (perms != null && perms.length > 0) {
+            if (perms.length == 1) {
+                if (!subject.isPermitted(perms[0])) {
+                    isPermitted = false;
+                }
+            } else if (!subject.isPermittedAll(perms)) {
+                isPermitted = false;
+            }
+        }
+
+        return isPermitted;
+    }
     /**
      * 解决权限不足302问题
      * @param request
@@ -46,7 +53,7 @@ public class MyPermsFilter extends PermissionsAuthorizationFilter {
      * @throws IOException
      */
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
         Subject subject = getSubject(request, response);
         if (subject.getPrincipal() != null) {
             /**
