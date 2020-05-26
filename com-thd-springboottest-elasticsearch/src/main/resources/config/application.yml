@@ -1,0 +1,28 @@
+debug: true
+
+#trace=true
+# 打开actuator 所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 8899
+  servlet:
+    context-path: /thd
+#spring.mvc.view.prefix= /WEB-INF/pages/
+#spring.mvc.view.suffix= .jsp
+
+spring:
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch #默认即为elasticsearch
+      cluster-nodes: 127.0.0.1:9300 #配置es节点信息，逗号分隔，如果没有指定，则启动ClientNode
+      repositories:
+        enabled: true
+      rest:
+        uris: http://127.0.0.1:9300
+        #username: devil13th
+        #password: 123456
