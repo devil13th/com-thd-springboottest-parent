@@ -10,7 +10,7 @@ spring:
     process-definition-location-prefix: classpath:/processes/
     #process-definition-location-suffixes: #流程文件格式
   datasource:
-    url: jdbc:mysql://localhost:3306/activiti?characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/activiti?characterEncoding=UTF-8&serverTimezone=GMT%2B8&&nullCatalogMeansCurrent=true
     username: root
     password: 123456
 

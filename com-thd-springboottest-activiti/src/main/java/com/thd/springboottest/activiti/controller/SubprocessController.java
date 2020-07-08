@@ -1,10 +1,7 @@
 package com.thd.springboottest.activiti.controller;
 
 import com.thd.springboottest.activiti.utils.MyActivitiUtil;
-import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
-import org.activiti.engine.impl.util.ProcessDefinitionUtil;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,39 +26,101 @@ import java.util.stream.Collectors;
  **/
 
 
-
-
-
-
-
 /*
 
-并签流程 / 监听器
+-- 创建流程
+http://127.0.0.1:8899/thd/subprocess/startProcess/01
+流程ID：8
 
--- 创建流程实例
-http://127.0.0.1:8899/thd/activiti/startProcess/ListenerTest/01
-创建工作生成的流程实例ID processInstanceId : 5
-
--- 查询待办
-http://127.0.0.1:8899/thd/activiti/queryTask
-["9,One Task,5"]
-
--- 设置代办人
-http://127.0.0.1:8899/thd/activiti/assign/9/zhangsan
-
--- 查询某代办人的代办
-http://127.0.0.1:8899/thd/activiti/queryTaskByUser/zhangsan
-["2513,One Task"]
-
--- 完成代办
-http://127.0.0.1:8899/thd/activiti/finishTask/2509/zhangsan
+-- 设置流程变量
+http://127.0.0.1:8899/thd/subprocess/setVariable/8
 
 -- 查看流程变量
-http://127.0.0.1:8899/thd/activiti/showProcessVar/5
+http://127.0.0.1:8899/thd/activiti/showProcessVar/8
+{"users":["zhangsan","lisi","wangwu"]}
+
+-- 查询所有代办
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:12,taskName:ASSIGN,ProcessInstanceId:8"]
+
+-- 设置待办人
+http://127.0.0.1:8899/thd/subprocess/assign/12/zhangsan
+
+-- 查询某人代办
+http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/zhangsan
+["taskId:12, taskName:ASSIGN"]
+
+-- 完成代办
+http://127.0.0.1:8899/thd/subprocess/finishTask/12/zhangsan
+
+
+-- 查询待办
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:42,taskName:Input Info,ProcessInstanceId:8","taskId:44,taskName:Input Info,ProcessInstanceId:8","taskId:47,taskName:Input Info,ProcessInstanceId:8"]
+
+
+-- 查询某人代办
+http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/zhangsan
+["taskId:42, taskName:Input Info"]
+
+http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/lisi
+["taskId:44, taskName:Input Info"]
+
+http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/wangwu
+["taskId:47, taskName:Input Info"]
+
+
+-- 完成代办并查询待办 - 循环子流程
+http://127.0.0.1:8899/thd/subprocess/finishTask/42/zhangsan
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:44,taskName:Input Info,ProcessInstanceId:8","taskId:47,taskName:Input Info,ProcessInstanceId:8","taskId:50,taskName:Audit,ProcessInstanceId:8"]
+
+http://127.0.0.1:8899/thd/subprocess/finishTask/44/lisi
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:47,taskName:Input Info,ProcessInstanceId:8","taskId:50,taskName:Audit,ProcessInstanceId:8","taskId:52,taskName:Audit,ProcessInstanceId:8"]
+
+http://127.0.0.1:8899/thd/subprocess/finishTask/47/wangwu
+["taskId:50,taskName:Audit,ProcessInstanceId:8","taskId:52,taskName:Audit,ProcessInstanceId:8","taskId:54,taskName:Audit,ProcessInstanceId:8"]
+
+-- 查询待办
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:50,taskName:Audit,ProcessInstanceId:8","taskId:52,taskName:Audit,ProcessInstanceId:8","taskId:54,taskName:Audit,ProcessInstanceId:8"]
+
+
+
+-- 完成代办并查询待办 - 循环子流程
+http://127.0.0.1:8899/thd/subprocess/finishTask/50/zhangsan
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:52,taskName:Audit,ProcessInstanceId:8","taskId:54,taskName:Audit,ProcessInstanceId:8"]
+
+http://127.0.0.1:8899/thd/subprocess/finishTask/52/lisi
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:54,taskName:Audit,ProcessInstanceId:8"]
+
+http://127.0.0.1:8899/thd/subprocess/finishTask/54/wangwu
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:59,taskName:Total,ProcessInstanceId:8"]
+
+
+-- 设置待办
+http://127.0.0.1:8899/thd/subprocess/assign/59/zhangsan
+
+-- 查询某人代办
+http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/zhangsan
+
+-- 完成代办
+http://127.0.0.1:8899/thd/subprocess/finishTask/59/zhangsan
+
+
+-- 查询所有代办
+http://127.0.0.1:8899/thd/subprocess/queryTask
+[]
+
  */
+
 @Controller
-@RequestMapping(value="/activiti")
-public class ActivitiController {
+@RequestMapping(value="/subprocess")
+public class SubprocessController {
     @Autowired
     private MyActivitiUtil util;
     @Autowired
@@ -80,51 +140,17 @@ public class ActivitiController {
     @Autowired
     public FormService formService;
     public Logger log = LoggerFactory.getLogger(this.getClass());
-    @RequestMapping(value="/test")
-    @ResponseBody
-    public String test(){
-        System.out.println("-----------------");
-//        ProcessDefinition pd = util.getRepositoryService().getProcessDefinition("myProcess_1:1:6");
-//
-//        BpmnModel bm = ProcessDefinitionUtil.getBpmnModel("myProcess_1:1:6");
-//        System.out.println(pd.getDeploymentId());
-//        System.out.println(util);
-        return "SUCCESS";
-    }
-
-
-
-
-
-
-    @RequestMapping(value="/deploy")
-    @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/deploy?bpmnName=ListenerTest.bpmn20.xml
-    public String deploy(@RequestParam String bpmnName){
-        this.log.info("deploy process " + bpmnName);
-//        ProcessDefinition pd = util.getRepositoryService().getProcessDefinition("myProcess_1:1:6");
-//
-//        BpmnModel bm = ProcessDefinitionUtil.getBpmnModel("myProcess_1:1:6");
-//        System.out.println(pd.getDeploymentId());
-//        System.out.println(util);
-
-        this.repositoryService.createDeployment().addClasspathResource("processes/" + bpmnName).deploy();
-        return "SUCCESS";
-    }
-
 
 
     /**
      * 开启流程
-     * @param processDefinedKey 流程定义key
-     * @param businessKey 业务主键
      * @return
      */
-    // url: http://127.0.0.1:8899/thd/activiti/startProcess/ListenerTest/01
-    @RequestMapping(value="/startProcess/{processDefinedKey}/{businessKey}")
+    // url: http://127.0.0.1:8899/thd/subprocess/startProcess/01
+    @RequestMapping(value="/startProcess/{businessKey}")
     @ResponseBody
-    public String startProcess(@PathVariable String processDefinedKey,@PathVariable String businessKey){
-        ProcessInstance pi = this.runtimeService.startProcessInstanceByKey(processDefinedKey,businessKey);
+    public String startProcess(@PathVariable String businessKey){
+        ProcessInstance pi = this.runtimeService.startProcessInstanceByKey("MultipleSubProcess",businessKey);
         return pi.getProcessInstanceId();
     }
 
@@ -134,13 +160,31 @@ public class ActivitiController {
      */
     @RequestMapping(value="/queryTask")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/queryTask
+    // url : http://127.0.0.1:8899/thd/subprocess/queryTask
     public List<String> queryTask(){
         List<Task> t =  this.taskService.createTaskQuery().list();
         List<String> l = t.stream().map(task -> {
             return "taskId:" + task.getId() + ",taskName:" + task.getName() + ",ProcessInstanceId:" + task.getProcessInstanceId();
         }).collect(Collectors.toList());
         return l;
+    }
+
+
+    /**
+     * 设置流程变量
+     * @return
+     */
+    @RequestMapping(value="/setVariable/{processInstanceId}")
+    @ResponseBody
+    // url : http://127.0.0.1:8899/thd/subprocess/setVariable/5
+    public String setVariable(@PathVariable String processInstanceId){
+        List<String> users = new ArrayList<String>();
+        users.add("zhangsan");
+        users.add("lisi");
+        users.add("wangwu");
+
+        this.runtimeService.setVariable(processInstanceId,"users",users);
+        return "SUCCESS";
     }
 
 
@@ -152,7 +196,7 @@ public class ActivitiController {
      */
     @RequestMapping(value="/assign/{taskId}/{user}")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/assign/2513/zhangsan
+    // url : http://127.0.0.1:8899/thd/subprocess/assign/2513/zhangsan
     public String assign(@PathVariable String taskId,@PathVariable String user){
         this.util.addCandidateUserToTask(taskId,user);
         return "SUCCESS";
@@ -165,7 +209,7 @@ public class ActivitiController {
      */
     @RequestMapping(value="/queryTaskByUser/{user}")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/queryTaskByUser/zhangsan
+    // url : http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/zhangsan
     public List<String> queryTaskByUser(@PathVariable String user){
         List<Task> t =  this.taskService.createTaskQuery().taskCandidateUser(user).list();
         List<Task> t2 =  this.taskService.createTaskQuery().taskAssignee(user).list();
@@ -187,7 +231,7 @@ public class ActivitiController {
 
     @RequestMapping(value="/finishTask/{taskId}/{user}")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/finishTask/2513/zhangsan
+    // url : http://127.0.0.1:8899/thd/subprocess/finishTask/2513/zhangsan
     public String finishTask(@PathVariable String taskId,@PathVariable String user){
         this.taskService.complete(taskId);
         return "SUCCESS";

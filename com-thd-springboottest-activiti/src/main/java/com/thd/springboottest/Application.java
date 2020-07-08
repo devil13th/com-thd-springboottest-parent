@@ -6,6 +6,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.stream.Stream;
+
 /**
  * 注意,如果集成activiti 一定要配置exclude={org.activiti.spring.boot.SecurityAutoConfiguration.class
  * Caused by: java.lang.ArrayStoreException: sun.reflect.annotation.TypeNotPresentExceptionProxy
@@ -25,6 +27,7 @@ public class Application extends SpringBootServletInitializer {
         //System.setProperty("spring.devtools.restart.enabled", "false");
         ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
         String[] names = ctx.getBeanDefinitionNames();
+        Stream.of(names).forEach(System.out::println);
     }
 
 

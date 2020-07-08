@@ -1,10 +1,7 @@
 package com.thd.springboottest.activiti.controller;
 
 import com.thd.springboottest.activiti.utils.MyActivitiUtil;
-import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
-import org.activiti.engine.impl.util.ProcessDefinitionUtil;
-import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,8 +57,8 @@ http://127.0.0.1:8899/thd/activiti/finishTask/2509/zhangsan
 http://127.0.0.1:8899/thd/activiti/showProcessVar/5
  */
 @Controller
-@RequestMapping(value="/activiti")
-public class ActivitiController {
+@RequestMapping(value="/listenerTest")
+public class ListenerTestController {
     @Autowired
     private MyActivitiUtil util;
     @Autowired
@@ -97,34 +95,16 @@ public class ActivitiController {
 
 
 
-    @RequestMapping(value="/deploy")
-    @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/deploy?bpmnName=ListenerTest.bpmn20.xml
-    public String deploy(@RequestParam String bpmnName){
-        this.log.info("deploy process " + bpmnName);
-//        ProcessDefinition pd = util.getRepositoryService().getProcessDefinition("myProcess_1:1:6");
-//
-//        BpmnModel bm = ProcessDefinitionUtil.getBpmnModel("myProcess_1:1:6");
-//        System.out.println(pd.getDeploymentId());
-//        System.out.println(util);
-
-        this.repositoryService.createDeployment().addClasspathResource("processes/" + bpmnName).deploy();
-        return "SUCCESS";
-    }
-
-
-
     /**
      * 开启流程
-     * @param processDefinedKey 流程定义key
      * @param businessKey 业务主键
      * @return
      */
-    // url: http://127.0.0.1:8899/thd/activiti/startProcess/ListenerTest/01
-    @RequestMapping(value="/startProcess/{processDefinedKey}/{businessKey}")
+    // url: http://127.0.0.1:8899/thd/listenerTest/startProcess/01
+    @RequestMapping(value="/startProcess/{businessKey}")
     @ResponseBody
-    public String startProcess(@PathVariable String processDefinedKey,@PathVariable String businessKey){
-        ProcessInstance pi = this.runtimeService.startProcessInstanceByKey(processDefinedKey,businessKey);
+    public String startProcess(@PathVariable String businessKey){
+        ProcessInstance pi = this.runtimeService.startProcessInstanceByKey("ListenerTest",businessKey);
         return pi.getProcessInstanceId();
     }
 
@@ -134,7 +114,7 @@ public class ActivitiController {
      */
     @RequestMapping(value="/queryTask")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/queryTask
+    // url : http://127.0.0.1:8899/thd/listenerTest/queryTask
     public List<String> queryTask(){
         List<Task> t =  this.taskService.createTaskQuery().list();
         List<String> l = t.stream().map(task -> {
@@ -152,7 +132,7 @@ public class ActivitiController {
      */
     @RequestMapping(value="/assign/{taskId}/{user}")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/assign/2513/zhangsan
+    // url : http://127.0.0.1:8899/thd/listenerTest/assign/2513/zhangsan
     public String assign(@PathVariable String taskId,@PathVariable String user){
         this.util.addCandidateUserToTask(taskId,user);
         return "SUCCESS";
@@ -165,7 +145,7 @@ public class ActivitiController {
      */
     @RequestMapping(value="/queryTaskByUser/{user}")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/queryTaskByUser/zhangsan
+    // url : http://127.0.0.1:8899/thd/listenerTest/queryTaskByUser/zhangsan
     public List<String> queryTaskByUser(@PathVariable String user){
         List<Task> t =  this.taskService.createTaskQuery().taskCandidateUser(user).list();
         List<Task> t2 =  this.taskService.createTaskQuery().taskAssignee(user).list();
@@ -187,39 +167,46 @@ public class ActivitiController {
 
     @RequestMapping(value="/finishTask/{taskId}/{user}")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/finishTask/2513/zhangsan
+    // url : http://127.0.0.1:8899/thd/listenerTest/finishTask/2513/zhangsan
     public String finishTask(@PathVariable String taskId,@PathVariable String user){
         this.taskService.complete(taskId);
         return "SUCCESS";
     }
 
-
     /**
-     * 查看流程变量
+     * 设置流程变量
      * @param processInstanceId 流程实例ID
      * @return
      */
-    // url : http://127.0.0.1:8899/thd/activiti/showProcessVar/2509
-    @RequestMapping(value="/showProcessVar/{processInstanceId}")
+    @RequestMapping(value="/setProcessVarAssignA/{processInstanceId}")
     @ResponseBody
-    public Map setProcessVar(@PathVariable String processInstanceId){
-        Map m = this.runtimeService.getVariables(processInstanceId);
-        return m;
+    // url : http://127.0.0.1:8899/thd/listenerTest/setProcessVarAssignA/2509
+    public String setProcessVarAssignA(@PathVariable String processInstanceId){
+        List<String> users = new ArrayList<String>();
+        users.add("zhangsan");
+        users.add("lisi");
+        users.add("wangwu");
+        this.runtimeService.setVariableLocal(processInstanceId,"assigneeA",users);
+        return "SUCCESS";
     }
 
     /**
      * 设置流程变量
      * @param processInstanceId 流程实例ID
-     * @param varName 流程变量名称
-     * @param varValue 流程变量值
      * @return
      */
-    @RequestMapping(value="/setProcessVar/{processInstanceId}/{varName}/{varValue}")
+    @RequestMapping(value="/setProcessVarAssignB/{processInstanceId}")
     @ResponseBody
-    // url : http://127.0.0.1:8899/thd/activiti/setProcessVar/2509/a/b
-    public String setProcessVar(@PathVariable String processInstanceId,@PathVariable String varName,@PathVariable String varValue){
-        this.runtimeService.setVariableLocal(processInstanceId,varName,varValue);
+    // url : http://127.0.0.1:8899/thd/listenerTest/setProcessVarAssignB/2509
+    public String setProcessVarAssignB(@PathVariable String processInstanceId){
+        List<String> users = new ArrayList<String>();
+        users.add("zhangsan");
+        users.add("lisi");
+        users.add("wangwu");
+        this.runtimeService.setVariableLocal(processInstanceId,"assigneeB",users);
         return "SUCCESS";
     }
+
+
 
 }

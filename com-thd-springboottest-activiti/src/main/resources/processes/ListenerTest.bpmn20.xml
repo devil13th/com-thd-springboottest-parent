@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="ListenerTest" name="ListenerTest" isExecutable="true">
+    <documentation>ListenerTest</documentation>
+    <extensionElements>
+      <activiti:executionListener event="start" delegateExpression="${executionLogListener}"></activiti:executionListener>
+      <activiti:executionListener event="end" delegateExpression="${executionLogListener}"></activiti:executionListener>
+      <activiti:executionListener event="take" delegateExpression="${executionLogListener}"></activiti:executionListener>
+    </extensionElements>
+    <startEvent id="startEvent1"></startEvent>
+    <userTask id="one" name="One Task">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="assignment" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="${taskLogListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-F72DA13A-D0DC-4B1A-9DF6-C193C2EC2AB7" sourceRef="startEvent1" targetRef="one"></sequenceFlow>
+    <userTask id="two" name="Second Task" activiti:assignee="${user}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${assigneeA}" activiti:elementVariable="user"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="sid-4DC5C297-A187-4473-9363-D8F5E522670E" sourceRef="one" targetRef="two"></sequenceFlow>
+    <userTask id="three" name="Third Task" activiti:assignee="${user}">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="true" activiti:collection="${assigneeB}" activiti:elementVariable="user"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="sid-6BD33B69-5A35-4F77-A8E9-431BB4DCF4C7" sourceRef="two" targetRef="three"></sequenceFlow>
+    <userTask id="four" name="Fourth Task">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="assignment" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="${taskLogListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-F0F5AB28-661F-4A9D-B655-294B9D6A3691" sourceRef="three" targetRef="four"></sequenceFlow>
+    <endEvent id="sid-FB97815B-2219-45FF-AC9C-41EB0D3B30BD"></endEvent>
+    <sequenceFlow id="sid-FBB15E4F-7000-49FC-9CBF-DEFD35760342" sourceRef="four" targetRef="sid-FB97815B-2219-45FF-AC9C-41EB0D3B30BD"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_ListenerTest">
+    <bpmndi:BPMNPlane bpmnElement="ListenerTest" id="BPMNPlane_ListenerTest">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="135.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="one" id="BPMNShape_one">
+        <omgdc:Bounds height="80.0" width="100.0" x="225.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="two" id="BPMNShape_two">
+        <omgdc:Bounds height="80.0" width="100.0" x="420.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="three" id="BPMNShape_three">
+        <omgdc:Bounds height="80.0" width="100.0" x="630.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="four" id="BPMNShape_four">
+        <omgdc:Bounds height="80.0" width="100.0" x="810.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-FB97815B-2219-45FF-AC9C-41EB0D3B30BD" id="BPMNShape_sid-FB97815B-2219-45FF-AC9C-41EB0D3B30BD">
+        <omgdc:Bounds height="28.0" width="28.0" x="990.0" y="136.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-4DC5C297-A187-4473-9363-D8F5E522670E" id="BPMNEdge_sid-4DC5C297-A187-4473-9363-D8F5E522670E">
+        <omgdi:waypoint x="325.0" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="420.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-FBB15E4F-7000-49FC-9CBF-DEFD35760342" id="BPMNEdge_sid-FBB15E4F-7000-49FC-9CBF-DEFD35760342">
+        <omgdi:waypoint x="910.0" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="990.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-6BD33B69-5A35-4F77-A8E9-431BB4DCF4C7" id="BPMNEdge_sid-6BD33B69-5A35-4F77-A8E9-431BB4DCF4C7">
+        <omgdi:waypoint x="520.0" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="630.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-F72DA13A-D0DC-4B1A-9DF6-C193C2EC2AB7" id="BPMNEdge_sid-F72DA13A-D0DC-4B1A-9DF6-C193C2EC2AB7">
+        <omgdi:waypoint x="130.0" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="225.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-F0F5AB28-661F-4A9D-B655-294B9D6A3691" id="BPMNEdge_sid-F0F5AB28-661F-4A9D-B655-294B9D6A3691">
+        <omgdi:waypoint x="730.0" y="150.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="150.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
