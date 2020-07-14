@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
-  <process id="MultipleSubProcess" name="MultipleSubProcess" isExecutable="true">
+  <process id="SubProcess" name="SubProcess" isExecutable="true">
     <startEvent id="startEvent1"></startEvent>
     <userTask id="assign" name="ASSIGN"></userTask>
     <sequenceFlow id="sid-C2AF6422-98B7-48A1-889C-C3825865E59D" sourceRef="startEvent1" targetRef="assign"></sequenceFlow>
@@ -24,8 +24,8 @@
     <endEvent id="sid-B3F3C44D-9A87-400A-ADCA-257949D5637F"></endEvent>
     <sequenceFlow id="sid-4870151E-9D1D-4517-88A6-702AA8ED511D" sourceRef="total" targetRef="sid-B3F3C44D-9A87-400A-ADCA-257949D5637F"></sequenceFlow>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_MultipleSubProcess">
-    <bpmndi:BPMNPlane bpmnElement="MultipleSubProcess" id="BPMNPlane_MultipleSubProcess">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_SubProcess">
+    <bpmndi:BPMNPlane bpmnElement="SubProcess" id="BPMNPlane_SubProcess">
       <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
         <omgdc:Bounds height="30.0" width="30.0" x="30.0" y="163.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>

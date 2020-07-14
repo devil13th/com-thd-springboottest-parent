@@ -202,7 +202,7 @@ public class ActivitiController {
     // url : http://127.0.0.1:8899/thd/activiti/showProcessVar/2509
     @RequestMapping(value="/showProcessVar/{processInstanceId}")
     @ResponseBody
-    public Map setProcessVar(@PathVariable String processInstanceId){
+    public Map showProcessVar(@PathVariable String processInstanceId){
         Map m = this.runtimeService.getVariables(processInstanceId);
         return m;
     }

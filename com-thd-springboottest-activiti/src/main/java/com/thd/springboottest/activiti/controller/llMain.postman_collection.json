@@ -1,0 +1,848 @@
+{
+	"info": {
+		"name": "llMain",
+		"_postman_id": "4c487707-081b-f272-d79a-da2b274a64dd",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "queryTaskByBusinessKey",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/queryTaskByBusinessKey/a01",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"queryTaskByBusinessKey",
+						"a01"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "queryVar",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/queryVar/1427508",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"queryVar",
+						"1427508"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteProcessDefined",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/deleteProcessDefined/1427501",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"deleteProcessDefined",
+						"1427501"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteProcessInstanceByBusinessKey",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/deleteProcessInstanceByBusinessKey/a01",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"deleteProcessInstanceByBusinessKey",
+						"a01"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - start ll Process",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/startProcess/a01",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"startProcess",
+						"a01"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - complete start trigger",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"15\",\n\t\"currentUser\":\"tiggerOwner\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeStartTrigger",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeStartTrigger"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - complete triggerManagerApproval",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"26\",\n\t\"direction\":\"toAwnerAccept\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeTriggerManagerApproval",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeTriggerManagerApproval"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - complete triggerManagerApproval back",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"17\",\n\t\"direction\":\"toStartTrigger\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeTriggerManagerApproval",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeTriggerManagerApproval"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - complete OwnerAccept",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"1420039\",\n\t\"direction\":\"ownerTakeAction\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerAccept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerAccept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - complete OwnerAccept analyse",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"1420039\",\n\t\"direction\":\"toOwnerAnalyse\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerAccept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerAccept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - complete OwnerAccept back",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"1420039\",\n\t\"direction\":\"toStartTrigger\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerAccept",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerAccept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeOwnerAnalyse",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"1427566\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerAnalyse",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerAnalyse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeOwnerTakeAction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"88\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerTakeAction",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerTakeAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeOwnerManagerApprove",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"93\",\n\t\"direction\":\"toTakeActionEnd\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerManagerApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerManagerApprove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeOwnerManagerApprove back",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"81\",\n\t\"direction\":\"toTakeAction\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerManagerApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerManagerApprove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeTriggerOwnerConfirm",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"1427726\",\n\t\"direction\":\"toTriggerOwnerManagerApprove\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeTriggerOwnerConfirm",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeTriggerOwnerConfirm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeTriggerOwnerConfirm updateAction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"107\",\n\t\"direction\":\"toUpdateAction\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeTriggerOwnerConfirm",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeTriggerOwnerConfirm"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeOwnerUpdateAction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"1427659\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerUpdateAction",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerUpdateAction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeOwnerManagerApproveUpdate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"1427666\",\n\t\"direction\":\"toUpdateActionEnd\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerManagerApproveUpdate",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerManagerApproveUpdate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeOwnerManagerApproveUpdate back",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"133\",\n\t\"direction\":\"toUpdateAction\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeOwnerManagerApproveUpdate",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeOwnerManagerApproveUpdate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeTriggerOwnerManagerApprove",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"149\",\n\t\"direction\":\"toCommitteeApprove\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeTriggerOwnerManagerApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeTriggerOwnerManagerApprove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeTriggerOwnerManagerApprove back",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"104\",\n\t\"direction\":\"toTriggerOwnerConfirm\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeTriggerOwnerManagerApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeTriggerOwnerManagerApprove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeCommitteeApprove",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"191\",\n\t\"direction\":\"toVpApprove\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeCommitteeApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeCommitteeApprove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeCommitteeApprove back",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"164\",\n\t\"direction\":\"toTriggerOwnerManagerApprove\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeCommitteeApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeCommitteeApprove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeVpApprove",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"196\",\n\t\"direction\":\"toEnd\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeVpApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeVpApprove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "f - completeVpApprove back",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":\"182\",\n\t\"direction\":\"toCommitteeApprove\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8899/thd/llProcessTest/completeVpApprove",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8899",
+					"path": [
+						"thd",
+						"llProcessTest",
+						"completeVpApprove"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -150,7 +150,7 @@ public class SubprocessController {
     @RequestMapping(value="/startProcess/{businessKey}")
     @ResponseBody
     public String startProcess(@PathVariable String businessKey){
-        ProcessInstance pi = this.runtimeService.startProcessInstanceByKey("MultipleSubProcess",businessKey);
+        ProcessInstance pi = this.runtimeService.startProcessInstanceByKey("SubProcess",businessKey);
         return pi.getProcessInstanceId();
     }
 
