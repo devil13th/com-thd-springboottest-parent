@@ -7,12 +7,16 @@
     <subProcess id="sid-C921F78A-FB55-4880-9C3B-CBB1C9677ADF" name="subProcess">
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${users}" activiti:elementVariable="user"></multiInstanceLoopCharacteristics>
       <startEvent id="sid-79A38AAA-1F3F-4538-8505-02537D26AA60"></startEvent>
-      <userTask id="inputinfo" name="Input Info" activiti:assignee="${user}">
+      <userTask id="inputinfo" name="Input Info" activiti:assignee="${user.input}">
         <extensionElements>
           <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
         </extensionElements>
       </userTask>
-      <userTask id="audit" name="Audit"></userTask>
+      <userTask id="audit" name="Audit" activiti:assignee="${user.audit}">
+        <extensionElements>
+          <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+        </extensionElements>
+      </userTask>
       <endEvent id="sid-93B871B9-0B66-40D0-A2BE-81AE5C39B6E2"></endEvent>
       <sequenceFlow id="sid-D9C0AB87-B080-444D-A84C-8DE44817557A" sourceRef="sid-79A38AAA-1F3F-4538-8505-02537D26AA60" targetRef="inputinfo"></sequenceFlow>
       <sequenceFlow id="sid-1DC6C3FD-68B4-44D7-A47B-19F29B483C52" sourceRef="inputinfo" targetRef="audit"></sequenceFlow>

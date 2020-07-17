@@ -1,6 +1,7 @@
 package com.thd.springboottest.activiti.controller;
 
 import com.thd.springboottest.activiti.utils.MyActivitiUtil;
+import com.thd.springboottest.activiti.vo.User;
 import org.activiti.engine.*;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -30,91 +31,94 @@ import java.util.stream.Collectors;
 
 -- 创建流程
 http://127.0.0.1:8899/thd/subprocess/startProcess/01
-流程ID：8
+流程ID：14
 
 -- 设置流程变量
-http://127.0.0.1:8899/thd/subprocess/setVariable/8
+http://127.0.0.1:8899/thd/subprocess/setVariable/14
 
 -- 查看流程变量
-http://127.0.0.1:8899/thd/activiti/showProcessVar/8
-{"users":["zhangsan","lisi","wangwu"]}
+http://127.0.0.1:8899/thd/activiti/showProcessVar/14
+{"users":[{"input":"zhangsan","audit":"zhangsanAudit"},{"input":"lisi","audit":"lisiAudit"},{"input":"wangwu","audit":"wangwuAudit"}]}
 
 -- 查询所有代办
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:12,taskName:ASSIGN,ProcessInstanceId:8"]
+["taskId:18,taskName:ASSIGN,ProcessInstanceId:14"]
 
 -- 设置待办人
-http://127.0.0.1:8899/thd/subprocess/assign/12/zhangsan
+http://127.0.0.1:8899/thd/subprocess/assign/18/zhangsan
 
 -- 查询某人代办
 http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/zhangsan
-["taskId:12, taskName:ASSIGN"]
+["taskId:18, taskName:ASSIGN"]
 
 -- 完成代办
-http://127.0.0.1:8899/thd/subprocess/finishTask/12/zhangsan
+http://127.0.0.1:8899/thd/subprocess/finishTask/18/zhangsan
 
 
 -- 查询待办
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:42,taskName:Input Info,ProcessInstanceId:8","taskId:44,taskName:Input Info,ProcessInstanceId:8","taskId:47,taskName:Input Info,ProcessInstanceId:8"]
+["taskId:54,taskName:Input Info,ProcessInstanceId:14","taskId:56,taskName:Input Info,ProcessInstanceId:14","taskId:59,taskName:Input Info,ProcessInstanceId:14"]
 
 
 -- 查询某人代办
 http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/zhangsan
-["taskId:42, taskName:Input Info"]
+["taskId:54, taskName:Input Info"]
 
 http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/lisi
-["taskId:44, taskName:Input Info"]
+["taskId:56, taskName:Input Info"]
 
 http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/wangwu
-["taskId:47, taskName:Input Info"]
+["taskId:59, taskName:Input Info"]
 
 
 -- 完成代办并查询待办 - 循环子流程
-http://127.0.0.1:8899/thd/subprocess/finishTask/42/zhangsan
+http://127.0.0.1:8899/thd/subprocess/finishTask/54/zhangsan
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:44,taskName:Input Info,ProcessInstanceId:8","taskId:47,taskName:Input Info,ProcessInstanceId:8","taskId:50,taskName:Audit,ProcessInstanceId:8"]
+["taskId:56,taskName:Input Info,ProcessInstanceId:14","taskId:59,taskName:Input Info,ProcessInstanceId:14","taskId:62,taskName:Audit,ProcessInstanceId:14"]
 
-http://127.0.0.1:8899/thd/subprocess/finishTask/44/lisi
+http://127.0.0.1:8899/thd/subprocess/finishTask/56/lisi
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:47,taskName:Input Info,ProcessInstanceId:8","taskId:50,taskName:Audit,ProcessInstanceId:8","taskId:52,taskName:Audit,ProcessInstanceId:8"]
+["taskId:59,taskName:Input Info,ProcessInstanceId:14","taskId:62,taskName:Audit,ProcessInstanceId:14","taskId:65,taskName:Audit,ProcessInstanceId:14"]
 
-http://127.0.0.1:8899/thd/subprocess/finishTask/47/wangwu
-["taskId:50,taskName:Audit,ProcessInstanceId:8","taskId:52,taskName:Audit,ProcessInstanceId:8","taskId:54,taskName:Audit,ProcessInstanceId:8"]
+http://127.0.0.1:8899/thd/subprocess/finishTask/59/wangwu
+http://127.0.0.1:8899/thd/subprocess/queryTask
+["taskId:62,taskName:Audit,ProcessInstanceId:14","taskId:65,taskName:Audit,ProcessInstanceId:14","taskId:68,taskName:Audit,ProcessInstanceId:14"]
 
 -- 查询待办
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:50,taskName:Audit,ProcessInstanceId:8","taskId:52,taskName:Audit,ProcessInstanceId:8","taskId:54,taskName:Audit,ProcessInstanceId:8"]
+["taskId:62,taskName:Audit,ProcessInstanceId:14","taskId:65,taskName:Audit,ProcessInstanceId:14","taskId:68,taskName:Audit,ProcessInstanceId:14"]
 
 
 
 -- 完成代办并查询待办 - 循环子流程
-http://127.0.0.1:8899/thd/subprocess/finishTask/50/zhangsan
+http://127.0.0.1:8899/thd/subprocess/finishTask/62/zhangsanAudit
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:52,taskName:Audit,ProcessInstanceId:8","taskId:54,taskName:Audit,ProcessInstanceId:8"]
+["taskId:65,taskName:Audit,ProcessInstanceId:14","taskId:68,taskName:Audit,ProcessInstanceId:14"]
 
-http://127.0.0.1:8899/thd/subprocess/finishTask/52/lisi
+http://127.0.0.1:8899/thd/subprocess/finishTask/65/lisiAudit
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:54,taskName:Audit,ProcessInstanceId:8"]
+["taskId:68,taskName:Audit,ProcessInstanceId:14"]
 
-http://127.0.0.1:8899/thd/subprocess/finishTask/54/wangwu
+http://127.0.0.1:8899/thd/subprocess/finishTask/68/wangwuAudit
 http://127.0.0.1:8899/thd/subprocess/queryTask
-["taskId:59,taskName:Total,ProcessInstanceId:8"]
+["taskId:74,taskName:Total,ProcessInstanceId:14"]
 
 
 -- 设置待办
-http://127.0.0.1:8899/thd/subprocess/assign/59/zhangsan
+http://127.0.0.1:8899/thd/subprocess/assign/74/zhangsan
 
 -- 查询某人代办
 http://127.0.0.1:8899/thd/subprocess/queryTaskByUser/zhangsan
+["taskId:74, taskName:Total"]
 
 -- 完成代办
-http://127.0.0.1:8899/thd/subprocess/finishTask/59/zhangsan
+http://127.0.0.1:8899/thd/subprocess/finishTask/74/zhangsan
 
 
 -- 查询所有代办
 http://127.0.0.1:8899/thd/subprocess/queryTask
 []
+
 
  */
 
@@ -178,11 +182,10 @@ public class SubprocessController {
     @ResponseBody
     // url : http://127.0.0.1:8899/thd/subprocess/setVariable/5
     public String setVariable(@PathVariable String processInstanceId){
-        List<String> users = new ArrayList<String>();
-        users.add("zhangsan");
-        users.add("lisi");
-        users.add("wangwu");
-
+        List<User> users = new ArrayList<User>();
+        users.add(new User("zhangsan","zhangsanAudit"));
+        users.add(new User("lisi","lisiAudit"));
+        users.add(new User("wangwu","wangwuAudit"));
         this.runtimeService.setVariable(processInstanceId,"users",users);
         return "SUCCESS";
     }
