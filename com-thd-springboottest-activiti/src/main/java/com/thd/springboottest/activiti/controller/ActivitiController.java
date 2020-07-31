@@ -138,7 +138,10 @@ public class ActivitiController {
     public List<String> queryTask(){
         List<Task> t =  this.taskService.createTaskQuery().list();
         List<String> l = t.stream().map(task -> {
-            return "taskId:" + task.getId() + ",taskName:" + task.getName() + ",ProcessInstanceId:" + task.getProcessInstanceId();
+            return "taskId:" + task.getId() +
+                    ",taskName:" + task.getName() +
+                    ",ProcessInstanceId:" + task.getProcessInstanceId() +
+                    ",parentTaskId:" + task.getParentTaskId();
         }).collect(Collectors.toList());
         return l;
     }
