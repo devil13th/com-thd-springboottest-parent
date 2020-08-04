@@ -54,6 +54,7 @@ public class SendMessageController {
         map.put("createTime",createTime);
         //将消息携带绑定键值：TestDirectRouting 发送到交换机TestDirectExchange
         rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirectRouting", map);
+
         this.logger.info("SendMessageController 消息提供者发送消息：" + map);
         return "ok";
     }

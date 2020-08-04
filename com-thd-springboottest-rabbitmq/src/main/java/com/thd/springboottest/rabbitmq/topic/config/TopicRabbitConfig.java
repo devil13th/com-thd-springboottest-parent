@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 public class TopicRabbitConfig {
-    //绑定键
+    //绑定键 bingdingKey
     public final static String man = "topic.man";
     public final static String woman = "topic.woman";
 

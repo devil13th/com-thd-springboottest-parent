@@ -5,6 +5,27 @@ spring:
   devtools:
     restart:
       enabled: true
+
+  rabbitmq:
+    addresses: 127.0.0.1:5672
+    username: guest
+    password: guest
+    virtual-host: /THD
+    connection-timeout: 15000
+    publisher-confirms: true #开启消息确认机制
+    publisher-returns: true  #支持消息发送失败返回队列
+
+
+#rabbitmq:
+#  host: 127.0.0.1
+#  port: 5672
+#  username: guest
+#  password: guest
+#  #虚拟host 可以不设置,使用server默认host
+#  virtual-host: /THD
+
+
+
 #trace=true
 # 打开actuator 所有端点
 management:
@@ -26,11 +47,4 @@ logging:
   path: D:/deleteme/logbacks
 
 
-# rabbitmq
-rabbitmq:
-  host: 127.0.0.1
-  port: 5672
-  username: guest
-  password: guest
-  #虚拟host 可以不设置,使用server默认host
-  virtual-host: THD
+

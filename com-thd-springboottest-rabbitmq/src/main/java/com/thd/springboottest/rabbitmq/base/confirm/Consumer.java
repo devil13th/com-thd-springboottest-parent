@@ -5,6 +5,9 @@ import com.rabbitmq.client.*;
 import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -23,6 +26,9 @@ public class Consumer {
         Connection conn = ConnectionUtil.getConnection();
         Channel channel = conn.createChannel();
 
+        // 消费成功列表  避免重复消费  successList是模拟的数据库
+        Map<String,Boolean> successList = new HashMap<String,Boolean>();
+
         /**
          * 开始消费
          * 参数1：routingKey
@@ -36,11 +42,21 @@ public class Consumer {
                 System.out.println(consumerTag);
 
                 String message = new String(body, "utf-8");
-                System.out.println("[Receive]：" + message);
+
 
 
                 //发布的每一条消息都会获得一个唯一的deliveryTag，deliveryTag在channel范围内是唯一的
                 long deliveryTag = envelope.getDeliveryTag();
+
+                // 避免重复消费  successList是模拟的数据库
+                if(successList.get(properties.getMessageId()) != null && successList.get(properties.getMessageId())){
+                    System.out.println(message + " 已经被消费，不能重复消费");
+                }else{
+                    System.out.println("[消费]：" + message + ", id:" + properties.getMessageId());
+                    successList.put(properties.getMessageId(),true);
+                }
+
+
 
                 /**
                  * 确认消息已接收的应答
@@ -57,6 +73,7 @@ public class Consumer {
                  * @throws IOException if an error is encountered
                  */
                 // void basicReject(long deliveryTag, boolean requeue) throws IOException;
+                // channel.basicReject(deliveryTag,true);
 
                 /**
                  * Reject one or several received messages.

@@ -1,11 +1,15 @@
 package com.thd.springboottest.rabbitmq.base.confirm;
 
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConfirmListener;
 import com.rabbitmq.client.Connection;
 import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * com.thd.springboottest.rabbitmq.base.direct.Producer
@@ -26,25 +30,11 @@ public class Producer {
         Channel channel = connection.createChannel();
 
         System.out.println(channel);
-
+        Map<String,String> messageList = new HashMap<String,String>();
         // 开启发送方确认模式
         channel.confirmSelect();
-        for (int i = 0; i < 5; i++) {
-            String msg = "Hello world.I love you forever ===>"  + i;
 
-            // 发布消息，需要参数：交换器，路由键。最后一个参数为消息内容
-            // 注意：RabbitMQ的消息类型只有一种，那就是byte[]
-            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY, null, msg.getBytes("utf-8"));
 
-            System.out.println("send:" + msg);
-
-//            if (channel.waitForConfirms()) {
-//                System.out.println("消息发送成功" );
-//            }else{
-//                // 进行消息重发
-//            }
-
-        }
 
         //6 添加一个确认监听
         channel.addConfirmListener(new ConfirmListener() {
@@ -53,15 +43,51 @@ public class Producer {
             public void handleNack(long deliveryTag, boolean multiple) throws IOException {
                 //deliveryTag；唯一消息标签
                 //multiple：是否批量
-                System.out.println(String.format("----no ack!---- %d  %b",deliveryTag,multiple));
+                System.out.println(String.format("----nack!---- %d  %b",deliveryTag,multiple));
+
             }
             //消息成功处理
             @Override
             public void handleAck(long deliveryTag, boolean multiple) throws IOException {
                 System.out.println(String.format("----  ack! ---- %d  %b",deliveryTag,multiple));
+                System.out.println(channel.getConnection());
             }
         });
 
+
+        for (int i = 0; i < 100; i++) {
+            String msg = "Hello world.I love you forever ===>"  + i;
+
+            // 头信息,任意键值对
+            Map<String,Object> m = new HashMap<String,Object>();
+            m.put("a","1");
+            m.put("b","2");
+            m.put("c","3");
+
+            AMQP.BasicProperties p = new AMQP.BasicProperties().builder()
+            // 1 代表非持久化消息，2 代表持久化消息。
+            .deliveryMode(2)
+            // 消息主键,应用级别
+            .messageId(String.valueOf(i))
+                    .headers(m) // 设置头信息
+                    .build();
+
+
+            // 发布消息，需要参数：交换器，路由键。最后一个参数为消息内容
+            // 注意：RabbitMQ的消息类型只有一种，那就是byte[]
+            channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY, p, msg.getBytes("utf-8"));
+
+            System.out.println("send:" + msg);
+//            if (channel.waitForConfirms()) {
+//                System.out.println("消息发送成功" + p.getMessageId() ) ;
+//            }else{
+//                // 进行消息重发
+//            }
+
+        }
+
+
+        channel.waitForConfirmsOrDie();
 
         //异步监听确认和未确认的消息
 //        channel.addConfirmListener(new ConfirmListener() {
