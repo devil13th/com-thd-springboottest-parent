@@ -18,6 +18,7 @@ public class TopicRabbitConfig {
     //绑定键 bingdingKey
     public final static String man = "topic.man";
     public final static String woman = "topic.woman";
+    public final static String child = "topic.child";
 
     @Bean
     public Queue firstQueue() {
@@ -27,6 +28,11 @@ public class TopicRabbitConfig {
     @Bean
     public Queue secondQueue() {
         return new Queue(TopicRabbitConfig.woman);
+    }
+
+    @Bean
+    public Queue thirdQueue() {
+        return new Queue(TopicRabbitConfig.child);
     }
 
     @Bean
@@ -47,6 +53,13 @@ public class TopicRabbitConfig {
     @Bean
     Binding bindingExchangeMessage2() {
         return BindingBuilder.bind(secondQueue()).to(exchange()).with("topic.#");
+    }
+
+    //将thidQueue和topicExchange绑定,而且绑定的键值为用上通配路由键规则topic.main
+    // 这样只要是消息携带的路由键是以topic.main开头,都会分发到该队列和firstqueue 达到分发的效果
+    @Bean
+    Binding bindingExchangeMessage3() {
+        return BindingBuilder.bind(thirdQueue()).to(exchange()).with(man);
     }
 
 }
