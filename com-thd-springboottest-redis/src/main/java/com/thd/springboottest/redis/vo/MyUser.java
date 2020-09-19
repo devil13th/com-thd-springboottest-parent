@@ -4,13 +4,14 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * @author devil13th
  **/
-public class MyUser {
+public class MyUser implements Serializable {
     private String userId;
     private String userName;
     private Integer userAge;

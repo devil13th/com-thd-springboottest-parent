@@ -117,6 +117,8 @@ public class CfgBean {
         // FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
 
 
+
+
         //2.定义一个配置，设置编码方式，和格式化的形式
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
 
@@ -144,8 +146,8 @@ public class CfgBean {
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
 
         // 设置redis value的序列化器 (上面几种序列化器任选其一,推荐使用fastJsonRedisSerializer (json格式,序列化效率高且业界常用))
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setValueSerializer(jdkSerializationRedisSerializer);
+        redisTemplate.setHashValueSerializer(jdkSerializationRedisSerializer);
 
 
         System.out.println(redisTemplate.getKeySerializer().toString());

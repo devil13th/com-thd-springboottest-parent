@@ -4,3 +4,5 @@
 
 *.iml
 target/
+com-thd-springboottest-redis/src/main/resources/rebel-remote.xml
+com-thd-springboottest-redis/src/main/resources/rebel.xml
