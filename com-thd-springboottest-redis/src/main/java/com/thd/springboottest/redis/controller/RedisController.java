@@ -6,6 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +19,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
+import javax.naming.StringRefAddr;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +45,11 @@ public class RedisController {
     @Resource
     private RedisTemplate myRedisTemplate;
 
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
     //redis连接池
@@ -93,6 +103,7 @@ public class RedisController {
     @RequestMapping(value="/testRedisTemplateSet",method= RequestMethod.GET)
     // http://127.0.0.1:8899/thd/redis/testRedisTemplateSet
     public MyUser testRedisTemplateSet(){
+        System.out.println(123);
         MyUser user = new MyUser();
         user.setUserId("1");
         user.setUserBirthday(new Date());
@@ -101,6 +112,8 @@ public class RedisController {
         user.setUserCreateTime(new Timestamp(new Date().getTime()));
 
         this.myRedisTemplate.opsForValue().set(user.getUserId(),user);
+
+        this.myRedisTemplate.opsForValue().set("a/b","xxxxx");
         return user;
     }
 
@@ -126,7 +139,6 @@ public class RedisController {
         user.setUserCreateTime(new Timestamp(new Date().getTime()));
 
         this.myRedisTemplate.opsForValue().set(user.getUserId(),user);
-
 
         this.myRedisTemplate.opsForValue().set("devil13th","123456");
         this.myRedisTemplate.opsForHash().put("xx","name","devil13th");
@@ -168,6 +180,44 @@ public class RedisController {
         System.out.println(this.myRedisTemplate.opsForValue().get(user.getUserId()));
         MyUser users = (MyUser)this.myRedisTemplate.opsForValue().get(user.getUserId());
         System.out.println(users);
+
         return user;
+    }
+
+    @ResponseBody
+    @RequestMapping("testSerializer")
+    // http://127.0.0.1:8899/thd/redis/testSerializer
+    public String testSerializer(){
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+
+        String str = "string";
+        byte[] a = jackson2JsonRedisSerializer.serialize(str);
+        byte[] b = jdkSerializationRedisSerializer.serialize(str);
+        byte[] c = stringRedisSerializer.serialize(str);
+
+        System.out.println(new String(a));
+        System.out.println(new String(b));
+        System.out.println(new String(c));
+
+        System.out.println(jackson2JsonRedisSerializer.deserialize(jackson2JsonRedisSerializer.serialize(str)));
+        System.out.println(jdkSerializationRedisSerializer.deserialize(jdkSerializationRedisSerializer.serialize(str)));
+        System.out.println(stringRedisSerializer.deserialize(stringRedisSerializer.serialize(str)));
+
+        System.out.println(new RedisTemplate<>().getDefaultSerializer());
+        System.out.println(this.redisTemplate.getKeySerializer());
+        System.out.println(this.redisTemplate.getValueSerializer());
+        System.out.println(this.redisTemplate.getHashKeySerializer());
+        System.out.println(this.redisTemplate.getKeySerializer());
+
+        System.out.println(this.stringRedisTemplate.getKeySerializer());
+        System.out.println(this.stringRedisTemplate.getValueSerializer());
+        System.out.println(this.stringRedisTemplate.getHashKeySerializer());
+        System.out.println(this.stringRedisTemplate.getHashValueSerializer());
+
+
+        System.out.println(this.myRedisTemplate.getDefaultSerializer());
+        return "SUCCESS";
     }
 }
