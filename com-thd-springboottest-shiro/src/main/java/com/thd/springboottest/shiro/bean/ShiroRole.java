@@ -1,4 +1,4 @@
-package com.thd.springboottest.shiro.entity;
+package com.thd.springboottest.shiro.bean;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -10,20 +10,21 @@ import java.util.Set;
  * Time: 16:06
  * Description: No Description
  */
-public class Role  implements Serializable {
+public class ShiroRole implements Serializable {
     private String id;
     private String roleName;
+    /**
+     * 角色对应权限集合
+     */
+    private Set<ShiroPermissions> permissions;
 
-    public Role(String id, String roleName, Set<Permissions> permissions) {
+    public ShiroRole(String id, String roleName, Set<ShiroPermissions> permissions) {
         this.id = id;
         this.roleName = roleName;
         this.permissions = permissions;
     }
 
-    /**
-     * 角色对应权限集合
-     */
-    private Set<Permissions> permissions;
+
 
     public String getId() {
         return id;
@@ -41,11 +42,11 @@ public class Role  implements Serializable {
         this.roleName = roleName;
     }
 
-    public Set<Permissions> getPermissions() {
+    public Set<ShiroPermissions> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Set<Permissions> permissions) {
+    public void setPermissions(Set<ShiroPermissions> permissions) {
         this.permissions = permissions;
     }
 }

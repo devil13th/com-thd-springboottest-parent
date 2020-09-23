@@ -1,14 +1,9 @@
 package com.thd.springboottest.shiro.filter;
 
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AnonymousFilter;
-import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * com.thd.springboottest.shiro.filter.MyFilter

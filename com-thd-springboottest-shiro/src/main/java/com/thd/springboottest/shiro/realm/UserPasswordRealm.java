@@ -1,18 +1,18 @@
-package com.thd.springboottest.shiro.service;
+package com.thd.springboottest.shiro.realm;
 
-import com.thd.springboottest.shiro.entity.Permissions;
-import com.thd.springboottest.shiro.entity.Role;
-import com.thd.springboottest.shiro.entity.User;
+import com.thd.springboottest.shiro.bean.ShiroPermissions;
+import com.thd.springboottest.shiro.bean.ShiroRole;
+import com.thd.springboottest.shiro.bean.ShiroUser;
+import com.thd.springboottest.shiro.service.ShiroService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.apache.shiro.crypto.hash.Sha512Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -25,7 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class UserPasswordRealm extends AuthorizingRealm {
 
     @Autowired
-    private LoginService loginService;
+    private ShiroService shiroService;
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public UserPasswordRealm(){
         this.setAuthenticationTokenClass(UsernamePasswordToken.class);
@@ -35,16 +37,15 @@ public class UserPasswordRealm extends AuthorizingRealm {
      * 授权
      */
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        //获取登录用户
-        User user = (User) principalCollection.getPrimaryPrincipal();
-
+        // 获取登录用户
+        ShiroUser user = (ShiroUser)principalCollection.getPrimaryPrincipal();
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        for (Role role : user.getRoles()) {
+        for (ShiroRole role : user.getRoles()) {
             //添加角色
             simpleAuthorizationInfo.addRole(role.getRoleName());
             //添加权限
-            for (Permissions permissions : role.getPermissions()) {
+            for (ShiroPermissions permissions : role.getPermissions()) {
                 simpleAuthorizationInfo.addStringPermission(permissions.getPermissionsName());
             }
         }
@@ -56,26 +57,10 @@ public class UserPasswordRealm extends AuthorizingRealm {
      * 认证
      */
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-// ============================ 使用密码明文验证方式 ===================================
-        //        //加这一步的目的是在Post请求的时候会先进认证，然后在到请求
-//        if (authenticationToken.getPrincipal() == null) {
-//            throw new UnknownAccountException("账户不存在!");
-//        }
-//        //获取用户信息
-//        String name = authenticationToken.getPrincipal().toString();
-//        User user = loginService.getUserByName(name);
-//        if (user == null) {
-//            //这里返回后会报出对应异常
-//            throw new UnknownAccountException("账户不存在!");
-//        } else {
-//            //这里验证authenticationToken和simpleAuthenticationInfo的信息
-//            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(name, user.getPassword().toString(), getName());
-//            return simpleAuthenticationInfo;
-//        }
 
         // =============================== 使用MD5盐值加密 =============================
 
-        System.out.println("[UserPasswordRealm] doGetAuthenticationInfo");
+        logger.info("[UserPasswordRealm] doGetAuthenticationInfo");
 
         //1. 把 AuthenticationToken 转换为 UsernamePasswordToken
         UsernamePasswordToken upToken = (UsernamePasswordToken) authenticationToken;
@@ -84,22 +69,24 @@ public class UserPasswordRealm extends AuthorizingRealm {
         String username = upToken.getUsername();
 
         //3. 调用数据库的方法, 从数据库中查询 username 对应的用户记录
-        System.out.println("从数据库中获取 username: " + username + " 所对应的用户信息.");
+
+        ShiroUser user = shiroService.loadUserByAccount(username);
+        logger.info("从数据库中获取 username: " + username + " 所对应的用户信息.");
 
         //4. 若用户不存在, 则可以抛出 UnknownAccountException 异常
-        if("unknown".equals(username)){
+        if(null == user){
             throw new UnknownAccountException("用户不存在!");
         }
 
         //5. 根据用户信息的情况, 决定是否需要抛出其他的 AuthenticationException 异常.
-        if("monster".equals(username)){
+        if(user.isLocked()){
             throw new LockedAccountException("用户被锁定");
         }
 
         //6. 根据用户的情况, 来构建 AuthenticationInfo 对象并返回. 通常使用的实现类为: SimpleAuthenticationInfo
         //以下信息是从数据库中获取的.
         //1). principal: 认证的实体信息. 可以是 username, 也可以是数据表对应的用户的实体类对象.
-        Object principal = loginService.getUserByName(username);
+        //Object principal = shiroService.loadUserByAccount(username);
         //2). credentials: 密码 - 模拟数据库中保存的密码 - 对原始密码加密后的字符串
         Object credentials = null;
 
@@ -114,13 +101,11 @@ public class UserPasswordRealm extends AuthorizingRealm {
         int iteratorCount = 1024;
 
         // 模拟数据库查询用户
-        User u = loginService.getUserByName(username);
+        //ShiroUser u = loginService.getUserByName(username);
 
-        if(u == null){
-            throw new UnknownAccountException("用户不存在!");
-        }
+
         // 原始密码 - 数据库中的密码
-        String pwd = loginService.getUserByName(username).getPassword();
+        String pwd = user.getCredential();
         // 盐值是用户名
         ByteSource salt = ByteSource.Util.bytes(username);
 
@@ -159,7 +144,7 @@ public class UserPasswordRealm extends AuthorizingRealm {
 
 
         //将盐值作为参数传入，以便 shiro 在比对密码时使用
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, credentials, credentialsSalt, realmName);
         return info;
 
     }

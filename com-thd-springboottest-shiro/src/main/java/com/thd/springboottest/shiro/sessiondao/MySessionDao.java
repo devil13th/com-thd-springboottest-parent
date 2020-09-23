@@ -1,4 +1,4 @@
-package com.thd.springboottest.shiro.dao;
+package com.thd.springboottest.shiro.sessiondao;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.session.Session;
@@ -22,8 +22,8 @@ public class MySessionDao extends AbstractSessionDAO {
     private static Logger logger = LoggerFactory.getLogger(MySessionDao.class);
 
     @Autowired
-    private RedisTemplate redisTemplate;
-    @Value("${redis.key.prefix}")
+    private RedisTemplate myShiroRedisTemplate;
+    @Value("${shiro.redis-key-prefix}")
     private String redisPrefixKey;
 
     /**
@@ -44,7 +44,7 @@ public class MySessionDao extends AbstractSessionDAO {
         try {
             String sessionJsonStr = JSONObject.toJSONString(session);
             System.out.println(sessionJsonStr);
-            redisTemplate.opsForValue().set(getKey(session.getId().toString()), session,30, TimeUnit.MINUTES);
+            myShiroRedisTemplate.opsForValue().set(getKey(session.getId().toString()), session,30, TimeUnit.MINUTES);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
         }
@@ -57,7 +57,7 @@ public class MySessionDao extends AbstractSessionDAO {
         logger.debug("获取seesion,id=[{}]", sessionId.toString());
         Session readSession = null;
         try {
-            readSession=(Session) redisTemplate.opsForValue().get(getKey(sessionId.toString()));
+            readSession=(Session) myShiroRedisTemplate.opsForValue().get(getKey(sessionId.toString()));
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -73,7 +73,7 @@ public class MySessionDao extends AbstractSessionDAO {
             System.out.println(sessionJsonStr);
 
 
-            redisTemplate.opsForValue().set(getKey(session.getId().toString()), session,30,TimeUnit.MINUTES);
+            myShiroRedisTemplate.opsForValue().set(getKey(session.getId().toString()), session,30,TimeUnit.MINUTES);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
         }
@@ -84,7 +84,7 @@ public class MySessionDao extends AbstractSessionDAO {
         logger.debug("删除seesion,id=[{}]", session.getId().toString());
         try {
             String key=getKey(session.getId().toString());
-            redisTemplate.delete(key);
+            myShiroRedisTemplate.delete(key);
         } catch (Exception e) {
             logger.error(e.getMessage(),e);
         }

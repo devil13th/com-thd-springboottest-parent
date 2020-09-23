@@ -44,7 +44,6 @@ public class Consumer {
                 String message = new String(body, "utf-8");
 
 
-
                 //发布的每一条消息都会获得一个唯一的deliveryTag，deliveryTag在channel范围内是唯一的
                 long deliveryTag = envelope.getDeliveryTag();
 
@@ -63,6 +62,7 @@ public class Consumer {
                  * 第一个参数：发布的每一条消息都会获得一个唯一的deliveryTag，deliveryTag在channel范围内是唯一的
                  * 第二个参数：批量确认标志。如果值为true，则执行批量确认，此deliveryTag之前收到的消息全部进行确认; 如果值为false，则只对当前收到的消息进行确认
                  */
+                System.out.println("deliveryTag:" + deliveryTag);
                 channel.basicAck(deliveryTag, true);
 
                 // 下面是拒绝应答

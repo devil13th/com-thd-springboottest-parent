@@ -1,4 +1,4 @@
-package com.thd.springboottest.shiro.entity;
+package com.thd.springboottest.shiro.bean;
 
 import java.io.Serializable;
 
@@ -9,13 +9,13 @@ import java.io.Serializable;
  * Time: 16:07
  * Description: No Description
  */
-public class Permissions implements Serializable {
+public class ShiroPermissions implements Serializable {
     private String id;
     private String permissionsName;
 
-    public Permissions() {}
+    public ShiroPermissions() {}
 
-    public Permissions(String id, String permissionsName) {
+    public ShiroPermissions(String id, String permissionsName) {
         this.id = id;
         this.permissionsName = permissionsName;
     }

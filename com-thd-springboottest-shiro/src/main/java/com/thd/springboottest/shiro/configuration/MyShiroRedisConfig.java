@@ -1,10 +1,9 @@
 package com.thd.springboottest.shiro.configuration;
 
-import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thd.springboottest.shiro.dao.MySessionDao;
+import com.thd.springboottest.shiro.sessiondao.MySessionDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +13,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
 @Configuration
-public class RedisConfig {
+public class MyShiroRedisConfig {
     private static Logger logger = LoggerFactory.getLogger(MySessionDao.class);
-    @Bean("redisTemplate")
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    @Bean("myShiroRedisTemplate")
+    public RedisTemplate<Object, Object> myShiroRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
@@ -57,8 +57,7 @@ public class RedisConfig {
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
         // =================== 创建 FastJsonRedisSerializer 序列化器 使用fastjson进行序列化和反序列化=================== //
-        MyFastJsonRedisSerializer  fastJsonRedisSerializer = new MyFastJsonRedisSerializer(Object.class);
-
+        MyShiroRedisSerializer fastJsonRedisSerializer = new MyShiroRedisSerializer(Object.class);
         /**
          * keySerializer 字符串 哈希 列表 集合 有序集合的键的序列化策略。
          * valueSerializer 字符串 列表 集合 有序集合的值的序列化策略。

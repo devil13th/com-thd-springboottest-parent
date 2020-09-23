@@ -6,6 +6,7 @@ import com.rabbitmq.client.ConfirmListener;
 import com.rabbitmq.client.Connection;
 import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,7 @@ public class Producer {
         // 开启发送方确认模式
         channel.confirmSelect();
 
-
+        System.out.println("channelNumber:" + channel.getChannelNumber());
 
         //6 添加一个确认监听
         channel.addConfirmListener(new ConfirmListener() {
@@ -54,10 +55,11 @@ public class Producer {
             }
         });
 
+        int base = 10;
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = base; i < base+5; i++) {
             String msg = "Hello world.I love you forever ===>"  + i;
-
+            System.out.println("channel.NextPublishSeqNo:" + channel.getNextPublishSeqNo());
             // 头信息,任意键值对
             Map<String,Object> m = new HashMap<String,Object>();
             m.put("a","1");
@@ -68,7 +70,7 @@ public class Producer {
             // 1 代表非持久化消息，2 代表持久化消息。
             .deliveryMode(2)
             // 消息主键,应用级别
-            .messageId(String.valueOf(i))
+            .messageId(String.valueOf(i * 100))
                     .headers(m) // 设置头信息
                     .build();
 
@@ -76,7 +78,12 @@ public class Producer {
             // 发布消息，需要参数：交换器，路由键。最后一个参数为消息内容
             // 注意：RabbitMQ的消息类型只有一种，那就是byte[]
             channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY, p, msg.getBytes("utf-8"));
-
+            if (channel.waitForConfirms()) {
+                System.out.println("发送成功!!!!!!!!!!!!!!!!!!!");
+            }else{
+                // 进行消息重发
+                System.out.println("发送失败,重新发送");
+            }
             System.out.println("send:" + msg);
 //            if (channel.waitForConfirms()) {
 //                System.out.println("消息发送成功" + p.getMessageId() ) ;
@@ -105,7 +112,7 @@ public class Producer {
 
 
         //关闭信道和连接
-        //channel.close();
-        //connection.close();
+        channel.close();
+        connection.close();
     }
 }

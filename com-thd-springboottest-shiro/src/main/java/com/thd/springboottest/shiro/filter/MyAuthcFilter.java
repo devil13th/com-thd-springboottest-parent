@@ -1,11 +1,7 @@
 package com.thd.springboottest.shiro.filter;
 
-import com.alibaba.fastjson.JSONObject;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.springframework.http.MediaType;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -29,8 +25,11 @@ public class MyAuthcFilter extends FormAuthenticationFilter {
     }
     /**
      *
-     * 表示是否允许访问；mappedValue就是[urls]配置中拦截器参数部分，如果允许访问返回true，否则false；
+     * 表示是否允许访问；mappedValue就是[urls]配置中拦截器参数部分，参见ShiroConfig.shiroFilterFactoryBean方法中 “ map.put("/perm/*","anon,authc[12345],prems[admin,alal]"); ”
+     * 如果允许访问返回true，否则false；
      * (感觉这里应该是对白名单（不需要登录的接口）放行的)
+     *
+     * adviceFilter中的boolean preHandle(...)方法其实最后调用的是isAccessAllowed() || onAccessDenied() 所以
      * 如果isAccessAllowed返回true则onAccessDenied方法不会继续执行
      * 这里可以用来判断一些不被通过的链接（个人备注）
      * * 表示是否允许访问 ，如果允许访问返回true，否则false；
@@ -41,7 +40,7 @@ public class MyAuthcFilter extends FormAuthenticationFilter {
      * @throws Exception
      * */
     @Override
-    public boolean isAccessAllowed(ServletRequest request, ServletResponse response,Object mappedValue){
+    public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue){
         if (((HttpServletRequest)request).getMethod().toUpperCase().equals("OPTIONS"))
         {
             return true;
@@ -51,16 +50,16 @@ public class MyAuthcFilter extends FormAuthenticationFilter {
 
 
     /**
-     * 表示当访问拒绝时是否已经处理了；如果返回true表示需要继续处理；如果返回false表示该拦截器实例已经处理了，不需要过滤器连的后续过滤器处理了，将直接返回响应内容即可。
+     * 表示当访问拒绝时是否已经处理了；如果返回true表示需要继续处理；如果返回false表示该拦截器实例已经处理了，将直接返回即可。
      * onAccessDenied是否执行取决于isAccessAllowed的值，如果返回true则onAccessDenied不会执行；如果返回false，执行onAccessDenied
      * 如果onAccessDenied也返回false，则直接返回，不会进入请求的方法（只有isAccessAllowed和onAccessDenied的情况下）
      * onAccessDenied如果返回true表示需要继续处理；如果返回false表示该拦截器实例已经处理了，将直接返回即可。
      * */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response)throws Exception{
-        if (isLoginRequest(request, response)) {
+        if (isLoginRequest(request, response)) { // 是否是登录的地址
             if (isLoginSubmission(request, response)) {
-                return executeLogin(request, response);
+                return executeLogin(request, response); // 执行登录
             } else {
                 return true;
             }

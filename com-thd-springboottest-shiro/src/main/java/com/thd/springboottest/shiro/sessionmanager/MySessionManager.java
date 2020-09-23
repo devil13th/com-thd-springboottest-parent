@@ -1,4 +1,4 @@
-package com.thd.springboottest.shiro.service;
+package com.thd.springboottest.shiro.sessionmanager;
 
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;

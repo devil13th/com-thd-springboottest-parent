@@ -6,6 +6,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.Arrays;
+
 
 @SpringBootApplication(scanBasePackages = "com.thd.springboottest")
 public class Application extends SpringBootServletInitializer {
@@ -20,6 +22,7 @@ public class Application extends SpringBootServletInitializer {
         //System.setProperty("spring.devtools.restart.enabled", "false");
         ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
         String[] names = ctx.getBeanDefinitionNames();
+        Arrays.stream(names).forEach(System.out::println);
     }
 
 

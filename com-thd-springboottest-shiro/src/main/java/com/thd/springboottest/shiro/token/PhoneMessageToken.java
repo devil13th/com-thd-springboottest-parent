@@ -1,6 +1,5 @@
-package com.thd.springboottest.shiro.service;
+package com.thd.springboottest.shiro.token;
 
-import com.thd.springboottest.shiro.entity.User;
 import org.apache.shiro.authc.HostAuthenticationToken;
 import org.apache.shiro.authc.RememberMeAuthenticationToken;
 
@@ -10,16 +9,15 @@ public class PhoneMessageToken implements HostAuthenticationToken, RememberMeAut
      * The phone
      */
     private String phone;
-    private User user;
     private boolean rememberMe;
     private String host;
     private String validateCode;
 
 
-    public PhoneMessageToken(User u,String validateCode) {
+    public PhoneMessageToken(String phone, String validateCode) {
         this.rememberMe = false;
         this.host = null;
-        this.user=u;
+        this.phone = phone;
         this.validateCode = validateCode;
     }
 
@@ -46,7 +44,7 @@ public class PhoneMessageToken implements HostAuthenticationToken, RememberMeAut
 
     @Override
     public Object getPrincipal() {
-        return this.user;
+        return this.phone;
     }
 
     @Override

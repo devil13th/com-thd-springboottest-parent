@@ -1,13 +1,18 @@
-package com.thd.springboottest.shiro.service;
+package com.thd.springboottest.shiro.realm;
 
-import com.thd.springboottest.shiro.entity.Permissions;
-import com.thd.springboottest.shiro.entity.Role;
-import com.thd.springboottest.shiro.entity.User;
+import com.thd.springboottest.shiro.bean.ShiroPermissions;
+import com.thd.springboottest.shiro.bean.ShiroRole;
+import com.thd.springboottest.shiro.bean.ShiroUser;
+import com.thd.springboottest.shiro.service.ShiroService;
+import com.thd.springboottest.shiro.token.PhoneMessageToken;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -20,8 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PhoneMessageRealm extends AuthorizingRealm {
 
     @Autowired
-    private LoginService loginService;
+    private ShiroService shiroService;
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public PhoneMessageRealm(){
         this.setAuthenticationTokenClass(PhoneMessageToken.class);
@@ -32,14 +38,14 @@ public class PhoneMessageRealm extends AuthorizingRealm {
      */
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 获取用户信息
-        User user = (User)principalCollection.getPrimaryPrincipal();
+        ShiroUser user = (ShiroUser)principalCollection.getPrimaryPrincipal();
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        for (Role role : user.getRoles()) {
+        for (ShiroRole role : user.getRoles()) {
             //添加角色
             simpleAuthorizationInfo.addRole(role.getRoleName());
             //添加权限
-            for (Permissions permissions : role.getPermissions()) {
+            for (ShiroPermissions permissions : role.getPermissions()) {
                 simpleAuthorizationInfo.addStringPermission(permissions.getPermissionsName());
             }
         }
@@ -52,7 +58,7 @@ public class PhoneMessageRealm extends AuthorizingRealm {
      */
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 
-        System.out.println("[PhoneMessageRealm] doGetAuthenticationInfo");
+        logger.info("[PhoneMessageRealm] doGetAuthenticationInfo");
         PhoneMessageToken token = null;
 
         // 如果是PhoneToken，则强转，获取phone；否则不处理。
@@ -63,23 +69,19 @@ public class PhoneMessageRealm extends AuthorizingRealm {
             return null;
         }
 
+        // 手机验证码
         String validateCode = (String) token.getCredentials();
 
-        User user = (User)token.getPrincipal();
+        // 通过手机号获取用户
+        ShiroUser user = shiroService.loadUserByPhone(token.getPrincipal().toString());
 
         if (user == null) {
             throw new UnknownAccountException("手机号不存在!");
         }
 
-        // 验证手机获取的验证码
+        // 从session中获取 手机验证码
+        String code = SecurityUtils.getSubject().getSession().getAttribute("validateCode").toString();
 
-        // 这个code应该是根据token的principal查询发送的验证码
-        String code = "123456";
-
-
-
-
-       // return new SimpleAuthenticationInfo(phone, "123456", this.getName());
         return new SimpleAuthenticationInfo(user, code, this.getName());
 
     }
