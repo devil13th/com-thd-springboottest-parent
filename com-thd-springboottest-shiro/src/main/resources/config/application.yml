@@ -50,3 +50,7 @@ redis:
 logging:
   config: classpath:config/logback-spring.xml
   path: D:/deleteme/logbacks
+
+shiro:
+  enable: true
+  redis-key-prefix:
