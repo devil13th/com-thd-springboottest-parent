@@ -1,6 +1,9 @@
 package com.thd.springboottest.annotation.controller;
 
 import com.thd.springboottest.annotation.entity.Person;
+import com.thd.springboottest.annotation.ipt.MyImportBeanA;
+import com.thd.springboottest.annotation.ipt.MyImportBeanB;
+import com.thd.springboottest.annotation.ipt.MyImportBeanC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,12 @@ public class AnnotationController {
 
     @Autowired
     private ResourceLoader resourceLoader;
-
+    @Autowired
+    private MyImportBeanA myImportBeanA;
+    @Autowired
+    private MyImportBeanB myImportBeanB;
+    @Autowired
+    private MyImportBeanC myImportBeanC;
     @ResponseBody
     @RequestMapping("/test")
     public String test(){
@@ -87,4 +95,17 @@ public class AnnotationController {
 
         return "SUCCESS";
     }
+
+
+    @ResponseBody
+    @RequestMapping("/getMyImportBean")
+    public String getMyImportBean(){
+        System.out.println(myImportBeanA);
+        System.out.println(myImportBeanB);
+        System.out.println(myImportBeanC);
+
+        return "SUCCESS";
+    }
+
+
 }

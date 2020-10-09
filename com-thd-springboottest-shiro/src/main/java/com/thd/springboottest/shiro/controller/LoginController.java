@@ -26,9 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * com.thd.springboottest.shiro.controller.LoginController
@@ -136,6 +134,11 @@ public class LoginController {
 //            subject.checkPermissions("query", "add");
 
  */
+            List perms = new ArrayList();
+            perms.add("新增");
+            perms.add("保存");
+            perms.add("删除");
+            SecurityUtils.getSubject().getSession().setAttribute("sessionPerms",perms);
         } catch (AuthenticationException e) {
             e.printStackTrace();
             return "账号或密码错误！";
@@ -356,19 +359,30 @@ public class LoginController {
 
 
     @RequestMapping("/showInfo")
+    @ResponseBody
     // url : http://127.0.0.1:8899/thd/showInfo
-    public String showInfo() {
+    public Map showInfo() {
         SessionKey sk = new DefaultSessionKey(SecurityUtils.getSubject().getSession().getId());
         Session session = SecurityUtils.getSecurityManager().getSession(sk);
-        this.getLogger().info("Subject:" + SecurityUtils.getSubject());
-        this.getLogger().info("session Id:" + session.getId());
-        this.getLogger().info("principal:" + SecurityUtils.getSubject().getPrincipal());
+
+
+
+        this.getLogger().info("==================== Information ====================");
+//        this.getLogger().info("Subject:" + JSON.toJSONString(SecurityUtils.getSubject()));
+        this.getLogger().info("Session:" + JSON.toJSONString(SecurityUtils.getSubject().getSession()));
+        this.getLogger().info("Principal:" + JSON.toJSONString(SecurityUtils.getSubject().getPrincipal()));
+        this.getLogger().info("session keys:" + session.getAttributeKeys());
+
         if(null != SecurityUtils.getSubject().getPrincipal()){
             this.getLogger().info("principal:" + ((ShiroUser) SecurityUtils.getSubject().getPrincipal()).getUserName());
         }
         this.getLogger().info("isAuthenticated:" + SecurityUtils.getSubject().isAuthenticated());
-        this.getLogger().info("attribute username:" + session.getAttribute("userName"));
-        return "showInfo!";
+        this.getLogger().info("session perms:" + session.getAttribute("userName"));
+
+        Map m = new HashMap();
+        m.put("principal",JSON.toJSONString(SecurityUtils.getSubject().getPrincipal()));
+        m.put("Session",JSON.toJSONString(SecurityUtils.getSubject().getSession()));
+        return m;
     }
 
 
