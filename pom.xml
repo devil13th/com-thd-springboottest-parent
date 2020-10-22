@@ -42,6 +42,7 @@
         <module>com-thd-springboottest-jackson</module>
         <module>com-thd-springboottest-validator</module>
         <module>com-thd-springboottest-elasticsearch</module>
+        <module>com-thd-springboottest-quartz</module>
 
     </modules>
 
