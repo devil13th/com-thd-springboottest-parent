@@ -40,6 +40,8 @@ public class TaskLogListener implements TaskListener {
     public void notify(DelegateTask delegateTask) {
         System.out.println(String.format("[task][%s] trigger :%s",delegateTask.getEventName(),this.getClass().getName()));
         System.out.println(String.format("task name :%s,%s",delegateTask.getTaskDefinitionKey(),delegateTask.getName()));
+        System.out.println(String.format("businessKey :%s",delegateTask.getProcessInstanceId()));
+
         processServiceImpl.testSpringIocInjection();
     }
 }
