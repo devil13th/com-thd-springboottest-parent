@@ -46,9 +46,15 @@ http://127.0.0.1:8899/thd/activiti/queryTask
 -- 设置代办人
 http://127.0.0.1:8899/thd/activiti/assign/9/zhangsan
 
+
 -- 查询某代办人的代办
 http://127.0.0.1:8899/thd/activiti/queryTaskByUser/zhangsan
 ["2513,One Task"]
+
+-- 设置流程变量
+http://127.0.0.1:8899/thd/listenerTest/setProcessVarAssignA/2509
+http://127.0.0.1:8899/thd/listenerTest/setProcessVarAssignB/2509
+
 
 -- 完成代办
 http://127.0.0.1:8899/thd/activiti/finishTask/2509/zhangsan

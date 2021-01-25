@@ -248,6 +248,21 @@ public class ProcessVariableController {
     // url : http://127.0.0.1:8899/thd/pv/saveTaskLocalVar/27
     public String saveTaskLocalVar(@PathVariable String taskId,@PathVariable String name,@PathVariable String value){
         this.taskService.setVariableLocal(taskId,name,value);
+
+
+        String processInstanceId = this.taskService.createTaskQuery().taskId(taskId).singleResult().getProcessInstanceId();
+        String executionId = this.taskService.createTaskQuery().taskId(taskId).singleResult().getExecutionId();
+        Map<String,String> map = new HashMap<String,String>();
+
+        this.taskService.setVariableLocal(taskId,name,value);
+        this.taskService.setVariable(processInstanceId,name,value);
+        this.taskService.setVariablesLocal(taskId,map);
+        this.taskService.setVariables(processInstanceId,map);
+
+        this.runtimeService.setVariableLocal(executionId,name,value);
+        this.runtimeService.setVariable(executionId,name,value);
+        this.runtimeService.setVariablesLocal(executionId,map);
+        this.runtimeService.setVariables(executionId,map);
         return "SUCCESS";
     }
 
