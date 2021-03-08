@@ -141,6 +141,28 @@ public class ActivitiController {
             return "taskId:" + task.getId() +
                     ",taskName:" + task.getName() +
                     ",ProcessInstanceId:" + task.getProcessInstanceId() +
+                    ",executionId:" + task.getExecutionId() +
+                    ",assignee:" + task.getAssignee() +
+                    ",parentTaskId:" + task.getParentTaskId();
+        }).collect(Collectors.toList());
+        return l;
+    }
+
+    /**
+     * 查询所有代办
+     * @return
+     */
+    @RequestMapping(value="/queryTaskByProcessInstanceId/{processInstanceId}")
+    @ResponseBody
+    // url : http://127.0.0.1:8899/thd/activiti/queryTaskByProcessInstanceId/{processInstanceId}
+    public List<String> queryTaskByProcessInstanceId(@PathVariable String processInstanceId){
+        List<Task> t =  this.taskService.createTaskQuery().processInstanceId(processInstanceId).list();
+        List<String> l = t.stream().map(task -> {
+            return "taskId:" + task.getId() +
+                    ",taskName:" + task.getName() +
+                    ",ProcessInstanceId:" + task.getProcessInstanceId() +
+                    ",executionId:" + task.getExecutionId() +
+                    ",assignee:" + task.getAssignee() +
                     ",parentTaskId:" + task.getParentTaskId();
         }).collect(Collectors.toList());
         return l;
