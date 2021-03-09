@@ -1,5 +1,6 @@
 package com.thd.springboottest.rabbitmq.direct.producer.controller;
 
+import com.thd.springboottest.rabbitmq.dto.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -48,14 +50,16 @@ public class SendMessageController {
         String messageId = String.valueOf(UUID.randomUUID());
         String messageData = "test message, hello!";
         String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        Map<String,Object> map=new HashMap<>();
-        map.put("messageId",messageId);
-        map.put("messageData",messageData);
-        map.put("createTime",createTime);
-        //将消息携带绑定键值：TestDirectRouting 发送到交换机TestDirectExchange
-        rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirectRouting", map);
+//        Map<String,Object> map=new HashMap<>();
+//        map.put("messageId",messageId);
+//        map.put("messageData",messageData);
+//        map.put("createTime",createTime);
 
-        this.logger.info("SendMessageController 消息提供者发送消息：" + map);
+        Person p  = new Person("张三",5,new Date());
+        //将消息携带绑定键值：TestDirectRouting 发送到交换机TestDirectExchange
+        rabbitTemplate.convertAndSend("TestDirectExchange", "TestDirectRouting", p);
+
+        this.logger.info("SendMessageController 消息提供者发送消息：" + p);
         return "ok";
     }
 }

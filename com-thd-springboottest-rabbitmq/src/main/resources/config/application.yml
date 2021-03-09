@@ -15,6 +15,16 @@ spring:
     publisher-confirms: true #开启消息确认机制
     publisher-returns: true  #支持消息发送失败返回队列
 
+    # 重试机制
+    listener:
+      simple:
+        retry:
+          enabled: true #是否开启消费者重试)
+          max-attempts: 5 #最大重试次数
+          initial-interval: 3000ms #重试间隔时间 3秒
+          max-interval: 20000ms #重试最大时间间隔（单位毫秒）
+          multiplier: 2 #乘子  重试间隔*乘子得出下次重试间隔  3s  6s  12s  24s  此处24s>20s  走20s
+        default-requeue-rejected: true #重试次数超过上面的设置之后是否丢弃（false不丢弃时需要写相应代码将该消息加入死信队列）
 
 #rabbitmq:
 #  host: 127.0.0.1
