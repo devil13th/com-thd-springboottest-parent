@@ -43,6 +43,7 @@
         <module>com-thd-springboottest-validator</module>
         <module>com-thd-springboottest-elasticsearch</module>
         <module>com-thd-springboottest-quartz</module>
+        <module>com-thd-springboottest-ioc</module>
 
     </modules>
 
