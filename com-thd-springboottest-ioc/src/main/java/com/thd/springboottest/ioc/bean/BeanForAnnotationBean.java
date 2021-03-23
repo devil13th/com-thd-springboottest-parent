@@ -7,7 +7,7 @@ package com.thd.springboottest.ioc.bean;
  * @DATE: 2021/3/22 13:54
  **/
 public class BeanForAnnotationBean {
-    private BeanForComponent user;
+    private BeanForAnnotationComponent user;
     private String message;
 
     public String getMessage() {
@@ -18,11 +18,11 @@ public class BeanForAnnotationBean {
         this.message = message;
     }
 
-    public BeanForComponent getUser() {
+    public BeanForAnnotationComponent getUser() {
         return user;
     }
 
-    public void setUser(BeanForComponent user) {
+    public void setUser(BeanForAnnotationComponent user) {
         this.user = user;
     }
 }

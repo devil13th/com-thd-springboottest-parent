@@ -17,7 +17,7 @@ public class MyConfig {
     private String message;
 
     @Autowired
-    private BeanForComponent user;
+    private BeanForAnnotationComponent user;
 
     @Bean
     public BeanForAnnotationBean beanForAnnotationBean(){

@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 
 // 通过注解@Component来注册一个bean
 @Component
-public class BeanForComponent {
+public class BeanForAnnotationComponent {
     @Value("${user.nickname}")
     private String name;
     @Value("${user.age}")
     private Integer age = 5;
     @Value("${user.xxx:hello}")
     private String message;
-    public BeanForComponent(){}
+    public BeanForAnnotationComponent(){}
 
     @Override
     public String toString() {

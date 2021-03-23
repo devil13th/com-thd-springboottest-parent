@@ -35,7 +35,15 @@ public class MyBeanRegister implements BeanDefinitionRegistryPostProcessor , Env
         RootBeanDefinition beanDefinition  = new RootBeanDefinition();
         beanDefinition.setBeanClass(BeanForBeanRegister.class);
         MutablePropertyValues mpv = beanDefinition.getPropertyValues();
+        // 注入属性 (如果有)
         mpv.addPropertyValue("message",environment.getProperty("message"));
+
+        // 设置 init方法 没有就不用设置
+//        beanDefinition.setInitMethodName("init");
+        // 设置 destory方法 没有就不用设置
+//        beanDefinition.setDestroyMethodName("destory");
+
+        // 注册到ioc容器中
         beanDefinitionRegistry.registerBeanDefinition("beanForBeanRegister",beanDefinition);
     }
 
