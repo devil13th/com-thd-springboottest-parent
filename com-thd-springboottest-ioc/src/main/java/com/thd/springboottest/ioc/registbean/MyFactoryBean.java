@@ -1,5 +1,6 @@
-package com.thd.springboottest.ioc.bean;
+package com.thd.springboottest.ioc.registbean;
 
+import com.thd.springboottest.ioc.bean.BeanForFactoryBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

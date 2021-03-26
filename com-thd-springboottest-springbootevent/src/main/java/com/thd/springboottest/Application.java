@@ -1,5 +1,7 @@
 package com.thd.springboottest;
 
+import com.thd.springboottest.applicationrunner.MyApplicationRunner;
+import com.thd.springboottest.applicationrunner.MyStartupRunner;
 import com.thd.springboottest.springbootevent.customevent.MyEvent;
 import com.thd.springboottest.springbootevent.customevent.MyListener;
 import com.thd.springboottest.springbootevent.event.*;
@@ -8,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 
 @SpringBootApplication(scanBasePackages = "com.thd.springboottest")
@@ -44,6 +47,17 @@ public class Application extends SpringBootServletInitializer {
 
 
     }
+
+//
+//    @Bean
+//    public MyStartupRunner myStartupRunner(){
+//        return new MyStartupRunner();
+//    }
+//
+//    @Bean
+//    public MyApplicationRunner myApplicatoinRunner(){
+//        return new MyApplicationRunner();
+//    }
 
 
 }

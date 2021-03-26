@@ -1,5 +1,7 @@
-package com.thd.springboottest.ioc.bean;
+package com.thd.springboottest.ioc.registbean;
 
+import com.thd.springboottest.ioc.bean.BeanForAnnotationBean;
+import com.thd.springboottest.ioc.bean.BeanForAnnotationComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

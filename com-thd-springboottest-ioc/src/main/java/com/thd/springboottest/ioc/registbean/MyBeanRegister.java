@@ -1,5 +1,6 @@
-package com.thd.springboottest.ioc.bean;
+package com.thd.springboottest.ioc.registbean;
 
+import com.thd.springboottest.ioc.bean.BeanForBeanRegister;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;

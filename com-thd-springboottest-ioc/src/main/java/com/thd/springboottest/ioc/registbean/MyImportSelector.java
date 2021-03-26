@@ -1,5 +1,6 @@
-package com.thd.springboottest.ioc.bean;
+package com.thd.springboottest.ioc.registbean;
 
+import com.thd.springboottest.ioc.bean.BeanForImportSelector;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 

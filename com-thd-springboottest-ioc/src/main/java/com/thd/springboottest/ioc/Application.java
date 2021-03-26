@@ -1,6 +1,9 @@
 package com.thd.springboottest.ioc;
 
 import com.thd.springboottest.ioc.bean.*;
+import com.thd.springboottest.ioc.beanpostprocessor.MyInterface;
+import com.thd.springboottest.ioc.registbean.MyImportBeanDefinitionRegistrar;
+import com.thd.springboottest.ioc.registbean.MyImportSelector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -12,7 +15,7 @@ import java.util.stream.Stream;
 
 
 @SpringBootApplication(scanBasePackages = "com.thd.springboottest")
-@Import(value={MyImportSelector.class, BeanForAnnotationImport.class})
+@Import(value={MyImportSelector.class, BeanForAnnotationImport.class, MyImportBeanDefinitionRegistrar.class})
 
 public class Application extends SpringBootServletInitializer {
 
@@ -56,15 +59,27 @@ public class Application extends SpringBootServletInitializer {
 
 
 
-        // 通过Import注释注册的bean -- 参见 BeanForAnnotationImport.java
+        // 通过Import注释注册的bean -- 参见 BeanForAnnotationImport.java  Application.java(@Import注解)
         BeanForAnnotationImport bfai =  (BeanForAnnotationImport)ctx.getBean("com.thd.springboottest.ioc.bean.BeanForAnnotationImport");
         System.out.println(" ======= 通过Import注册的bean =======");
         System.out.println(bfai);
 
-        // 通过ImportSelector注册的bean -- 参见 BeanForImportSelector.java
+        // 通过ImportSelector注册的bean -- 参见 BeanForImportSelector.java  Application.java(@Import注解)
         BeanForImportSelector bfis =  (BeanForImportSelector)ctx.getBean("com.thd.springboottest.ioc.bean.BeanForImportSelector");
         System.out.println(" ======= 通过ImportSelector注册的bean =======");
         System.out.println(bfis);
+
+        // 通过ImportBeanDefinitionRegistrar 注册的bean  -- 参见MyImportBeanDefinitionRegistrar.java  Application.java(@Import注解)
+        BeanForImportBeanDefinitionRegistrar bfibdr = (BeanForImportBeanDefinitionRegistrar)ctx.getBean("com.thd.springboottest.ioc.bean.BeanForImportBeanDefinitionRegistrar");
+        System.out.println(" ======= 通过ImportBeanDefinitionRegistrar 注册的bean ======= ");
+        System.out.println(bfibdr);
+
+
+        // 注册bean过程中替换已有bean -- 参见 MyBeanPostProcess.java  将已注册的bean进行增强
+        MyInterface echoBean = (MyInterface) ctx.getBean("myBean");
+        System.out.println(" ======= 注册bean过程中替换已有bean ======= ");
+        String str = echoBean.echoSomething();
+        System.out.println(str);
     }
 
 
