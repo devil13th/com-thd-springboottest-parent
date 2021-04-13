@@ -23,4 +23,8 @@ public class TopicChild2Receiver {
     public void process(Map testMessage) {
         this.logger.info("TopicChildReceiver[2]消费者收到消息  : " + testMessage.toString());
     }
+    @RabbitHandler
+    public void process2(String testMessage) {
+        this.logger.info("TopicChildReceiver[2]消费者收到消息  : " + testMessage);
+    }
 }

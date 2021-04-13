@@ -3,6 +3,7 @@ package com.thd.springboottest.rabbitmq.integration.confirm;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
@@ -12,24 +13,25 @@ import java.util.UUID;
  * @author: wanglei62
  * @DATE: 2021/4/2 10:43
  **/
-public class Producer implements RabbitTemplate.ConfirmCallback  {
+@Component
+public class ConfirmProducer implements RabbitTemplate.ConfirmCallback  {
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public Producer(RabbitTemplate rabbitTemplate) {
+    public ConfirmProducer(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
         rabbitTemplate.setConfirmCallback(this);
     }
 
     public void send2() {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5; i++) {
             String context = "hi, i am messages " + i;
             System.out.println("Sender : " + context);
-            CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+            String businessKey = UUID.randomUUID().toString();
+            CorrelationData correlationData = new CorrelationData(businessKey);
+            System.out.println("================== > send  UUID: " + correlationData.getId());
 
-            System.out.println("callbackSender UUID: " + correlationData.getId());
-
-            this.rabbitTemplate.convertAndSend("topicExchange", "topic.messages", context, correlationData);
+            this.rabbitTemplate.convertAndSend("TestIntegrationConfirmExchange", "ConfirmRouting", context, correlationData);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -40,6 +42,6 @@ public class Producer implements RabbitTemplate.ConfirmCallback  {
 
     @Override
     public void confirm(CorrelationData correlationData, boolean b, String s) {
-        System.out.println("confirm: " + correlationData.getId() + ",s=" + s + ",b:" + b);
+        System.out.println(" |||||||||||||||  confirm: " + correlationData.getId() + ",s=" + s + ",b:" + b);
     }
 }

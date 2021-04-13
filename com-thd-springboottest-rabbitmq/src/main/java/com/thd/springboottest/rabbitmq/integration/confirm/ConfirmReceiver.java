@@ -1,4 +1,4 @@
-package com.thd.springboottest.rabbitmq.exchange.topic.consumer;
+package com.thd.springboottest.rabbitmq.integration.confirm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,15 +16,11 @@ import java.util.Map;
  **/
 
 @Component
-@RabbitListener(queues = "topic.child")
-public class TopicChildReceiver {
+@RabbitListener(queues = "TestIntegrationConfirmQueue")
+public class ConfirmReceiver {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @RabbitHandler
-    public void process(Map testMessage) {
-        this.logger.info("TopicChildReceiver[1]消费者收到消息  : " + testMessage.toString());
-    }
-    @RabbitHandler
-    public void process2(String testMessage) {
-        this.logger.info("TopicChildReceiver[1]消费者收到消息  : " + testMessage);
+    public void process(String testMessage) {
+        this.logger.info("<=================== ConfirmReceiver消费者收到消息  : " + testMessage.toString());
     }
 }
