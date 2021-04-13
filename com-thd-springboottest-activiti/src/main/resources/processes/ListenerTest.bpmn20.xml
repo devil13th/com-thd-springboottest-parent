@@ -19,6 +19,10 @@
     <sequenceFlow id="sid-F72DA13A-D0DC-4B1A-9DF6-C193C2EC2AB7" sourceRef="startEvent1" targetRef="one"></sequenceFlow>
     <userTask id="two" name="Second Task" activiti:assignee="${user}">
       <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="assignment" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="${taskLogListener}"></activiti:taskListener>
         <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${assigneeA}" activiti:elementVariable="user"></multiInstanceLoopCharacteristics>
@@ -26,6 +30,10 @@
     <sequenceFlow id="sid-4DC5C297-A187-4473-9363-D8F5E522670E" sourceRef="one" targetRef="two"></sequenceFlow>
     <userTask id="three" name="Third Task" activiti:assignee="${user}">
       <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="assignment" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="complete" delegateExpression="${taskLogListener}"></activiti:taskListener>
+        <activiti:taskListener event="delete" delegateExpression="${taskLogListener}"></activiti:taskListener>
         <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="true" activiti:collection="${assigneeB}" activiti:elementVariable="user"></multiInstanceLoopCharacteristics>

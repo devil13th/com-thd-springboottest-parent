@@ -26,7 +26,7 @@ public class Student implements Serializable {
     // searchAnalyzer = "ik_max_word"搜索分词的类型
     @Id
     private String id;
-
+    // Keyword 代表不进行分词
     @Field(type = FieldType.Keyword, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String name;
     private Integer age;

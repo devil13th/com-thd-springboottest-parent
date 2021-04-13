@@ -1,0 +1,20 @@
+debug: false
+
+
+
+
+
+#trace=true
+# 打开actuator 所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 8899
+  servlet:
+    context-path: /thd
+#spring.mvc.view.prefix= /WEB-INF/pages/
+#spring.mvc.view.suffix= .jsp

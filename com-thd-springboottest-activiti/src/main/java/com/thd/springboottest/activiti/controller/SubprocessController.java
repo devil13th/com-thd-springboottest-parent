@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -182,10 +183,28 @@ public class SubprocessController {
     @ResponseBody
     // url : http://127.0.0.1:8899/thd/subprocess/setVariable/5
     public String setVariable(@PathVariable String processInstanceId){
-        List<User> users = new ArrayList<User>();
-        users.add(new User("zhangsan","zhangsanAudit"));
-        users.add(new User("lisi","lisiAudit"));
-        users.add(new User("wangwu","wangwuAudit"));
+//        List<User> users = new ArrayList<User>();
+//        users.add(new User("zhangsan","zhangsanAudit"));
+//        users.add(new User("lisi","lisiAudit"));
+//        users.add(new User("wangwu","wangwuAudit"));
+//        this.runtimeService.setVariable(processInstanceId,"users",users);
+
+
+        List<Map<String,String>> users = new ArrayList<Map<String,String>>();
+        Map<String,String> m = new HashMap<String,String>();
+        m.put("input","zhangsan");
+        m.put("audit","zhangsanAudit");
+
+        Map<String,String> m1 = new HashMap<String,String>();
+        m1.put("input","lisi");
+        m1.put("audit","lisiAudit");
+
+        Map<String,String> m2 = new HashMap<String,String>();
+        m2.put("input","wangwu");
+        m2.put("audit","wangwuAudit");
+        users.add(m);
+        users.add(m1);
+        users.add(m2);
         this.runtimeService.setVariable(processInstanceId,"users",users);
         return "SUCCESS";
     }
