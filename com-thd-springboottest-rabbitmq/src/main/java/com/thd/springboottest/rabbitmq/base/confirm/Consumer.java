@@ -46,7 +46,7 @@ public class Consumer {
 
                 //发布的每一条消息都会获得一个唯一的deliveryTag，deliveryTag在channel范围内是唯一的
                 long deliveryTag = envelope.getDeliveryTag();
-
+                properties.getCorrelationId();
                 // 避免重复消费  successList是模拟的数据库
                 if(successList.get(properties.getMessageId()) != null && successList.get(properties.getMessageId())){
                     System.out.println(message + " 已经被消费，不能重复消费");

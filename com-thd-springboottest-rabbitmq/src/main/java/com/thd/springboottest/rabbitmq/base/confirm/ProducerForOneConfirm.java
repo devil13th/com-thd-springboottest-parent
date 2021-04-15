@@ -44,6 +44,7 @@ public class ProducerForOneConfirm {
                 .deliveryMode(2)
                 // 消息主键,应用级别
                 .messageId(String.valueOf(Math.random() * 100))
+                .correlationId(String.valueOf(Math.random() * 100))
                 .headers(m) // 设置头信息
                 .build();
 

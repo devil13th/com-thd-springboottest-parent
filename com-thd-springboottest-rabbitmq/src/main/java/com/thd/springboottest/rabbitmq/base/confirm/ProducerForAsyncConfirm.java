@@ -98,6 +98,7 @@ public class ProducerForAsyncConfirm {
             channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY,p,msg.getBytes());
             confirmSet.add(seqNo);
             System.out.println("发送消息======>" + seqNo);
+            Thread.sleep(2000);
         }
 
         //关闭信道和连接
