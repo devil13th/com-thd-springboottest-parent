@@ -1,9 +1,12 @@
-package com.thd.springboottest.rabbitmq.base;
+package com.thd.springboottest.rabbitmq.base.ttl;
 
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * com.thd.springboottest.rabbitmq.base.direct.CreateExchangeAndQueue
@@ -13,14 +16,32 @@ import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
  **/
 public class CreateExchangeAndQueue {
     public static void main(String[] args) throws Exception{
-        String QUEUE_NAME = "queue-devil13th";// 队列名称
-        String ROUTE_KEY = "routekey-devil13th";// 路由键名称
-        String EXCHANGE_NAME = "exchange-devil13th";// 交换器名称
 
+        String QUEUE_NAME = "ttl-queue";// 队列名称
+        String ROUTE_KEY = "ttl-routekey";// 路由键名称
+        String EXCHANGE_NAME = "ttl-exchange";// 交换器名称
+
+        String DLX_QUEUE_NAME = "dlx-ttl-queue";// 队列名称
+        String DLX_ROUTE_KEY = "dlx-ttl-routekey";// 路由键名称
+        String DLX_EXCHANGE_NAME = "dlx-ttl-exchange";// 交换器名称
 
         Connection conn = ConnectionUtil.getConnection();
         Channel channel = conn.createChannel();
-        // 创建一个队列
+
+
+
+
+        // ====================== 创建私信队列、交换机、并绑定 ===================
+        // 创建一个死信队列(就是一个普通的队列)
+        channel.queueDeclare(DLX_QUEUE_NAME, true, false, false, null);
+        // 创建一个死信交换机
+        channel.exchangeDeclare(DLX_EXCHANGE_NAME, BuiltinExchangeType.DIRECT, true, false, false, null);
+        // 绑定死信队列和私信交换机
+        channel.queueBind(DLX_QUEUE_NAME, DLX_EXCHANGE_NAME, DLX_ROUTE_KEY);
+
+
+
+        // channel.queueDeclare ： 创建一个队列
         /*
          * 声明（创建）队列
          * 参数1：队列名称
@@ -29,7 +50,13 @@ public class CreateExchangeAndQueue {
          * 参数4：队列不再使用时是否自动删除（没有连接，并且没有未处理的消息)
          * 参数5：建立队列时的其他参数(创建死信队列、延时队列使用)
          */
-        channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+
+        // 设置死信队列
+        Map<String , Object> arguments = new HashMap<String , Object>();
+        arguments.put("x-message-ttl", 2000); // 延时队列, 消息存货时间:2000毫秒,如果过期进入死信队列
+        arguments.put("x-dead-letter-exchange" , DLX_EXCHANGE_NAME); // 设置死信交换机的名称
+        arguments.put("x-dead-letter-routing-key", DLX_ROUTE_KEY); // 这个DLX指定routing key，如果没有特殊指定，则使用原队列的routing key
+        channel.queueDeclare(QUEUE_NAME, true, false, false, arguments);
 
         // 创建交换器
         /*
@@ -41,8 +68,11 @@ public class CreateExchangeAndQueue {
          * 参数6：arguments 其它一些结构化参数比如:alternate-exchange
          */
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.DIRECT, true, false, false, null);
+
         // 将队列和交换器通过路由键进行绑定
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, ROUTE_KEY);
+
+
 
 
         System.out.println("已创建交换器和队列并已绑定");
