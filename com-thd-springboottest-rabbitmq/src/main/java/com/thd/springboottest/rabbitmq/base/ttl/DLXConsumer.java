@@ -9,12 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-/**
- * com.thd.springboottest.rabbitmq.base.direct.Consumer2
- *
- * @author: wanglei62
- * @DATE: 2020/2/18 15:21
- **/
+
 public class DLXConsumer {
     public static void main(String[] args) throws IOException, TimeoutException {
         String QUEUE_NAME = "ttl-queue";// 队列名称

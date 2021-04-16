@@ -5,12 +5,6 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
 
-/**
- * com.thd.springboottest.rabbitmq.base.deadletter.DeadLetterProducer
- *
- * @author: wanglei62
- * @DATE: 2021/4/16 15:53
- **/
 public class Producer {
     public static void main(String[] args) throws Exception{
 
