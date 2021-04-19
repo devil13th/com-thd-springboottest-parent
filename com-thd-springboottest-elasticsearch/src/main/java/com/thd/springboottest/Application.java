@@ -17,4 +17,7 @@ public class Application extends SpringBootServletInitializer {
         ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
         String[] names = ctx.getBeanDefinitionNames();
     }
+
+
+
 }
