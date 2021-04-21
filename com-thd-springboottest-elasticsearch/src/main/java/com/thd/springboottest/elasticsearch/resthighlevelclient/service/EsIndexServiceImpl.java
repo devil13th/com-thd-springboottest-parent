@@ -46,9 +46,19 @@ public class EsIndexServiceImpl implements EsIndexService{
             if(!checkIndex(indexName)){
                 CreateIndexRequest request = new CreateIndexRequest(indexName);
 
-                request.source("{\"settings\": {\"number_of_shards\": 3,\"number_of_replicas\": 2},\"mappings\": {\"properties\": {\"title\": {\"type\": \"keyword\"}}},\"aliases\": {\"blog_alias_javaboy\": {}}}", XContentType.JSON);
+                request.source("{" +
+                        "\"settings\": {" +
+                            "\"number_of_shards\": 3," +
+                            "\"number_of_replicas\": 2" +
+                        "}," +
+                        "\"mappings\": {" +
+                            "\"properties\": {" +
+                                "\"title\": {\"type\": \"keyword\"}" +
+                            "}" +
+                        "}," +
+                        "\"aliases\": {\"blog_alias_javaboy\": {}}}", XContentType.JSON);
                 request.mapping()
-
+                request.
                 if (columnMap != null && columnMap.size()>0) {
                     Map<String, Object> source = new HashMap<>();
                     source.put("properties", columnMap);

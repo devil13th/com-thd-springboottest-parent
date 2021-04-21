@@ -45,6 +45,7 @@
         <module>com-thd-springboottest-quartz</module>
         <module>com-thd-springboottest-ioc</module>
         <module>com-thd-springboottest-websocket</module>
+        <module>com-thd-springboottest-redistemplate</module>
 
     </modules>
 
