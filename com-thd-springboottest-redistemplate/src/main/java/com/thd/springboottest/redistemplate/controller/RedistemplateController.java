@@ -2,8 +2,16 @@ package com.thd.springboottest.redistemplate.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.thd.springboottest.redistemplate.bean.Item;
 import com.thd.springboottest.redistemplate.bean.User;
+import com.thd.springboottest.redistemplate.serializer.JsonDateDeserializer;
+import com.thd.springboottest.redistemplate.serializer.JsonDateSerializer;
+import com.thd.springboottest.redistemplate.serializer.JsonTimestampDeserializer;
+import com.thd.springboottest.redistemplate.serializer.JsonTimestampSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * com.thd.springboottest.redistemplate.controller.RedistemplateController
@@ -46,13 +52,36 @@ public class RedistemplateController {
         u.setUserBirthday(new Date());
         u.setUserId("1");
         u.setUserName("devil13th");
+        u.setUserCreateTime(new Timestamp(new Date().getTime()));
 
-        ObjectMapper mapper=new ObjectMapper();
-        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        ObjectMapper objectMapper=new ObjectMapper();
+//        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+//        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+
+
+
+
+
+
+
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        //Date序列化和反序列化
+        javaTimeModule.addSerializer(Date.class,new JsonDateSerializer());
+        javaTimeModule.addDeserializer(Date.class,new JsonDateDeserializer());
+        // timestamp的序列化和反序列话
+        javaTimeModule.addSerializer(Timestamp.class,new JsonTimestampSerializer());
+        javaTimeModule.addDeserializer(Timestamp.class,new JsonTimestampDeserializer());
+        objectMapper.registerModule(javaTimeModule);
+
+
+
+
+
         // 序列化
-        String str = mapper.writeValueAsString(u);
-        System.out.println(String.format("TestBean03:%s",u));
+        String str = objectMapper.writeValueAsString(u);
+        System.out.println(String.format("TestBean03:%s",str));
         byte[] s = this.myRedisTemplate.getValueSerializer().serialize(u);
 
         System.out.println(new String(s));
@@ -88,6 +117,35 @@ public class RedistemplateController {
         u.setUserBirthday(new Date());
         u.setUserId("1");
         u.setUserName("devil13th");
+        u.setUserCreateTime(new Timestamp(new Date().getTime()));
+        u.setLdt(LocalDateTime.now());
+
+        Item item = new Item();
+        item.setId(30);
+        item.setName("mama");
+        item.setType("family");
+        u.setItem(item);
+
+
+        List<Item> l = new ArrayList<Item>();
+        for(int i = 0 , j = 3 ; i < j ; i++){
+            Item aitem = new Item(i,"name_" + i , "type" + i);
+            l.add(aitem);
+        }
+        u.setItemList(l);
+
+
+        List<User> userList = new ArrayList<User>();
+        for(int i = 0 , j = 3 ; i < j ; i++){
+            User aUser = new User();
+            aUser.setUserId(String.valueOf(i));
+            aUser.setUserName("user_" + i);
+            aUser.setUserBirthday(new Date());
+            aUser.setUserAge(i);
+            userList.add(aUser);
+        }
+        u.setChildren(userList);
+
         this.myRedisTemplate.opsForValue().set("user",u);
         return ResponseEntity.ok("SUCCESS");
     }
@@ -97,8 +155,7 @@ public class RedistemplateController {
     //url : http://127.0.0.1:8899/thd/redisTemplate/getKeyValueForObject
     public ResponseEntity getKeyValueForObject(){
         System.out.println("getKeyValueForObject ...");
-        Object u = this.myRedisTemplate.opsForValue().get("user");
-
+        User u = (User)this.myRedisTemplate.opsForValue().get("user");
         return ResponseEntity.ok(u);
     }
 

@@ -2,8 +2,16 @@ package com.thd.springboottest.redistemplate.cfg;
 
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.thd.springboottest.redistemplate.bean.Item;
+import com.thd.springboottest.redistemplate.serializer.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +24,10 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.MediaType;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,15 +64,58 @@ public class Config {
         // =================== 创建Jackson2JsonRedisSerialize 序列化器  使用ObjectMapper进行序列化和反序列化=================== //
 
         // JdkSerializationRedisSerializer  JDK序列化器
-        // JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
+         JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
 
 
         // 使用Jackson2JsonRedisSerialize 替换默认序列化
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class); // 默认的使用JdkSerializationRedisSerializer
 
+
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+
+
+        /**
+         * 特别注意这个配置
+         * 此项必须配置，否则反序列化会报java.lang.ClassCastException: java.util.LinkedHashMap cannot be cast to XXX
+         * 因为反序列化时候都是转换成Map类型
+         *
+         * 加了此配置，序列化的时候会将数据类型写到json中,才可以进行正常json转对象的反序列化
+         *
+         * 加了改配置，如果有自定义的序列化器，不仅要重写JsonSerializer.serialize方法还要重写JsonSerializer.serializeWithType方法
+         * 否则会报错 Type id handling not implemented for type XXX
+         */
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+
+
+
+
+        // null属性不进行序列化
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        // 设置在反序列化时忽略在JSON字符串中存在，而在Java中不存在的属性
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        //Date序列化和反序列化
+        javaTimeModule.addSerializer(Date.class,new JsonDateSerializer());
+        javaTimeModule.addDeserializer(Date.class,new JsonDateDeserializer());
+        // timestamp的序列化和反序列话
+        javaTimeModule.addSerializer(Timestamp.class,new JsonTimestampSerializer());
+        javaTimeModule.addDeserializer(Timestamp.class,new JsonTimestampDeserializer());
+
+        objectMapper.registerModule(javaTimeModule);
+
+        // 创建某种自定义类型转换的模块
+        SimpleModule itemModule = new SimpleModule();
+        //设置Item对象的 序列化器和反序列化器
+        itemModule.addSerializer(Item.class,new ItemSerializer());
+        itemModule.addDeserializer(Item.class,new ItemDeserializer());
+        // 注册模块到objectMapper中
+        // objectMapper.registerModule(itemModule);
+
+
         // Jackson2JsonRedisSerializer内部是通过ObjectMapper来进行序列化和反序列化的,所以要设置ObjectMapper
         jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
 
@@ -77,8 +131,10 @@ public class Config {
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
         // value序列化方式采用jackson
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+//        redisTemplate.setValueSerializer(jdkSerializationRedisSerializer);
         // hash的value序列化方式采用jackson
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+//        redisTemplate.setHashValueSerializer(jdkSerializationRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
 

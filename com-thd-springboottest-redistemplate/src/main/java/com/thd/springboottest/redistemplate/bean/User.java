@@ -8,7 +8,9 @@ import com.thd.springboottest.redistemplate.serializer.JsonDateSerializer;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author devil13th
@@ -22,6 +24,11 @@ public class User implements Serializable {
 //    @JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+8")
     private Date userBirthday;
 
+    private Item item;
+    private List<Item> itemList;
+    private List<User> children;
+
+    private LocalDateTime ldt;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp userCreateTime;
@@ -64,6 +71,38 @@ public class User implements Serializable {
 
     public void setUserCreateTime(Timestamp userCreateTime) {
         this.userCreateTime = userCreateTime;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public List<Item> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<Item> itemList) {
+        this.itemList = itemList;
+    }
+
+    public LocalDateTime getLdt() {
+        return ldt;
+    }
+
+    public void setLdt(LocalDateTime ldt) {
+        this.ldt = ldt;
+    }
+
+    public List<User> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<User> children) {
+        this.children = children;
     }
 
     @Override
