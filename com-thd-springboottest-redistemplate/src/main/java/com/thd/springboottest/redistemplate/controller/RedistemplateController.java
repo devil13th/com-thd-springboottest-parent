@@ -37,6 +37,9 @@ public class RedistemplateController {
     @Resource
     private RedisTemplate myRedisTemplate;
 
+    @Resource
+    private RedisTemplate normalRedisTemplate;
+
 
     @RequestMapping("/test")
     @ResponseBody
@@ -146,7 +149,7 @@ public class RedistemplateController {
         }
         u.setChildren(userList);
 
-        this.myRedisTemplate.opsForValue().set("user",u);
+        this.normalRedisTemplate.opsForValue().set("user",u);
         return ResponseEntity.ok("SUCCESS");
     }
 
@@ -155,7 +158,7 @@ public class RedistemplateController {
     //url : http://127.0.0.1:8899/thd/redisTemplate/getKeyValueForObject
     public ResponseEntity getKeyValueForObject(){
         System.out.println("getKeyValueForObject ...");
-        User u = (User)this.myRedisTemplate.opsForValue().get("user");
+        User u = (User)this.normalRedisTemplate.opsForValue().get("user");
         return ResponseEntity.ok(u);
     }
 
