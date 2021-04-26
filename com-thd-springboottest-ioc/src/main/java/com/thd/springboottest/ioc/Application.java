@@ -4,10 +4,9 @@ import com.thd.springboottest.ioc.bean.*;
 import com.thd.springboottest.ioc.beanpostprocessor.MyInterface;
 import com.thd.springboottest.ioc.registbean.MyImportBeanDefinitionRegistrar;
 import com.thd.springboottest.ioc.registbean.MyImportSelector;
+import com.thd.springboottest.ioc.staticmethodioc.SpringBeanUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 
@@ -17,11 +16,11 @@ import java.util.stream.Stream;
 @SpringBootApplication(scanBasePackages = "com.thd.springboottest")
 @Import(value={MyImportSelector.class, BeanForAnnotationImport.class, MyImportBeanDefinitionRegistrar.class})
 
-public class Application extends SpringBootServletInitializer {
+public class Application  {
 
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(this.getClass());
-    }
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(this.getClass());
+//    }
 
 
 
@@ -80,6 +79,11 @@ public class Application extends SpringBootServletInitializer {
         System.out.println(" ======= 注册bean过程中替换已有bean ======= ");
         String str = echoBean.echoSomething();
         System.out.println(str);
+
+
+        // 静态方法注入bean -- 参见 StaticClassMethod.java
+        System.out.println(" ======= 静态方法注入bean ======= ");
+        System.out.println(SpringBeanUtil.getBean("beanForStaticClassMethod"));
     }
 
 

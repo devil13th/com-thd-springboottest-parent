@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -112,19 +113,7 @@ public class RedistemplateController {
     //url : http://127.0.0.1:8899/thd/redisTemplate/saveKeyValueForObject
     public ResponseEntity saveKeyValueForObject(){
         System.out.println("saveKeyValueForObject ...");
-        User u = new User();
-        u.setUserAge(5);
-        u.setUserBirthday(new Date());
-        u.setUserId("1");
-        u.setUserName("devil13th");
-        u.setUserCreateTime(new Timestamp(new Date().getTime()));
-        u.setLdt(LocalDateTime.now());
-
-        Item item = new Item();
-        item.setId(30);
-        item.setName("mama");
-        item.setType("family");
-        u.setItem(item);
+        User u = User.getInstance();
 
 
         List<Item> l = new ArrayList<Item>();
@@ -170,11 +159,7 @@ public class RedistemplateController {
         this.myRedisTemplate.opsForHash().put("hx","name","devil13th");
 
         Map m = new HashMap();
-        User u = new User();
-        u.setUserAge(5);
-        u.setUserBirthday(new Date());
-        u.setUserId("1");
-        u.setUserName("devil13th");
+        User u = User.getInstance();
         m.put("user",u);
         this.myRedisTemplate.opsForHash().putAll("hx",m);
         return ResponseEntity.ok("SUCCESS");
