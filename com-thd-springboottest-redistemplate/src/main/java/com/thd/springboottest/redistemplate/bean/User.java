@@ -22,7 +22,7 @@ public class User implements Serializable {
     private Integer userAge;
 //    @JsonSerialize(using = JsonDateSerializer.class)
 //    @JsonDeserialize(using = JsonDateDeserializer.class)
-//    @JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+8")
     private Date userBirthday;
 
     private Item item;
