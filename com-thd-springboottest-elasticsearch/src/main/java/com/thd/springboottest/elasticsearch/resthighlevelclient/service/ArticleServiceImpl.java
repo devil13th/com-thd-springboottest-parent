@@ -1,12 +1,39 @@
 package com.thd.springboottest.elasticsearch.resthighlevelclient.service;
 
 import com.thd.springboottest.elasticsearch.resthighlevelclient.util.EsUtils;
+import com.thd.springboottest.elasticsearch.resthighlevelclient.util.MyFileUtils;
+import com.thd.springboottest.elasticsearch.resthighlevelclient.vo.Article;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.GetIndexRequest;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * com.thd.springboottest.elasticsearch.resthighlevelclient.service.ArticleServiceImpl
@@ -17,11 +44,229 @@ import java.io.IOException;
 @Component
 public class ArticleServiceImpl implements ArticleService {
 
+
+
+
+    @Autowired
+    private RestHighLevelClient esClient = EsUtils.getEsClient();
+
     private final RequestOptions options = RequestOptions.DEFAULT;
 
-    public RestHighLevelClient getEsClient(){
-        return EsUtils.getEsClient();
+    @Override
+    public boolean checkIndex(String index) {
+        try {
+            return esClient.indices().exists(new GetIndexRequest(index), options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Boolean.FALSE ;
+    }
+
+    /**
+     * 创建索引
+     */
+    public boolean createIndex (){
+        try {
+            if(!checkIndex("article")){
+                // 1、创建 创建索引request 参数：索引名java
+                CreateIndexRequest request = new CreateIndexRequest("article");
+
+                // 2、设置索引setting
+//                Settings.Builder builder = Settings.builder()
+//                    .put("index.number_of_shards",3) // 分片数量
+//                    .put("index.number_of_replicas",2) ;// 每个分片的副本数量
+//                request.settings(builder);
+
+                // 使用json设置索引内容
+                request.source("{\n" +
+                        "    \"settings\" : {\n" +
+                        "        \"number_of_shards\" : 1,\n" +
+                        "        \"number_of_replicas\" : 0\n" +
+                        "    },\n" +
+                        "    \"mappings\" : {\n" +
+                        "        \"properties\" : {\n" +
+                        "            \"title\" : { \"type\" : \"text\" },\n" +
+                        "            \"classify\" : { \"type\" : \"keyword\" },\n" +
+                        "            \"path\" : { \"type\" : \"keyword\" },\n" +
+                        "            \"content\" : { \"type\" : \"text\" }\n" +
+                        "        }\n" +
+                        "    },\n" +
+                        "    \"aliases\" : {\n" +
+                        "        \"article_\" : {}\n" +
+                        "    }\n" +
+                        "}", XContentType.JSON);
+
+                esClient.indices().create(request, options);
+                return Boolean.TRUE ;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Boolean.FALSE;
+    }
+
+    /**
+     * 删除索引
+     */
+    public boolean deleteIndex(String indexName) {
+        try {
+            if(checkIndex(indexName)){
+                DeleteIndexRequest request = new DeleteIndexRequest(indexName);
+                AcknowledgedResponse response = esClient.indices().delete(request, options);
+                return response.isAcknowledged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Boolean.FALSE;
+    }
+
+
+
+    /**
+     * 索引文档
+     */
+    public boolean index(Article article) {
+        IndexRequest request = new IndexRequest("article");
+        String id = UUID.randomUUID().toString().replace("-","");
+        request.id(id);
+
+        Map<String, Object> jsonMap = new HashMap<>();
+
+        jsonMap.put("title", article.getTitle());
+        jsonMap.put("content", article.getContent());
+        jsonMap.put("message", article.getClassify());
+        jsonMap.put("path", article.getPath());
+        request.source(jsonMap);
+
+        try {
+            IndexResponse is = esClient.index(request,options);
+            System.out.println(is);
+        } catch (IOException e) {
+            throw new RuntimeException(" create index error ... ");
+        }
+        return true;
     };
 
 
+
+    /**
+     * 索引文档
+     */
+    public void indexAllFile(String path) {
+        String folderPath = path;
+        File folder = new File(folderPath);
+        String[] folderList = folder.list();
+        Stream.of(folderList).forEach( item -> {
+
+            File f = new File(folder.getAbsolutePath() + "\\" + item);
+            if(f.isFile()) {
+                if(f.getName().toLowerCase().indexOf(".html") != -1
+                ||f.getName().toLowerCase().indexOf(".htm") != -1
+                ||f.getName().toLowerCase().indexOf(".md") != -1
+                ) {
+                    System.out.println(f.getAbsolutePath());
+                    String content = MyFileUtils.readFile(f.getAbsolutePath());
+                    Article art = new Article();
+                    art.setTitle(f.getName());
+                    art.setContent(content);
+                    art.setPath(f.getAbsolutePath());
+                    art.setClassify("JAVA");
+                    boolean r = this.index(art);
+                }
+            }else{
+                this.indexAllFile(f.getAbsolutePath());
+            }
+        });
+    };
+
+
+
+
+    public List<Article> search(String keywords){
+        SearchRequest sr = new SearchRequest("article");
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+//        searchSourceBuilder.query(QueryBuilders.termQuery("content",keywords));
+
+        // 必须匹配到每一个词
+//        searchSourceBuilder.query(QueryBuilders.matchQuery("content","java jvm thread pool").operator(Operator.AND));
+
+        // 多个条件或者
+        searchSourceBuilder.query(QueryBuilders.boolQuery()
+                .should(QueryBuilders.matchQuery("content","java jvm thread pool").operator(Operator.AND))
+                .should(QueryBuilders.matchQuery("title","thread"))
+        );
+
+
+        // 分页
+        searchSourceBuilder.from(0);
+        searchSourceBuilder.size(100);
+
+        searchSourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));// 默认得分倒叙
+        //searchSourceBuilder.sort(new FieldSortBuilder("_uid").order(SortOrder.ASC));//也可以按_id字段进行升序排序
+
+
+
+        // 高亮
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+
+        highlightBuilder.preTags("</bbb>");
+        highlightBuilder.postTags("</bbb>");
+
+
+        HighlightBuilder.Field highlightTitle = new HighlightBuilder.Field("title");
+        highlightTitle.highlighterType("unified");
+        highlightBuilder.field(highlightTitle);
+
+        HighlightBuilder.Field highlightContent = new HighlightBuilder.Field("content");
+        highlightBuilder.field(highlightContent);
+
+//        searchSourceBuilder.highlighter(highlightBuilder);
+
+
+        sr.source(searchSourceBuilder);
+
+        try {
+            SearchResponse res = esClient.search(sr,options);
+            SearchHit[] r = res.getHits().getHits();
+            List<Article> l = Stream.of(r).map(item -> {
+                Article arc = new Article();
+                Map arcMap = item.getSourceAsMap();
+                arc.setId(item.getId());
+                arc.setPath(arcMap.get("path").toString());
+                arc.setTitle(arcMap.get("title").toString());
+                return arc;
+            }).collect(Collectors.toList());
+            return l;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    };
+
+    public List<Article> searchById(String id){
+        SearchRequest sr = new SearchRequest("article");
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.idsQuery().addIds(id.split(",")));
+
+        sr.source(searchSourceBuilder);
+        try {
+            SearchResponse res = esClient.search(sr,options);
+            SearchHit[] r = res.getHits().getHits();
+            List<Article> l = Stream.of(r).map(item -> {
+                Article arc = new Article();
+                Map arcMap = item.getSourceAsMap();
+                arc.setId(item.getId());
+                arc.setPath(arcMap.get("path").toString());
+                arc.setTitle(arcMap.get("title").toString());
+                return arc;
+            }).collect(Collectors.toList());
+            return l;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    };
 }

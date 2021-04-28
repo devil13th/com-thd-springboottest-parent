@@ -17,6 +17,7 @@ public class Article {
     private String author;
     private Date date;
     private Integer supportNum;
+    private String path;
 
     public String getId() {
         return id;
@@ -72,5 +73,13 @@ public class Article {
 
     public void setSupportNum(Integer supportNum) {
         this.supportNum = supportNum;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }
