@@ -55,8 +55,9 @@ public class ArticleController {
     /**
      * 创建索引
      */
-    @RequestMapping("/createIndex/{indexName}")
+    @RequestMapping("/createIndex")
     @ResponseBody
+    // http://127.0.0.1:8899/thd/es/article/createIndex
     public boolean createIndex (){
         boolean r = this.articleService.createIndex();
         return r;
@@ -96,6 +97,20 @@ public class ArticleController {
 //                boolean r = this.articleService.index(art);
 //            }
 //        });
+        return ResponseEntity.ok("SUCCESS");
+    };
+
+
+    @RequestMapping("/indexTest")
+    @ResponseBody
+    // http://127.0.0.1:8899/thd/es/article/indexTest
+    public ResponseEntity indexTest(){
+        Article art = new Article();
+        art.setTitle("我爱北京天安门");
+        art.setContent("我爱天安门北京");
+        art.setClassify("我爱天安门北京");
+        art.setPath("我爱天安门北京");
+        this.articleService.index(art);
         return ResponseEntity.ok("SUCCESS");
     };
 

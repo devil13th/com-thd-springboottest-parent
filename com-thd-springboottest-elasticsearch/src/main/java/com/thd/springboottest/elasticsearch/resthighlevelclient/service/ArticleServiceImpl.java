@@ -28,10 +28,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -135,7 +132,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         jsonMap.put("title", article.getTitle());
         jsonMap.put("content", article.getContent());
-        jsonMap.put("message", article.getClassify());
+        jsonMap.put("classify", article.getClassify());
         jsonMap.put("path", article.getPath());
         request.source(jsonMap);
 
@@ -157,6 +154,7 @@ public class ArticleServiceImpl implements ArticleService {
         String folderPath = path;
         File folder = new File(folderPath);
         String[] folderList = folder.list();
+        String[] classifyArrays = new String[]{"REACT","JS","JVM","VUE","JAVA"};
         Stream.of(folderList).forEach( item -> {
 
             File f = new File(folder.getAbsolutePath() + "\\" + item);
@@ -171,7 +169,9 @@ public class ArticleServiceImpl implements ArticleService {
                     art.setTitle(f.getName());
                     art.setContent(content);
                     art.setPath(f.getAbsolutePath());
-                    art.setClassify("JAVA");
+
+                    int c = new Random().nextInt(3);
+                    art.setClassify(classifyArrays[c]);
                     boolean r = this.index(art);
                 }
             }else{
@@ -187,16 +187,55 @@ public class ArticleServiceImpl implements ArticleService {
         SearchRequest sr = new SearchRequest("article");
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+
+        // 返回的字段集合
+        String[] includeFields = new String[] {"title","path"};
+        searchSourceBuilder.fetchSource(includeFields,null);
+
+
+        // ================== 下面是各种查询条件 ==================
+
+        searchSourceBuilder.query(QueryBuilders.matchQuery("content",keywords));
+        // 单字段查询
 //        searchSourceBuilder.query(QueryBuilders.termQuery("content",keywords));
 
         // 必须匹配到每一个词
 //        searchSourceBuilder.query(QueryBuilders.matchQuery("content","java jvm thread pool").operator(Operator.AND));
 
         // 多个条件或者
-        searchSourceBuilder.query(QueryBuilders.boolQuery()
-                .should(QueryBuilders.matchQuery("content","java jvm thread pool").operator(Operator.AND))
-                .should(QueryBuilders.matchQuery("title","thread"))
-        );
+//        searchSourceBuilder.query(QueryBuilders.boolQuery()
+//                .should(QueryBuilders.matchQuery("content","java jvm thread pool").operator(Operator.AND))
+//                .should(QueryBuilders.matchQuery("title","thread"))
+//        );
+        // 多个条件并且
+//        searchSourceBuilder.query(QueryBuilders.boolQuery()
+//                .must(QueryBuilders.matchQuery("content","jvm thread pool").operator(Operator.OR))
+//                .must(QueryBuilders.matchQuery("classify","JVM"))
+//        );
+
+        // 模拟sql and  or 优先级
+//        searchSourceBuilder.query(
+//                QueryBuilders.boolQuery()
+//                .should(
+//                        QueryBuilders.boolQuery()
+//                                .must(QueryBuilders.matchQuery("content","jvm").operator(Operator.OR))
+//                                .must(QueryBuilders.matchQuery("classify","JVM"))
+//                )
+//                .should(
+//                        QueryBuilders.boolQuery()
+//                                .must(QueryBuilders.matchQuery("content","java").operator(Operator.OR))
+//                                .must(QueryBuilders.matchQuery("classify","REACT"))
+//                )
+//        );
+
+//        searchSourceBuilder.query(QueryBuilders.matchQuery("classify","JVM"));
+
+//        searchSourceBuilder.query(QueryBuilders.termQuery("title","我爱北京天安门"));
+//        searchSourceBuilder.query(QueryBuilders.matchQuery("title","我爱北京天安门"));
+//        searchSourceBuilder.query(QueryBuilders.matchPhraseQuery("title","北京 天安门"));
+//        searchSourceBuilder.query(QueryBuilders.matchPhraseQuery("content","天安门 北京"));
+//        searchSourceBuilder.query(QueryBuilders.queryStringQuery("天安门 北京").field("content"));
 
 
         // 分页
@@ -226,16 +265,19 @@ public class ArticleServiceImpl implements ArticleService {
 
 
         sr.source(searchSourceBuilder);
-
+        System.out.println(sr.source().toString());
         try {
-            SearchResponse res = esClient.search(sr,options);
-            SearchHit[] r = res.getHits().getHits();
+            SearchResponse searchResponse = esClient.search(sr,options);
+            System.out.println(searchResponse.toString());
+            SearchHit[] r = searchResponse.getHits().getHits();
             List<Article> l = Stream.of(r).map(item -> {
                 Article arc = new Article();
                 Map arcMap = item.getSourceAsMap();
                 arc.setId(item.getId());
-                arc.setPath(arcMap.get("path").toString());
-                arc.setTitle(arcMap.get("title").toString());
+                arc.setPath(null == arcMap.get("path") ? null : arcMap.get("path").toString());
+                arc.setTitle(null == arcMap.get("title") ? null : arcMap.get("title").toString());
+                arc.setContent(null == arcMap.get("content") ? null : arcMap.get("content").toString());
+                arc.setClassify(null == arcMap.get("classify") ? null : arcMap.get("classify").toString());
                 return arc;
             }).collect(Collectors.toList());
             return l;
