@@ -19,6 +19,8 @@ public class Article {
     private Integer supportNum;
     private String path;
 
+    private String highLight;
+
     public String getId() {
         return id;
     }
@@ -81,5 +83,13 @@ public class Article {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getHighLight() {
+        return highLight;
+    }
+
+    public void setHighLight(String highLight) {
+        this.highLight = highLight;
     }
 }

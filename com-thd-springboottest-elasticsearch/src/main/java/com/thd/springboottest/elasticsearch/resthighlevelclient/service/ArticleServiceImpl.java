@@ -4,6 +4,8 @@ import com.thd.springboottest.elasticsearch.resthighlevelclient.util.EsUtils;
 import com.thd.springboottest.elasticsearch.resthighlevelclient.util.MyFileUtils;
 import com.thd.springboottest.elasticsearch.resthighlevelclient.vo.Article;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.admin.indices.settings.get.GetSettingsRequest;
+import org.elasticsearch.action.admin.indices.settings.get.GetSettingsResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -11,8 +13,10 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.CreateIndexRequest;
-import org.elasticsearch.client.indices.GetIndexRequest;
+import org.elasticsearch.client.indices.*;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -48,7 +52,7 @@ public class ArticleServiceImpl implements ArticleService {
     private RestHighLevelClient esClient = EsUtils.getEsClient();
 
     private final RequestOptions options = RequestOptions.DEFAULT;
-
+    // ================================== 索引操作 ======================================= //
     @Override
     public boolean checkIndex(String index) {
         try {
@@ -58,6 +62,79 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return Boolean.FALSE ;
     }
+
+
+    @Override
+    public List<String> queryIndex(String indexName){
+        // 查询索引  如果查询所有索引则设置indexName为'*'
+        GetIndexRequest request = new GetIndexRequest(indexName);
+        GetIndexResponse response = null;
+        try {
+            response = esClient.indices().get(request, RequestOptions.DEFAULT);
+            String[] indices = response.getIndices();
+            return Arrays.asList(indices);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @Override
+    public List<Map<String, Object>> indexMappingInfo(String indexName) {
+        GetMappingsRequest getMappings = new GetMappingsRequest().indices("article");
+        try {
+           GetMappingsResponse getMappingResponse = esClient.indices().getMapping(getMappings,options);
+            //处理数据
+            Map<String, MappingMetaData> allMappings = getMappingResponse.mappings();
+            System.out.println(allMappings);
+            List<Map<String, Object>> mapList = new ArrayList<>();
+            for (Map.Entry<String, MappingMetaData> indexValue : allMappings.entrySet()) {
+                Map<String, Object> mapping = indexValue.getValue().sourceAsMap();
+
+                Iterator<Map.Entry<String, Object>> entries = mapping.entrySet().iterator();
+                entries.forEachRemaining(stringObjectEntry -> {
+                    if (stringObjectEntry.getKey().equals("properties")) {
+                        Map<String, Object> value = (Map<String, Object>) stringObjectEntry.getValue();
+                        for (Map.Entry<String, Object> ObjectEntry : value.entrySet()) {
+                            Map<String, Object> map = new HashMap<>();
+                            String key = ObjectEntry.getKey();
+                            Map<String, Object> value1 = (Map<String, Object>) ObjectEntry.getValue();
+                            map.put(key, value1.get("type"));
+                            mapList.add(map);
+                        }
+                    }
+                });
+            }
+
+            return mapList;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public Map<String, String> indexSettingInfo(String indexName){
+        GetSettingsRequest getSettingsRequest = new GetSettingsRequest().indices(indexName);
+        try {
+            GetSettingsResponse getSettingsResponse = esClient.indices().getSettings(getSettingsRequest,options);
+            ImmutableOpenMap<String, Settings> settings =  getSettingsResponse.getIndexToSettings();
+            Map<String,String> st = new HashMap<String,String>();
+            settings.forEach( item -> {
+                Settings s = item.value;
+                s.keySet().forEach(kst -> {
+                    st.put(kst,s.get(kst));
+                });
+//                st.put(item.key,s.);
+            });
+            return st;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    };
 
     /**
      * 创建索引
@@ -138,6 +215,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         try {
             IndexResponse is = esClient.index(request,options);
+
             System.out.println(is);
         } catch (IOException e) {
             throw new RuntimeException(" create index error ... ");
@@ -164,15 +242,17 @@ public class ArticleServiceImpl implements ArticleService {
                 ||f.getName().toLowerCase().indexOf(".md") != -1
                 ) {
                     System.out.println(f.getAbsolutePath());
-                    String content = MyFileUtils.readFile(f.getAbsolutePath());
-                    Article art = new Article();
-                    art.setTitle(f.getName());
-                    art.setContent(content);
-                    art.setPath(f.getAbsolutePath());
+                    if(f.length() <= 1 * 1024 * 1024) {
+                        String content = MyFileUtils.readFile(f.getAbsolutePath());
+                        Article art = new Article();
+                        art.setTitle(f.getName());
+                        art.setContent(content);
+                        art.setPath(f.getAbsolutePath());
 
-                    int c = new Random().nextInt(3);
-                    art.setClassify(classifyArrays[c]);
-                    boolean r = this.index(art);
+                        int c = new Random().nextInt(3);
+                        art.setClassify(classifyArrays[c]);
+                        boolean r = this.index(art);
+                    }
                 }
             }else{
                 this.indexAllFile(f.getAbsolutePath());
@@ -261,7 +341,7 @@ public class ArticleServiceImpl implements ArticleService {
         HighlightBuilder.Field highlightContent = new HighlightBuilder.Field("content");
         highlightBuilder.field(highlightContent);
 
-//        searchSourceBuilder.highlighter(highlightBuilder);
+        searchSourceBuilder.highlighter(highlightBuilder);
 
 
         sr.source(searchSourceBuilder);
@@ -278,6 +358,7 @@ public class ArticleServiceImpl implements ArticleService {
                 arc.setTitle(null == arcMap.get("title") ? null : arcMap.get("title").toString());
                 arc.setContent(null == arcMap.get("content") ? null : arcMap.get("content").toString());
                 arc.setClassify(null == arcMap.get("classify") ? null : arcMap.get("classify").toString());
+                arc.setHighLight(item.getHighlightFields().get("content").toString());
                 return arc;
             }).collect(Collectors.toList());
             return l;

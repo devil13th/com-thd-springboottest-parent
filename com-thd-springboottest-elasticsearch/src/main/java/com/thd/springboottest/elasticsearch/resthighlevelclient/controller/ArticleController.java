@@ -1,8 +1,14 @@
 package com.thd.springboottest.elasticsearch.resthighlevelclient.controller;
 
 import com.thd.springboottest.elasticsearch.resthighlevelclient.service.ArticleService;
+import com.thd.springboottest.elasticsearch.resthighlevelclient.util.EsUtils;
 import com.thd.springboottest.elasticsearch.resthighlevelclient.util.MyFileUtils;
 import com.thd.springboottest.elasticsearch.resthighlevelclient.vo.Article;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +32,8 @@ import java.util.stream.Stream;
 @RequestMapping("/es/article")
 public class ArticleController {
 
+    @Autowired
+    private RestHighLevelClient esClient = EsUtils.getEsClient();
 
     @Autowired
     private ArticleService articleService;
@@ -40,6 +48,38 @@ public class ArticleController {
         return ResponseEntity.ok("SUCCESS");
     }
 
+    // ================================== 索引操作 ======================================= //
+
+    /**
+     * 索引操作
+     * @return
+     */
+    @RequestMapping("/indexExample")
+    @ResponseBody
+    // http://127.0.0.1:8899/thd/es/article/indexExample
+    public ResponseEntity indexExample(){
+
+//        // 查询索引是否存在
+//        boolean r = this.articleService.checkIndex("article");
+//        return ResponseEntity.ok(r);
+
+//        // 查询索引列表
+//        List<String> indexList = this.articleService.queryIndex("*");
+//        return ResponseEntity.ok(indexList);
+
+//        // 查询某个索引
+//        List<String> indexList = this.articleService.queryIndex("article");
+//        return ResponseEntity.ok(indexList);
+
+//        // 查询某个索引mapping详细信息
+//        List<Map<String,Object>> r = this.articleService.indexMappingInfo("article");
+//        return ResponseEntity.ok(r);
+
+        //查询某个索引setting详细信息
+        Map<String,String> r = this.articleService.indexSettingInfo("article");
+        return ResponseEntity.ok(r);
+    };
+
 
     /**
      * 判断索引是否存在
@@ -51,7 +91,16 @@ public class ArticleController {
         return this.articleService.checkIndex(indexName);
     };
 
-
+    /**
+     * 查询索引列表
+     */
+    @RequestMapping("/queryIndex/{indexName}")
+    @ResponseBody
+    // http://127.0.0.1:8899/thd/es/article/queryIndex/* (查询所有索引)
+    public ResponseEntity queryIndex (@PathVariable String indexName){
+        List<String> r = this.articleService.queryIndex(indexName);
+        return ResponseEntity.ok(r);
+    };
     /**
      * 创建索引
      */
@@ -68,12 +117,29 @@ public class ArticleController {
      */
     @RequestMapping("/deleteIndex/{indexName}")
     @ResponseBody
-    public boolean deleteIndex(String indexName){
+    public boolean deleteIndex(@PathVariable String indexName){
         boolean r = this.articleService.deleteIndex(indexName);
         return r;
     };
 
+    // ================================== 文档操作 ======================================= //
 
+
+    @RequestMapping("/testDoc")
+    @ResponseBody
+    // http://127.0.0.1:8899/thd/es/article/testDoc
+    public ResponseEntity testDoc() throws Exception{
+
+        // 根据id获取doc
+        GetRequest getRequest = new GetRequest("article","315e6503e3574847bdedbf13d1e82fbd");
+        GetResponse getResponse = esClient.get(getRequest, RequestOptions.DEFAULT);
+        return ResponseEntity.ok(getResponse);
+
+//        // 根据id删除doc
+//        DeleteRequest deleteRequest = new DeleteRequest("article","e518f6ea08b04506a7b870273f45d72a");
+//        DeleteResponse deleteResponse = esClient.delete(deleteRequest,RequestOptions.DEFAULT);
+//        return ResponseEntity.ok(deleteResponse);
+    }
 
     @RequestMapping("/index")
     @ResponseBody
@@ -113,6 +179,11 @@ public class ArticleController {
         this.articleService.index(art);
         return ResponseEntity.ok("SUCCESS");
     };
+
+
+    // ================================== 文档查询 ======================================= //
+
+
 
 
 

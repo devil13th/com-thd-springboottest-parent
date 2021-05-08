@@ -4,6 +4,7 @@ import com.thd.springboottest.elasticsearch.resthighlevelclient.vo.Article;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * com.thd.springboottest.elasticsearch.resthighlevelclient.service.ArticleService
@@ -14,7 +15,26 @@ import java.util.List;
 public interface ArticleService {
 //    public RestHighLevelClient getEsClient();
 
+    /**
+     * 查询索引
+     * @param indexName
+     * @return
+     */
+    public List<String> queryIndex(String indexName);
 
+    /**
+     * 查询索引mapping详细信息
+     * @param indexName
+     * @return
+     */
+    public List<Map<String, Object>> indexMappingInfo(String indexName);
+
+    /**
+     * 查询索引setting详细信息
+     * @param indexName
+     * @return
+     */
+    public Map<String, String> indexSettingInfo(String indexName);
 
     /**
      * 删除索引
