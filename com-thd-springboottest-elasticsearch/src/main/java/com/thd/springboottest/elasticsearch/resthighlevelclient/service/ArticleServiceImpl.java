@@ -265,7 +265,6 @@ public class ArticleServiceImpl implements ArticleService {
 
     public List<Article> search(String keywords){
         SearchRequest sr = new SearchRequest("article");
-
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
 
@@ -323,6 +322,8 @@ public class ArticleServiceImpl implements ArticleService {
         searchSourceBuilder.size(100);
 
         searchSourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));// 默认得分倒叙
+
+
         //searchSourceBuilder.sort(new FieldSortBuilder("_uid").order(SortOrder.ASC));//也可以按_id字段进行升序排序
 
 
