@@ -1,0 +1,4322 @@
+{
+	"info": {
+		"name": "ES",
+		"_postman_id": "7a78e230-a76e-7709-8fed-93a2bdc275d2",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "关系",
+			"description": "",
+			"item": [
+				{
+					"name": "关系查询引起的问题",
+					"description": "",
+					"item": [
+						{
+							"name": "插入数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Invest Money\",\r\n  \"body\": \"Please start investing money as soon...\",\r\n  \"tags\": [\"money\", \"invest\"],\r\n  \"published_on\": \"18 Oct 2017\",\r\n  \"comments\": [\r\n    {\r\n      \"name\": \"William\",\r\n      \"age\": 34,\r\n      \"rating\": 8,\r\n      \"comment\": \"Nice article..\",\r\n      \"commented_on\": \"30 Nov 2017\"\r\n    },\r\n    {\r\n      \"name\": \"John\",\r\n      \"age\": 38,\r\n      \"rating\": 9,\r\n      \"comment\": \"I started investing after reading this.\",\r\n      \"commented_on\": \"25 Nov 2017\"\r\n    },\r\n    {\r\n      \"name\": \"Smith\",\r\n      \"age\": 33,\r\n      \"rating\": 7,\r\n      \"comment\": \"Very good post\",\r\n      \"commented_on\": \"20 Nov 2017\"\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blog/_doc/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blog",
+										"_doc",
+										"1"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查看索引信息",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blog",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blog"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "删除索引",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blog?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blog"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"query\": {\r\n    \"bool\": {\r\n      \"must\": [\r\n        {\r\n          \"match\": {\r\n            \"comments.name\": \"John\"\r\n          }\r\n        },\r\n        {\r\n          \"match\": {\r\n            \"comments.age\": 34\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blog/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blog",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "对象1对1",
+					"description": "",
+					"item": [
+						{
+							"name": "创建索引",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"mappings\": {\n    \"properties\": {\n      \"content\": {\n        \"type\": \"text\"\n      },\n      \"time\": {\n        \"type\": \"date\"\n      },\n      \"user\": {\n        \"properties\": {\n          \"city\": {\n            \"type\": \"text\"\n          },\n          \"userid\": {\n            \"type\": \"long\"\n          },\n          \"username\": {\n            \"type\": \"keyword\"\n          }\n        }\n      }\n    }\n  }\n}\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blob?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blob"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"content\":\"I like Elasticsearch\",\n  \"time\":\"2019-01-01T00:00:00\",\n  \"user\":{\n    \"userid\":1,\n    \"username\":\"Jack\",\n    \"city\":\"Shanghai\"\n  }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blog/_doc/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blog",
+										"_doc",
+										"1"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询 - 1对1深层对象的查询",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": {\n    \"bool\": {\n      \"must\": [\n        {\n          \"match\": {\n            \"content\": \"Elasticsearch\"\n          }\n        },\n        {\n          \"match\": {\n            \"user.username\": \"Jack\"\n          }\n        }\n      ]\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blog/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blog",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询所有",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": {\n    \"bool\": {\n      \"must\": [\n        {\n          \"match\": {\n            \"content\": \"Elasticsearch\"\n          }\n        },\n        {\n          \"match\": {\n            \"user.username\": \"Jack\"\n          }\n        }\n      ]\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blob/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blob",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查看索引信息",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blob",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blob"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "删除对象1对多索引",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/blob?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"blob"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "对象1对多",
+					"description": "",
+					"item": [
+						{
+							"name": "删除对象1对多索引",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查看索引信息",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "创建索引",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n      \"mappings\" : {\n      \"properties\" : {\n        \"actors\" : {\n          \"properties\" : {\n            \"first_name\" : {\n              \"type\" : \"keyword\"\n            },\n            \"last_name\" : {\n              \"type\" : \"keyword\"\n            }\n          }\n        },\n        \"title\" : {\n          \"type\" : \"text\",\n          \"fields\" : {\n            \"keyword\" : {\n              \"type\" : \"keyword\",\n              \"ignore_above\" : 256\n            }\n          }\n        }\n      }\n    }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\":\"Speed\",\n  \"actors\":[\n    {\n      \"first_name\":\"Keanu\",\n      \"last_name\":\"Reeves\"\n    },\n\n    {\n      \"first_name\":\"Dennis\",\n      \"last_name\":\"Hopper\"\n    }\n\n  ]\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"1"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询 - 其实应该不应查询出数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": {\n    \"bool\": {\n      \"must\": [\n        {\n          \"match\": {\n            \"actors.first_name\": \"Keanu\"\n          }\n        },\n        {\n          \"match\": {\n            \"actors.last_name\": \"Hopper\"\n          }\n        }\n      ]\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询所有",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": {\n    \"bool\": {\n      \"must\": [\n        {\n          \"match\": {\n            \"content\": \"Elasticsearch\"\n          }\n        },\n        {\n          \"match\": {\n            \"user.username\": \"Jack\"\n          }\n        }\n      ]\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "嵌套",
+					"description": "",
+					"item": [
+						{
+							"name": "删除对象1对多索引",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "创建嵌套索引",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"mappings\": {\n    \"properties\": {\n      \"actors\": {\n        \"type\": \"nested\",\n        \"properties\": {\n          \"first_name\": {\n            \"type\": \"keyword\"\n          },\n          \"last_name\": {\n            \"type\": \"keyword\"\n          }\n        }\n      },\n      \"title\": {\n        \"type\": \"text\"\n      }\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\":\"Speed\",\n  \"actors\":[\n    {\n      \"first_name\":\"Keanu\",\n      \"last_name\":\"Reeves\"\n    },\n\n    {\n      \"first_name\":\"Dennis\",\n      \"last_name\":\"Hopper\"\n    }\n\n  ]\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"1"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "嵌套查询-按照对象方式查询不到-正确 - 必须使用nested查询才可以",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"query\":{\n\t\t\"match\": {\n\t\t\t\"actors.first_name\": \"Keanu\"\n\t\t}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "嵌套查询-嵌套查询格式",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"query\": {\n    \t\"nested\": {\n            \"path\": \"actors\",\n            \"query\":{\n\t\t\t\t\"match\": {\n\t\t\t\t\t\"actors.first_name\": \"Keanu\"\n\t\t\t\t}\n            }\n    \t}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "嵌套查询-查询到结果",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"query\": {\n        \"nested\": {\n            \"path\": \"actors\",\n            \"query\": {\n            \t\"bool\": {\n                \"must\": [\n                  {\n                    \"match\": {\n                      \"actors.first_name\": \"Keanu\"\n                    }\n                  },\n                  {\n                    \"match\": {\n                      \"actors.last_name\": \"Reeves\"\n                    }\n                  }\n                ]\n              }\n            }\n        }\n    }\n}\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "嵌套查询-inner_hits",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"query\": {\n        \"nested\": {\n            \"path\": \"actors\",\n            \"query\": {\n            \t\"bool\": {\n                \"must\": [\n                  {\n                    \"match\": {\n                      \"actors.first_name\": \"Keanu\"\n                    }\n                  },\n                  {\n                    \"match\": {\n                      \"actors.last_name\": \"Reeves\"\n                    }\n                  }\n                ]\n              }\n            },\n            \"inner_hits\" : {}\n        }\n    }\n}\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "嵌套查询-查不到-正确",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"query\": {\n        \"nested\": {\n            \"path\": \"actors\",\n            \"query\": {\n            \t\"bool\": {\n                \"must\": [\n                  {\n                    \"match\": {\n                      \"actors.first_name\": \"Keanu\"\n                    }\n                  },\n                  {\n                    \"match\": {\n                      \"actors.last_name\": \"Hopper\"\n                    }\n                  }\n                ]\n              }\n            }\n        }\n    }\n}\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查看索引信息",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询索引下的所有内容",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/my_movies/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"my_movies",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "父子",
+					"description": "",
+					"item": [
+						{
+							"name": "删除父子索引",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "创建父子索引",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"my_join_field\": { \r\n        \"type\": \"join\",\r\n        \"relations\": {\r\n          \"question\": [\"answer\",\"comment\"] \r\n        }\r\n      }\r\n    }\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查看索引信息",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index?pretty",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index"
+									],
+									"query": [
+										{
+											"key": "pretty",
+											"value": "",
+											"equals": false
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入父数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"text\": \"This is a question , 我爱北京天安门\",\r\n  \"my_join_field\": {\r\n    \"name\": \"question\" \r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"1"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入answer子数据1",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"text\": \"This is an answer\",\r\n  \"my_join_field\": {\r\n    \"name\": \"answer\", \r\n    \"parent\": \"1\" \r\n\t}\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/3?routing=1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"3"
+									],
+									"query": [
+										{
+											"key": "routing",
+											"value": "1",
+											"equals": true
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入answer子数据2",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"text\": \"This is an answer2\",\r\n  \"my_join_field\": {\r\n    \"name\": \"answer\", \r\n    \"parent\": \"1\" \r\n\t}\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/4?routing=1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"4"
+									],
+									"query": [
+										{
+											"key": "routing",
+											"value": "1",
+											"equals": true
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入comment子数据1",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"text\": \"This is an comment1, 世界你好\",\r\n  \"my_join_field\": {\r\n    \"name\": \"comment\", \r\n    \"parent\": \"1\" \r\n\t}\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/5?routing=1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"5"
+									],
+									"query": [
+										{
+											"key": "routing",
+											"value": "1",
+											"equals": true
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "插入comment子数据2",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"text\": \"This is an comment2\",\r\n  \"my_join_field\": {\r\n    \"name\": \"comment\", \r\n    \"parent\": \"1\" \r\n\t}\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/6?routing=1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"6"
+									],
+									"query": [
+										{
+											"key": "routing",
+											"value": "1",
+											"equals": true
+										}
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询所有",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": {\n    \"bool\": {\n      \"must\": [\n        {\n          \"match\": {\n            \"content\": \"Elasticsearch\"\n          }\n        },\n        {\n          \"match\": {\n            \"user.username\": \"Jack\"\n          }\n        }\n      ]\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "根据父ID查询answer子数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"query\": {\r\n    \"parent_id\": { \r\n      \"type\": \"answer\",\r\n      \"id\": \"1\"\r\n    }\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "根据父ID查询comment子数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"query\": {\r\n    \"parent_id\": { \r\n      \"type\": \"comment\",\r\n      \"id\": \"1\"\r\n    }\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询父数据",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"query\": {\r\n  \t\"match\":{\r\n\t  \"text\": \"question\"\r\n  \t}\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "has-child查询",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"query\": {\r\n        \"has_child\" : {\r\n            \"type\" : \"answer\",\r\n            \"query\" : {\r\n                \"match_all\" : {}\r\n            },\r\n            \"max_children\": 10, \r\n            \"min_children\": 1,\r\n            \"score_mode\" : \"min\"\r\n        }\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "has-child查询 2",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"query\": {\r\n        \"has_child\" : {\r\n            \"type\" : \"comment\",\r\n            \"query\" : {\r\n                \"match\":{\r\n            \t\t\"text\" : \"世界你好\"\r\n            \t}\r\n            },\r\n            \"max_children\": 10, \r\n            \"min_children\": 1,\r\n            \"score_mode\" : \"min\"\r\n        }\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "has-child查询-inner_hits",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"query\": {\r\n        \"has_child\" : {\r\n            \"type\" : \"comment\",\r\n            \"query\" : {\r\n                \"match_all\" : {}\r\n            },\r\n            \"max_children\": 10, \r\n            \"min_children\": 1,\r\n            \"score_mode\" : \"min\",\r\n            \"inner_hits\" : {}\r\n        }\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "has-parent查询",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": {\n    \"has_parent\": {\n      \"parent_type\": \"question\",\n      \"query\": {\n        \"match\": {\n          \"text\": \"天安门\"\n        }\n      }\n    }\n  }\n}\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "has-parent查询-inner_hits",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": {\n    \"has_parent\": {\n      \"parent_type\": \"question\",\n      \"query\": {\n        \"match\": {\n          \"text\": \"天安门\"\n        }\n      },\n      \"inner_hits\":{}\n    }\n  }\n}\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "查询关系",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n \"script_fields\": {\r\n    \"parent\": {\r\n      \"script\": {\r\n         \"source\": \"doc['my_join_field#question']\" \r\n      }\r\n    }\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:9200/parent_child_index/_doc/_search",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "9200",
+									"path": [
+										"parent_child_index",
+										"_doc",
+										"_search"
+									]
+								},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "basic",
+			"description": "",
+			"item": [
+				{
+					"name": "创建-不指定id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程\",\r\n  \"director\": \"java 教程 java 教程 java 教程\",\r\n  \"classify\": \"tec\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "创建-指定id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"The Godfather\",\r\n  \"director\": \"Francis Ford Coppola\",\r\n  \"year\": 1972,\r\n  \"genres\": [\r\n    \"Crime\",\r\n    \"Drama\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "创建-强制创建-方式一",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"The Godfather\",\r\n  \"director\": \"Francis Ford Coppola\",\r\n  \"year\": 1972,\r\n  \"genres\": [\r\n    \"Crime\",\r\n    \"Drama\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1/_create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1",
+								"_create"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "创建-强制创建-方式二",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"The Godfather\",\r\n  \"director\": \"Francis Ford Coppola\",\r\n  \"year\": 1972,\r\n  \"genres\": [\r\n    \"Crime\",\r\n    \"Drama\"\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1?op_type=create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1"
+							],
+							"query": [
+								{
+									"key": "op_type",
+									"value": "create",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "修改-整体更新",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sex\":\"man\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "修改-乐观锁",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sex\":\"man\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1?if_seq_no=35&if_primary_term=2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1"
+							],
+							"query": [
+								{
+									"key": "if_seq_no",
+									"value": "35",
+									"equals": true
+								},
+								{
+									"key": "if_primary_term",
+									"value": "2",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "修改-局部更新",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"doc\":{\r\n\t\t\"age\":5\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1/_update",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1",
+								"_update"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询-根据id查询",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"1"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询-查询指定字段",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/_search?_source=title,year",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"_search"
+							],
+							"query": [
+								{
+									"key": "_source",
+									"value": "title,year",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询-查询所有",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询-同时检索多个文档",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"docs\" : \r\n\t[\r\n\t\t{\r\n\t\t\"_index\" : \"movies\",\r\n\t\t\"_type\" : \"movie\",\r\n\t\t\"_id\" : \"zykClXEBDYKKynSOSlgf\"\r\n\t\t},\r\n\t\t{\r\n\t\t\"_index\" : \"movies\",\r\n\t\t\"_type\" : \"movie\",\r\n\t\t\"_id\" : \"zikClXEBDYKKynSONVhw\"\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/_mget",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"_mget"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "批量操作",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"delete\": { \"_index\": \"website\", \"_type\": \"blog\", \"_id\": \"123\" }}\r\n{ \"create\": { \"_index\": \"website\", \"_type\": \"blog\", \"_id\": \"123\" }}\r\n{ \"title\": \"My first blog post\" }\r\n{ \"index\": { \"_index\": \"website\", \"_type\": \"blog\" }}\r\n{ \"title\": \"My second blog post\" }\r\n{ \"update\": { \"_index\": \"website\", \"_type\": \"blog\", \"_id\": \"123\"} }\r\n{ \"doc\" : {\"title\" : \"My updated blog post\"} }\r\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/movies/movie/_bulk",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"_bulk"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "search",
+			"description": "",
+			"item": [
+				{
+					"name": "01-01检索所有内容",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "滚屏搜索1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/knowledge/_search?scroll=1m",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"knowledge",
+								"_search"
+							],
+							"query": [
+								{
+									"key": "scroll",
+									"value": "1m",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "滚屏搜索2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"scroll\" : \"1m\", \r\n    \"scroll_id\" : \"DnF1ZXJ5VGhlbkZldGNoAgAAAAAAAAE4FjdQaVRWcGxMU2h1X1A0djBKUEp2VVEAAAAAAAABORY3UGlUVnBsTFNodV9QNHYwSlBKdlVR\" \r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_search/scroll",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_search",
+								"scroll"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "02-01 分页",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_search?size=3&from=3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_search"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "3",
+									"equals": true
+								},
+								{
+									"key": "from",
+									"value": "3",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "01-02在电影索引中搜索所有类型",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/db/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"db",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "01-03 在电影索引中显式搜索电影类型的文档",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9200/movies/movie/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "02-01 字符串搜索所有字段",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"query\": {\r\n    \"query_string\": {\r\n      \"query\": \"kill\"\r\n    }\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9200/movies/movie/_search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"movie",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "02-02检索某个指定的字段",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"query\" : {\r\n\t\t\"match\" : {\r\n\t\t\t\"username\" : \"devil13th\"\r\n\t\t}\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/db/user/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"db",
+								"user",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "mappingAndAnalyze",
+			"description": "",
+			"item": [
+				{
+					"name": "http://localhost:9200/movies/_mapping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9200/school/_mapping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_mapping"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "测试分词器",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \r\n\t\"analyzer\":\"ik_max_word\",\r\n\t\"text\":\"新冠肺炎病毒疫情\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9200/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_analyze"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "测试某个字段的分词",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"field\": \"name\",\r\n  \"text\": \"新冠01.txt\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9200/school/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_analyze"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API",
+			"description": "",
+			"item": [
+				{
+					"name": "查看健康状态",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_cat/health?v",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_cat",
+								"health"
+							],
+							"query": [
+								{
+									"key": "v ",
+									"value": "",
+									"equals": false
+								},
+								{
+									"key": "v",
+									"value": ""
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查看集群节点",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_cat/nodes?v",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_cat",
+								"nodes"
+							],
+							"query": [
+								{
+									"key": "v",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "列出所有索引",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_cat/indices?v",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_cat",
+								"indices"
+							],
+							"query": [
+								{
+									"key": "v",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "创建索引",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"settings\": {\r\n\t\t\"number_of_shards\": 3,\r\n\t\t\"number_of_replicas\": 2\r\n\t},\r\n\t\"mappings\": {\r\n\t\t\"properties\": {\r\n\t\t\t\"name\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"desc\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"classify\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishDate\": {\r\n\t\t\t\t\"type\": \"date\"\r\n\t\t\t},\r\n\t\t\t\"pageNum\": {\r\n\t\t\t\t\"type\": \"integer\"\r\n\t\t\t},\r\n\t\t\t\"author\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishBy \": {\r\n\t\t\t\t\"type\": \"keyword\",\r\n    \t\t\t\"index\": false\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec?pretty",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec"
+							],
+							"query": [
+								{
+									"key": "pretty",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "删除索引",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/myindex?pretty",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"myindex"
+							],
+							"query": [
+								{
+									"key": "pretty",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查看索引信息",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询索引结构",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_mappings",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_mappings"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询索分片副本信息",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_settings",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_settings"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "修改索引",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"properties\": {\r\n                \"age\": {\r\n                    \"type\": \"long\"\r\n                },\r\n                \"id\": {\r\n                    \"type\": \"text\",\r\n                    \"fields\": {\r\n                        \"keyword\": {\r\n                            \"type\": \"keyword\",\r\n                            \"ignore_above\": 256\r\n                        }\r\n                    }\r\n                },\r\n                \"info\": {\r\n                    \"type\": \"text\",\r\n                    \"fields\": {\r\n                        \"keyword\": {\r\n                            \"type\": \"keyword\",\r\n                            \"ignore_above\": 256\r\n                        }\r\n                    }\r\n                },\r\n                \"desc\": {\r\n                    \"type\": \"text\",\r\n                    \"index\" : false\r\n                },\r\n                \"score\": {\r\n                    \"type\": \"float\"\r\n                }\r\n            }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_mappings",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_mappings"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询索引下的所有内容",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询索引和类型下的所有内容",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/student/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"student",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "关闭索引",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_close",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_close"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "打开索引",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_open",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_open"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DSL",
+			"description": "",
+			"item": [
+				{
+					"name": "查看索引信息",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询所有 - get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_search?q=*&pretty",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "*",
+									"equals": true
+								},
+								{
+									"key": "pretty",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询所有 - post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"match_all\" : {\r\n         \r\n      }\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/note/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"note",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "查询所有 - 分页排序",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \n  \"from\":0, \n  \"size\":100,\n  \"sort\":{\"age\" :{\"order\":\"desc\"}}\n}\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "单字段模糊匹配",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"match\" : {\r\n         \"info\":\"病毒\"\r\n      }\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "多字段模糊匹配",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"multi_match\" : {\r\n         \"query\": \"devil13th\",\r\n         \"fields\": [ \"info\", \"name\" ]\r\n      }\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "字符串模糊匹配",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"query_string\":{\r\n         \"query\":\"病毒\"\r\n      }\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "字符串多字段模糊匹配",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"query_string\":{\r\n         \"query\":\"devil13th\",\r\n         \"fields\":[\r\n                \"info\",\"name\"\r\n          ]\r\n      }\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "字符串精确匹配",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"match\":{\r\n         \"schoolname\":\"三中\"\r\n      }\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "数字等于 主要处理结构化数据，如数字，日期和枚举",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"term\":{\"age\":10}\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "数字范围 此查询用于查找值的范围之间的值的对象",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"query\":{\r\n      \"range\":{\r\n      \t\"age\":{\r\n      \t\t\"gte\":5,\r\n      \t\t\"lte\":10\r\n      \t}\r\n      }\r\n    }\r\n  \r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/school/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"school",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "分词器",
+			"description": "",
+			"item": [
+				{
+					"name": "standard分词器",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"analyzer\": \"standard\",\r\n  \"text\": \"my name is 张某某 X\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:9200/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_analyze"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "simple 分词器",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"analyzer\": \"simple\",\r\n  \"text\": \"我的名字是 my name is 张某某12345 X\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:9200/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_analyze"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "whitespace分词器",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"analyzer\": \"whitespace\",\r\n  \"text\": \"我的名字是 my name is 张某某1234 X\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:9200/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_analyze"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "ik_smart 分词器",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"analyzer\": \"ik_smart\",\r\n  \"text\": \"我爱北京天安门 全世界新冠肺炎病毒疫情\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:9200/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_analyze"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "ik_max_word分词器",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"analyzer\": \"ik_max_word\",\r\n  \"text\": \"我爱北京天安门 全世界新冠肺炎病毒疫情\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://localhost:9200/_analyze",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_analyze"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "in action",
+			"description": "",
+			"item": [
+				{
+					"name": "01 创建索引",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"settings\": {\r\n\t\t\"number_of_shards\": 3,\r\n\t\t\"number_of_replicas\": 2\r\n\t},\r\n\t\"mappings\": {\r\n\t\t\"properties\": {\r\n\t\t\t\"name\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"desc\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"classify\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishDate\": {\r\n\t\t\t\t\"type\": \"date\"\r\n\t\t\t},\r\n\t\t\t\"pageNum\": {\r\n\t\t\t\t\"type\": \"integer\"\r\n\t\t\t},\r\n\t\t\t\"author\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishBy\": {\r\n\t\t\t\t\"type\": \"keyword\",\r\n    \t\t\t\"index\": false\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec?pretty",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec"
+							],
+							"query": [
+								{
+									"key": "pretty",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "01 查看索引",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"settings\": {\r\n\t\t\"number_of_shards\": 3,\r\n\t\t\"number_of_replicas\": 2\r\n\t},\r\n\t\"mappings\": {\r\n\t\t\"properties\": {\r\n\t\t\t\"name\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"desc\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"classify\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishDate\": {\r\n\t\t\t\t\"type\": \"date\"\r\n\t\t\t},\r\n\t\t\t\"pageNum\": {\r\n\t\t\t\t\"type\": \"integer\"\r\n\t\t\t},\r\n\t\t\t\"author\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishBy \": {\r\n\t\t\t\t\"type\": \"keyword\",\r\n    \t\t\t\"index\": false\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "02 创建文档",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\":\"springboot in action\",\r\n  \"desc\":\"Spring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域(rapid application development)成为领导者。\",\r\n  \"classify\":\"java\",\r\n  \"publishDate\":\"2002-01-01\",\r\n  \"pageNum\":80,\r\n  \"author\":\"张明\",\r\n  \"publishBy\":\"清华大学出版社\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "03 查询所有文档",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "04 按分类查询",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"term\":{\n\t\t\t\"classify\":\"mq\"\n\t\t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "04 按作者查询",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"match\":{\n\t\t\t\"author\":\"李四\"\n\t\t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "04 按出版社查询 - 未索引,所以报错的",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"match\":{\n\t\t\t\"publishBy\":\"清华大学出版社\"\n\t\t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "04 按页数范围查询",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"range\":{\n\t      \t\"pageNum\":{\n\t      \t\t\"gte\":300,\n\t      \t\t\"lte\":700\n\t      \t}\n    \t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "04 按页数精确查询",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"term\":{\n\t      \t\"pageNum\":300\n    \t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "04 按出版日期精确查询",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"term\":{\n\t      \t\"publishDate\":\"2013-01-01\"\n    \t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "04 按出版日期范围查询",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"from\":0,\r\n\t\"size\":20,\r\n\t\"query\":{\r\n\t\t\"range\":{\r\n\t      \t\"publishDate\":{\r\n\t      \t\t\"gte\":\"2010-01-01\",\r\n\t      \t\t\"lte\":\"2020-01-01\"\r\n\t      \t}\r\n    \t}\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "05 全文检索",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"match\":{\n\t\t\t\"desc\":\"java\"\n\t\t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cluster",
+			"description": "",
+			"item": [
+				{
+					"name": "集群健康状态",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":0,\n\t\"size\":20,\n\t\"query\":{\n\t\t\"match\":{\n\t\t\t\"desc\":\"java\"\n\t\t}\n\t}\n}\n\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_cluster/health",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_cluster",
+								"health"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "shards",
+			"description": "",
+			"item": [
+				{
+					"name": "索引-创建",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"settings\": {\r\n\t\t\"number_of_shards\": 2,\r\n\t\t\"number_of_replicas\": 2\r\n\t},\r\n\t\"mappings\": {\r\n\t\t\"_routing\": {\r\n\t      \"required\": true \r\n\t    },\r\n\t\t\"properties\": {\r\n\t\t\t\"name\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"desc\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"classify\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec?pretty",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec"
+							],
+							"query": [
+								{
+									"key": "pretty",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "索引-查看信息",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"settings\": {\r\n\t\t\"number_of_shards\": 3,\r\n\t\t\"number_of_replicas\": 2\r\n\t},\r\n\t\"mappings\": {\r\n\t\t\"_routing\": {\r\n\t      \"required\": true \r\n\t    },\r\n\t\t\"properties\": {\r\n\t\t\t\"name\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"desc\": {\r\n\t\t\t\t\"type\": \"text\",\r\n\t\t\t\t\"analyzer\":\"ik_max_word\",\r\n            \t\"search_analyzer\":\"ik_smart\"\r\n\t\t\t},\r\n\t\t\t\"classify\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishDate\": {\r\n\t\t\t\t\"type\": \"date\"\r\n\t\t\t},\r\n\t\t\t\"pageNum\": {\r\n\t\t\t\t\"type\": \"integer\"\r\n\t\t\t},\r\n\t\t\t\"author\": {\r\n\t\t\t\t\"type\": \"keyword\"\r\n\t\t\t},\r\n\t\t\t\"publishBy \": {\r\n\t\t\t\t\"type\": \"keyword\",\r\n    \t\t\t\"index\": false\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "文档-创建",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程\",\r\n  \"director\": \"java 教程 java 教程 java 教程\",\r\n  \"classify\": \"tec\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "文档-创建-带有路由",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程1\",\r\n  \"director\": \"java 教程1 java 教程1 java 教程1\",\r\n  \"classify\": \"tec\"\r\n}\r\n\r\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/ac?routing=key1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"ac"
+							],
+							"query": [
+								{
+									"key": "routing",
+									"value": "key1",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "文档-创建-带有路由02",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程2\",\r\n  \"director\": \"java 教2 java 教程2 java 教程2\",\r\n  \"classify\": \"tec\"\r\n}\r\n\r\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/ac?routing=key2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"ac"
+							],
+							"query": [
+								{
+									"key": "routing",
+									"value": "key2",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "文档-创建-带有路由03",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程3\",\r\n  \"director\": \"java 教程3 java 教程3 java 教程3\",\r\n  \"classify\": \"tec\"\r\n}\r\n\r\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/ac?routing=key3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"ac"
+							],
+							"query": [
+								{
+									"key": "routing",
+									"value": "key3",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "文档-创建-带有路由04",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程4\",\r\n  \"director\": \"java 教程4 java 教程4 java 教程4\",\r\n  \"classify\": \"tec\"\r\n}\r\n\r\n"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/ac?routing=key4",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"ac"
+							],
+							"query": [
+								{
+									"key": "routing",
+									"value": "key4",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "文档-查询",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程\",\r\n  \"director\": \"java 教程 java 教程 java 教程\",\r\n  \"classify\": \"tec\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_search",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_search"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "分片-详细信息",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程\",\r\n  \"director\": \"java 教程 java 教程 java 教程\",\r\n  \"classify\": \"tec\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/_cat/shards/tec?v",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"_cat",
+								"shards",
+								"tec"
+							],
+							"query": [
+								{
+									"key": "v",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "文档-查询-通过路由",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"java 教程\",\r\n  \"director\": \"java 教程 java 教程 java 教程\",\r\n  \"classify\": \"tec\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec/_doc/ac?routing=key1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec",
+								"_doc",
+								"ac"
+							],
+							"query": [
+								{
+									"key": "routing",
+									"value": "key1",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "索引-删除",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://127.0.0.1:9200/tec?pretty",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9200",
+							"path": [
+								"tec"
+							],
+							"query": [
+								{
+									"key": "pretty",
+									"value": "",
+									"equals": false
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "http://localhost:9200/twitter/_doc/1?pretty",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": \"kimchy\",\r\n    \"post_date\": \"2009-11-15T13:12:00\",\r\n    \"message\": \"Trying out Elasticsearch, so far so good?\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9200/twitter/_doc/1?pretty",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"twitter",
+						"_doc",
+						"1"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": "",
+							"equals": false
+						}
+					]
+				},
+				"description": "Add Index"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9200/twitter/_doc/2?pretty",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": \"kimchy\",\r\n    \"post_date\": \"2009-11-15T14:12:12\",\r\n    \"message\": \"Another tweet, will it be indexed?\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9200/twitter/_doc/2?pretty",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"twitter",
+						"_doc",
+						"2"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": "",
+							"equals": false
+						}
+					]
+				},
+				"description": "Add Index 2"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9200/twitter/_doc/3?pretty",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": \"elastic\",\r\n    \"post_date\": \"2010-01-15T01:46:38\",\r\n    \"message\": \"Building the site, should be kewl\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9200/twitter/_doc/3?pretty",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"twitter",
+						"_doc",
+						"3"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": "",
+							"equals": false
+						}
+					]
+				},
+				"description": "Add Index3"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9200/twitter/_doc/1?pretty=true",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:9200/twitter/_doc/1?pretty=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"twitter",
+						"_doc",
+						"1"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": "true",
+							"equals": true
+						}
+					]
+				},
+				"description": "get Info"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9200/twitter/_search?pretty=true",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\" : {\r\n        \"match_all\" : {}\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9200/twitter/_search?pretty=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"twitter",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": "true",
+							"equals": true
+						}
+					]
+				},
+				"description": "search basic"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9200/twitter/_search?pretty=true",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\" : {\r\n        \"match\" : { \"user\": \"kimchy\" }\r\n    },\r\n    \"_source\": [\"user\", \"post_date\"]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9200/twitter/_search?pretty=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"twitter",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": "true",
+							"equals": true
+						}
+					]
+				},
+				"description": "search basic2"
+			},
+			"response": []
+		}
+	]
+}
