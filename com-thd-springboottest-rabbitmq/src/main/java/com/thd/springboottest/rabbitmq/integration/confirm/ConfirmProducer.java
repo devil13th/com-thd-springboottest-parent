@@ -50,12 +50,21 @@ public class ConfirmProducer implements RabbitTemplate.ConfirmCallback,RabbitTem
     }
 
     @Override
-    public void confirm(CorrelationData correlationData, boolean b, String s) {
-        System.out.println(" |||||||||||||||  成功发送到交换机: " + correlationData.getId() + ",s=" + s + ",b:" + b);
+    public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+        // 调用correlationData.getId() 拿到消息id，!ack表示消息没有到达交换机，cause造成的原因
+        System.out.println(" |||||||||||||||  成功发送到交换机: " + correlationData.getId() + ",ack=" + ack + ",cause:" + cause);
     }
 
     @Override
-    public void returnedMessage(Message message, int i, String s, String s1, String s2) {
-        System.out.println(" |||||||||||||||  交换机未找到路由 : " + message.toString() + " || " + i + " || " + s + " || " + s1 + " || " + s2 );
+    // 如果消息不能路由到队列，将进入此回调方法
+    public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+        /*
+            提取消息id：message.getMessageProperties().getCorrelationId();
+            replyCode：状态码
+            replyText：返回文本
+            exchange、routingKey：交换机、路由key名字
+        */
+
+        System.out.println(" |||||||||||||||  交换机未找到路由 : " + message.toString() + " || " + replyCode + " || " + replyText + " || " + exchange + " || " + routingKey );
     }
 }

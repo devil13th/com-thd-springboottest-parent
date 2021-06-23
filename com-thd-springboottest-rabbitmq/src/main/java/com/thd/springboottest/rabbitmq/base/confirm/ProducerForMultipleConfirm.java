@@ -69,6 +69,12 @@ public class ProducerForMultipleConfirm {
         }
 
 
+        /*
+         * 批量confirm模式是每发送一批消息后，调用channel.waitForConfirms()方法，等待服务器的确认返回，因此相比于普通confirm模式，性能更好。
+         * 但是不好的地方在于，如果出现返回Basic.Nack或者超时情况，生产者客户端需要将这一批次的消息全部重发，这样会带来明显的重复消息数量，
+         * 如果消息经常丢失，批量confirm模式的性能应该是不升反降的。
+         */
+
 //        channel.waitForConfirmsOrDie();
         if (!channel.waitForConfirms()) {
             System.out.println("confirm message send failed");
