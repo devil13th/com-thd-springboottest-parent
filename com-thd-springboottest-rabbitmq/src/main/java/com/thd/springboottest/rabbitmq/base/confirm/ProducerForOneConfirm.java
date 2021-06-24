@@ -1,9 +1,6 @@
 package com.thd.springboottest.rabbitmq.base.confirm;
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.ConfirmListener;
-import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.*;
 import com.thd.springboottest.rabbitmq.base.ConnectionUtil;
 
 import java.io.IOException;
@@ -33,6 +30,30 @@ public class ProducerForOneConfirm {
         // 开启发送方确认模式
         channel.confirmSelect();
 
+
+
+
+        /*
+           设置Return Listener监听 如果找不到routing key 则调用该回调
+           开启该回调方法： 设置mandatory为true (第三个参数)
+           channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY, true , true ,p, msg.getBytes());
+
+         */
+
+        channel.addReturnListener(new ReturnListener() {
+            public void handleReturn(int replyCode, String replyText, String exchange, String routingKey, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                System.out.println("--------------Return Listener--------------");
+                System.out.println(replyCode);
+                System.out.println(replyText);
+                System.out.println(exchange);
+                System.out.println(routingKey);
+                System.out.println(properties);
+                System.out.println(new String(body));
+            }
+        });
+
+
+
         String msg = "hello confirm message!";
         // 头信息,任意键值对
         Map<String,Object> m = new HashMap<String,Object>();
@@ -49,13 +70,15 @@ public class ProducerForOneConfirm {
                 .build();
 
 
-        channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY, p, msg.getBytes());
+//        channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY, p, msg.getBytes());
+
+        // 第三个参数是 mandatory , 如果找不到routingkey 则会调用return listener回调
+        channel.basicPublish(EXCHANGE_NAME, ROUTE_KEY, true,p, msg.getBytes());
         if (!channel.waitForConfirms()) {
             System.out.println("发送失败");
         } else {
             System.out.println("发送成功");
         }
-
 
         //关闭信道和连接
         channel.close();
