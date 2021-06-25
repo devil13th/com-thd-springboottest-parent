@@ -22,7 +22,7 @@ public class ConfirmProducer implements RabbitTemplate.ConfirmCallback,RabbitTem
     public ConfirmProducer(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
         rabbitTemplate.setConfirmCallback(this);
-        rabbitTemplate.setReturnCallback(this);
+        rabbitTemplate.setReturnCallback(this); // 设置了return callback 会在发送消息时设置mandatory为true
     }
 
     public void send2() {
@@ -36,6 +36,7 @@ public class ConfirmProducer implements RabbitTemplate.ConfirmCallback,RabbitTem
             if(i %2 == 0 ){
                 // 成功发送
                 this.rabbitTemplate.convertAndSend("TestIntegrationConfirmExchange", "ConfirmRouting", context, correlationData);
+
             }else{
                 // 发送成功但故意将routekey写错,导致找不到Queue而调用ReturnCallback回调
                 this.rabbitTemplate.convertAndSend("TestIntegrationConfirmExchange", "xxxConfirmRouting", context, correlationData);

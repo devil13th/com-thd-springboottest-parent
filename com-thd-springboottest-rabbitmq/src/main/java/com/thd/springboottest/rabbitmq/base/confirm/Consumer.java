@@ -31,8 +31,8 @@ public class Consumer {
 
         /**
          * 开始消费
-         * 参数1：routingKey
-         * 参数2：是否自动确认
+         * 参数1：队列名称
+         * 参数2：是否自动确认, true：自动确认   false:手工确认  建议手工确认
          */
         boolean autoAsk = false;
         channel.basicConsume(QUEUE_NAME, autoAsk, new DefaultConsumer(channel) {
@@ -60,10 +60,10 @@ public class Consumer {
                 /**
                  * 确认消息已接收的应答
                  * 第一个参数：发布的每一条消息都会获得一个唯一的deliveryTag，deliveryTag在channel范围内是唯一的
-                 * 第二个参数：批量确认标志。如果值为true，则执行批量确认，此deliveryTag之前收到的消息全部进行确认; 如果值为false，则只对当前收到的消息进行确认
+                 * 第二个参数：批量确认标志。如果值为true，则执行批量确认，此deliveryTag之前收到的消息全部进行确认; 如果值为false，则只对当前收到的消息进行确认，建议false
                  */
                 System.out.println("deliveryTag:" + deliveryTag);
-                channel.basicAck(deliveryTag, true);
+                channel.basicAck(deliveryTag, false);
 
                 // 下面是拒绝应答
                 /**
