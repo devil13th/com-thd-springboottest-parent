@@ -28,4 +28,14 @@ public class MyConfig {
         hw.setMessage(message);
         return hw;
     }
+
+
+
+    @Bean
+    public BeanForAnnotationBean beanForAnnotationBeanTwo(BeanForAnnotationComponent u){
+        BeanForAnnotationBean hw = new BeanForAnnotationBean();
+        hw.setUser(u);
+        hw.setMessage(message);
+        return hw;
+    }
 }

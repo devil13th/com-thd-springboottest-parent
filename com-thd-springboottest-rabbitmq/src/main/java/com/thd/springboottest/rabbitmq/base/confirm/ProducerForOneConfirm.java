@@ -15,7 +15,7 @@ import java.util.Map;
  **/
 public class ProducerForOneConfirm {
     // 注：一定要先启动Consumer2，创建好交换器、队列 !!!
-    private static final String ROUTE_KEY ="routekey-devil13th"; // 路由键名称
+    private static final String ROUTE_KEY ="routekey2-devil13th"; // 路由键名称
     private static final String EXCHANGE_NAME = "exchange-devil13th";// 交换器名称
 
     public static void main(String[] args) throws Exception{

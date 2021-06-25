@@ -45,6 +45,11 @@ public class Application  {
         System.out.println(hw.getUser());
         System.out.println(hw.getMessage());
 
+        BeanForAnnotationBean hw2 = (BeanForAnnotationBean)ctx.getBean("beanForAnnotationBeanTwo");
+        System.out.println(" ======= 通过@Bean注册 =======");
+        System.out.println(hw2.getUser());
+        System.out.println(hw2.getMessage());
+
         // 通过FactoryBean注册的bean  -- 参见MyFactoryBean.java
         BeanForFactoryBean mfb = (BeanForFactoryBean)ctx.getBean("myFactoryBean");
         System.out.println(" ======= 通过FactoryBean注册 =======");
